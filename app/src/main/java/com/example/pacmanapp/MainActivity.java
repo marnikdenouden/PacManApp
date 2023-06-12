@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
         LocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 getCurrentLocation();
             }
         });
@@ -69,18 +68,12 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == 1){
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
-
-                if (isGPSEnabled()) {
-
-                    getCurrentLocation();
-
-                } else {
-
-                    turnOnGPS();
-                }
+        if (requestCode == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            if (!isGPSEnabled()) {
+                turnOnGPS();
+                return;
             }
+            getCurrentLocation();
         }
     }
 
@@ -88,14 +81,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 2) {
-            if (resultCode == Activity.RESULT_OK) {
-
-                getCurrentLocation();
-            }
+        if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
+            getCurrentLocation();
         }
     }
 
+    /**
+     * Gets the current location to update location used.
+     */
     private void getCurrentLocation() {
         if (!(ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
@@ -128,6 +121,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Turn on GPS by preparing settings and alike.
+     */
     private void turnOnGPS() {
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                 .addLocationRequest(locationRequest);
@@ -143,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     LocationSettingsResponse response = task.getResult(ApiException.class);
                     Toast.makeText(MainActivity.this, "GPS is already tured on", Toast.LENGTH_SHORT).show();
-
                 } catch (ApiException e) {
 
                     switch (e.getStatusCode()) {
