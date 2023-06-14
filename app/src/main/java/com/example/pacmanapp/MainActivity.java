@@ -3,6 +3,7 @@ package com.example.pacmanapp;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
@@ -11,13 +12,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 
 import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,11 +37,14 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.Random;
+
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView AddressText;
     private Button LocationButton;
+
     private LocationRequest locationRequest;
 
      private LocationManager locationManager = null;
@@ -60,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 getCurrentLocation();
+                placePacmanMarker();
             }
         });
     }
@@ -84,6 +92,53 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
             getCurrentLocation();
         }
+    }
+
+    /**
+     * Places a pacman marker.
+     */
+    private void placePacmanMarker() {
+        // Calculate x and y value of pacman marker
+        Random random = new Random();
+        ImageView map = findViewById(R.id.map_image);
+        int x = random.nextInt(map.getWidth()); // compute x-Coordinate
+        int y = random.nextInt(map.getHeight()); // compute y-Coordinate
+
+        // Create layout params for the relative layout
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(16, 16);
+
+        // Create imageView that will be the marker.
+        ImageView imageView = new ImageView(MainActivity.this);
+
+        // Get the relative layout that the marker will be added to.
+        RelativeLayout markersContainer = findViewById(R.id.markers);
+
+        // set the margins of the layout params
+        layoutParams.setMargins(x, y, 0, 0);
+
+        // Set layout params to imageView
+        imageView.setLayoutParams(layoutParams);
+
+        // Get drawable of pacman marker and set it to imageView
+        Drawable drawable = AppCompatResources.
+                getDrawable(MainActivity.this, R.drawable.pacman_marker_animation);
+        imageView.setImageDrawable(drawable);
+
+        // Add the imageView to the layout
+        markersContainer.addView(imageView);
+
+        // Cast the drawable of the animation resource to an animation drawable
+        AnimationDrawable animation = (AnimationDrawable) drawable;
+
+        if (animation == null) {
+            // Do something when animation is null.
+            return;
+        }
+
+        // Start the animation drawable
+        animation.start();
+
+        //imageView.animate().x(x).y(y).setDuration(10000).withEndAction(() -> {}).start(); //Could be used for moving from one position to another.
     }
 
     /**
@@ -115,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
                                 double longitude = locationResult.getLocations().get(index).getLongitude();
 
                                 AddressText.setText("Latitude: " + latitude + "\n" + "Longitude: " + longitude);
+
                             }
                         }
                     }, Looper.getMainLooper());
@@ -172,6 +228,27 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+    /**
+     * Start the pacman animation ** Waka waka **
+     */
+    private void startAnimation() {
+        // Get the imageView to run the animation on
+        ImageView imageView = (ImageView)findViewById(R.id.pacman_marker);
+
+        // Get the drawable of the animation
+        Drawable drawable = AppCompatResources.
+        getDrawable(MainActivity.this, R.drawable.pacman_marker_animation);
+
+        // Set the drawable of the image to the animation drawable
+        imageView.setImageDrawable(drawable);
+
+        // Cast the drawable of the animation resource to an animation drawable
+        AnimationDrawable animation = (AnimationDrawable) drawable;
+
+        // Start the animation drawable
+        animation.start();
     }
 
 }
