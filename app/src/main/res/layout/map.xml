@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/map_v1" />
+        app:srcCompat="@drawable/map" />
 
     <RelativeLayout
         android:id="@+id/markers"
