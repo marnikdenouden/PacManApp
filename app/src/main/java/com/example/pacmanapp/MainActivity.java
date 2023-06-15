@@ -14,6 +14,7 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 
@@ -67,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 getCurrentLocation();
-                placePacmanMarker();
             }
         });
     }
@@ -94,49 +94,81 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Places a pacman marker.
-     */
-    private void placePacmanMarker() {
-        // Calculate x and y value of pacman marker
-        Random random = new Random();
+    private void placeMarker(double latitude, double longitude, int markerWidth, int markerHeight, Context context, int drawableId, boolean animate) {
+        // longitude range
+        final double longitudeStart = 5.48382758497;
+        final double longitudeWidth = 0.013472188;
+
+        // latitude range
+        final double latitudeStart = 51.424203344;
+        final double latitudeHeight = -0.0084914531;
+
+        System.out.println("longitude " + longitude + ", latitude " + latitude);
+
+        // Get the map object to
         ImageView map = findViewById(R.id.map_image);
-        int x = random.nextInt(map.getWidth()); // compute x-Coordinate
-        int y = random.nextInt(map.getHeight()); // compute y-Coordinate
 
-        // Create layout params for the relative layout
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(16, 16);
+        // Convert the latitude and longitude to X and Y values on the map
+        double rawX = (longitude - longitudeStart) * map.getWidth() / longitudeWidth;
+        double rawY = (latitude - latitudeStart) * map.getHeight() / latitudeHeight;
 
-        // Create imageView that will be the marker.
-        ImageView imageView = new ImageView(MainActivity.this);
+        System.out.println("RawX " + rawX + ", RawY " + rawY);
 
-        // Get the relative layout that the marker will be added to.
-        RelativeLayout markersContainer = findViewById(R.id.markers);
+        // Set the X and Y position of the marker to the center of the image
+        int markerX = (int) (rawX) - (markerWidth / 2);
+        int markerY = (int) (rawY)- (markerHeight / 2);
+
+        System.out.println("MarkerX " + markerX + ", MarkerY " + markerY);
+
+        // Limit the X and Y position to ensure the maker is completely within map bounds
+        markerX = Math.max(0, Math.min(markerX, map.getWidth() - markerWidth));
+        markerY = Math.max(0, Math.min(markerY, map.getHeight() - markerHeight));
+
+        // Create the relative layout params with specified height and width
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(markerWidth, markerHeight);
 
         // set the margins of the layout params
-        layoutParams.setMargins(x, y, 0, 0);
+        layoutParams.setMargins(markerX, markerY, 0, 0);
+
+        // Create a new imageView for the marker
+        ImageView imageView = new ImageView(context);
+
+        // Gets the relative layout with markers id that marker will be added to.
+        RelativeLayout layout = findViewById(R.id.markers);
 
         // Set layout params to imageView
         imageView.setLayoutParams(layoutParams);
 
-        // Get drawable of pacman marker and set it to imageView
+        // Set drawable of marker to the created imageView
         Drawable drawable = AppCompatResources.
-                getDrawable(MainActivity.this, R.drawable.pacman_marker_animation);
+                getDrawable(context, drawableId);
         imageView.setImageDrawable(drawable);
 
         // Add the imageView to the layout
-        markersContainer.addView(imageView);
+        layout.addView(imageView);
 
-        // Cast the drawable of the animation resource to an animation drawable
-        AnimationDrawable animation = (AnimationDrawable) drawable;
+        if (animate) {
+            // Cast the drawable of the animation resource to an animation drawable
+            AnimationDrawable animation = (AnimationDrawable) drawable;
 
-        if (animation == null) {
-            // Do something when animation is null.
-            return;
+            if (animation == null) {
+                // Do something when animation is null.
+                return;
+            }
+
+            // Start the animation drawable
+            animation.start();
         }
+    }
 
-        // Start the animation drawable
-        animation.start();
+    /**
+     * Places a pacman marker.
+     */
+    private void placePacmanMarker(double latitude, double longitude) {
+
+        int markerSize = getResources().getDimensionPixelSize(R.dimen.pacmanMarkerSize);
+        placeMarker(latitude, longitude, markerSize, markerSize,
+                MainActivity.this, R.drawable.pacman_marker_animation, true);
 
         //imageView.animate().x(x).y(y).setDuration(10000).withEndAction(() -> {}).start(); //Could be used for moving from one position to another.
     }
@@ -165,7 +197,13 @@ public class MainActivity extends AppCompatActivity {
 
                             if (locationResult.getLocations().size() > 0) {
 
+                                Location location = locationResult.getLastLocation(); // Is this the same as get index - 1?
+                                placePacmanMarker(location.getLatitude(), location.getLongitude());
+
+                                // Old code for displaying latitude and longitude
                                 int index = locationResult.getLocations().size() - 1;
+                                //location = locationResult.getLocations().get(index);
+
                                 double latitude = locationResult.getLocations().get(index).getLatitude();
                                 double longitude = locationResult.getLocations().get(index).getLongitude();
 
@@ -228,27 +266,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-    }
-
-    /**
-     * Start the pacman animation ** Waka waka **
-     */
-    private void startAnimation() {
-        // Get the imageView to run the animation on
-        ImageView imageView = (ImageView)findViewById(R.id.pacman_marker);
-
-        // Get the drawable of the animation
-        Drawable drawable = AppCompatResources.
-        getDrawable(MainActivity.this, R.drawable.pacman_marker_animation);
-
-        // Set the drawable of the image to the animation drawable
-        imageView.setImageDrawable(drawable);
-
-        // Cast the drawable of the animation resource to an animation drawable
-        AnimationDrawable animation = (AnimationDrawable) drawable;
-
-        // Start the animation drawable
-        animation.start();
     }
 
 }

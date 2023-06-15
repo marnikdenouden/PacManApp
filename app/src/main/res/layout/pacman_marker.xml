@@ -6,8 +6,8 @@
 
     <ImageView
         android:id="@+id/pacman_marker"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+        android:layout_width="@dimen/pacmanMarkerSize"
+        android:layout_height="@dimen/pacmanMarkerSize"
         android:contentDescription="Pac-Man animated marker"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
