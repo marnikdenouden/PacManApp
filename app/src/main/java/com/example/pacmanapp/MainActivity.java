@@ -16,12 +16,14 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 
 import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +37,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -48,7 +51,10 @@ public class MainActivity extends AppCompatActivity {
 
     private LocationRequest locationRequest;
 
-     private LocationManager locationManager = null;
+    private LocationManager locationManager = null;
+    private FusedLocationProviderClient fusedLocationClient;
+    private LocationCallback locationCallback;
+    private boolean requestingLocationUpdates = true;
 
 
     @Override
@@ -59,124 +65,83 @@ public class MainActivity extends AppCompatActivity {
         AddressText = findViewById(R.id.addressText);
         LocationButton = findViewById(R.id.locationButton);
 
-        locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(5000);
-        locationRequest.setFastestInterval(2000);
+        locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
+                .setWaitForAccurateLocation(false)
+                .setMinUpdateIntervalMillis(1000)
+                .setMaxUpdateDelayMillis(20000)
+
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    return;
+                }
+
+                Location location = locationResult.getLastLocation(); // Is this the same as get index - 1?
+
+                AddressText.setText("Latitude " + location.getLatitude() + ", Longitude " + location.getLatitude());
+
+                pacman.move(location.getLatitude(), location.getLongitude(), MainActivity.this, MainActivity.this);
+                ghost.move(location.getLatitude() - 0.002, location.getLongitude() + 0.002, MainActivity.this, MainActivity.this);
+
+                for (Location resultLocations : locationResult.getLocations()) {
+                    // Update UI with location data
+                    // ...
+                }
+            }
+        };
+
+        // Todo set start location instead of 0 0.
+        //pacman = new PacMan(0, 0, MainActivity.this, MainActivity.this);
+        ghost = new Ghost(GhostType.Blinky, 0, 0, MainActivity.this, MainActivity.this);
+        //PowerPallet powerPallet = new PowerPallet(51.4191983, 5.492802, MainActivity.this, MainActivity.this);
+        //PacDot pacDot1 = new PacDot(51.419331, 5.48632, MainActivity.this, MainActivity.this);
+
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(MainActivity.this);
 
         LocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getCurrentLocation();
+                if (requestingLocationUpdates) {
+                    stopLocationUpdates();
+                    linearLayout.setBackgroundColor(getResources().getColor(R.color.white, getTheme()));
+                    System.out.println("Stop location updates");
+                } else {
+                    startLocationUpdates();
+                    System.out.println("Start location updates");
+                    linearLayout.setBackgroundColor(getResources().getColor(R.color.black, getTheme()));
+                }
             }
         });
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-            if (!isGPSEnabled()) {
-                turnOnGPS();
-                return;
-            }
-            getCurrentLocation();
-        }
+    protected void onPause() {
+        super.onPause();
+        stopLocationUpdates();
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
-            getCurrentLocation();
-        }
-    }
-
-    private void placeMarker(double latitude, double longitude, int markerWidth, int markerHeight, Context context, int drawableId, boolean animate) {
-        // longitude range
-        final double longitudeStart = 5.48382758497;
-        final double longitudeWidth = 0.013472188;
-
-        // latitude range
-        final double latitudeStart = 51.424203344;
-        final double latitudeHeight = -0.0084914531;
-
-        System.out.println("longitude " + longitude + ", latitude " + latitude);
-
-        // Get the map object to
-        ImageView map = findViewById(R.id.map_image);
-
-        // Convert the latitude and longitude to X and Y values on the map
-        double rawX = (longitude - longitudeStart) * map.getWidth() / longitudeWidth;
-        double rawY = (latitude - latitudeStart) * map.getHeight() / latitudeHeight;
-
-        System.out.println("RawX " + rawX + ", RawY " + rawY);
-
-        // Set the X and Y position of the marker to the center of the image
-        int markerX = (int) (rawX) - (markerWidth / 2);
-        int markerY = (int) (rawY)- (markerHeight / 2);
-
-        System.out.println("MarkerX " + markerX + ", MarkerY " + markerY);
-
-        // Limit the X and Y position to ensure the maker is completely within map bounds
-        markerX = Math.max(0, Math.min(markerX, map.getWidth() - markerWidth));
-        markerY = Math.max(0, Math.min(markerY, map.getHeight() - markerHeight));
-
-        // Create the relative layout params with specified height and width
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(markerWidth, markerHeight);
-
-        // set the margins of the layout params
-        layoutParams.setMargins(markerX, markerY, 0, 0);
-
-        // Create a new imageView for the marker
-        ImageView imageView = new ImageView(context);
-
-        // Gets the relative layout with markers id that marker will be added to.
-        RelativeLayout layout = findViewById(R.id.markers);
-
-        // Set layout params to imageView
-        imageView.setLayoutParams(layoutParams);
-
-        // Set drawable of marker to the created imageView
-        Drawable drawable = AppCompatResources.
-                getDrawable(context, drawableId);
-        imageView.setImageDrawable(drawable);
-
-        // Add the imageView to the layout
-        layout.addView(imageView);
-
-        if (animate) {
-            // Cast the drawable of the animation resource to an animation drawable
-            AnimationDrawable animation = (AnimationDrawable) drawable;
-
-            if (animation == null) {
-                // Do something when animation is null.
-                return;
-            }
-
-            // Start the animation drawable
-            animation.start();
+    protected void onResume() {
+        super.onResume();
+        if (requestingLocationUpdates) {
+            startLocationUpdates();
         }
     }
 
     /**
-     * Places a pacman marker.
+     * Stop location updates.
      */
-    private void placePacmanMarker(double latitude, double longitude) {
-
-        int markerSize = getResources().getDimensionPixelSize(R.dimen.pacmanMarkerSize);
-        placeMarker(latitude, longitude, markerSize, markerSize,
-                MainActivity.this, R.drawable.pacman_marker_animation, true);
-
-        //imageView.animate().x(x).y(y).setDuration(10000).withEndAction(() -> {}).start(); //Could be used for moving from one position to another.
+    private void stopLocationUpdates() {
+        fusedLocationClient.removeLocationUpdates(locationCallback);
+        requestingLocationUpdates = false;
     }
 
     /**
-     * Gets the current location to update location used.
+     * Start location updates. after checking permissions and GPS.
      */
-    private void getCurrentLocation() {
+    private void startLocationUpdates() {
         if (!(ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
@@ -184,34 +149,26 @@ public class MainActivity extends AppCompatActivity {
 
         if (!isGPSEnabled()) {
             turnOnGPS();
-        } else {
-            LocationServices.getFusedLocationProviderClient(MainActivity.this)
-                    .requestLocationUpdates(locationRequest, new LocationCallback() {
-                        @Override
-                        public void onLocationResult(@NonNull LocationResult locationResult) {
-                            super.onLocationResult(locationResult);
+            return;
+        }
 
-                            LocationServices.getFusedLocationProviderClient(MainActivity.this)
-                                    .removeLocationUpdates(this);
-                            // Remove request, without it would keep calling this function with new location updates.
+        fusedLocationClient.requestLocationUpdates(locationRequest,
+                locationCallback,
+                Looper.getMainLooper());
 
-                            if (locationResult.getLocations().size() > 0) {
+        requestingLocationUpdates = true;
+    }
 
-                                Location location = locationResult.getLastLocation(); // Is this the same as get index - 1?
-                                placePacmanMarker(location.getLatitude(), location.getLongitude());
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-                                // Old code for displaying latitude and longitude
-                                int index = locationResult.getLocations().size() - 1;
-                                //location = locationResult.getLocations().get(index);
+        if (grantResults.length == 0) {
+            return;
+        }
 
-                                double latitude = locationResult.getLocations().get(index).getLatitude();
-                                double longitude = locationResult.getLocations().get(index).getLongitude();
-
-                                AddressText.setText("Latitude: " + latitude + "\n" + "Longitude: " + longitude);
-
-                            }
-                        }
-                    }, Looper.getMainLooper());
+        if (requestCode == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            startLocationUpdates();
         }
     }
 
@@ -253,6 +210,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
+            startLocationUpdates();
+        }
     }
 
     /**
