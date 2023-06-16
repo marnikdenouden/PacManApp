@@ -48,7 +48,12 @@ public class Clock {
         int remainingSeconds = (int) seconds % 60;
 
         // Set hour value
-        hour.setValue(hours); // Set hour value
+        if (hours == 0) {
+            hour.setVisible(false);
+        } else {
+            hour.setVisible(true);
+            hour.setValue(hours); // Set hour value
+        }
 
         // Set minute values
         minute_0.setValue(minutes / 10); // Set significant minute value
