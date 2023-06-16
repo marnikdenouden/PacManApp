@@ -16,6 +16,7 @@ public enum Direction {
     private int degrees;
     private int[] drawableBaseIds;
     private int drawableEyesId;
+
     Direction(int degrees, int[] drawableBaseIds, int drawableEyesId) {
         this.degrees = degrees;
         this.drawableBaseIds = drawableBaseIds;
@@ -26,10 +27,28 @@ public enum Direction {
         return degrees;
     }
 
+    /**
+     * Get the drawable base of a ghost for this direction.
+     *
+     * @param context Context to get drawable with
+     * @param frameIndex Frame index to get drawable from
+     * @pre Frame index needs to be >= 0 and < frameCount
+     * @return Drawable for the frame index
+     * @throws IllegalArgumentException if pre condition is violated
+     */
     Drawable getDrawableBase(Context context, int frameIndex) {
+        if (frameIndex < 0 || frameIndex >= context.getResources().getInteger(R.integer.ghostFrameCount)) {
+            throw new IllegalArgumentException("Frame index is not valid for the frame count.");
+        }
         return AppCompatResources.getDrawable(context, drawableBaseIds[frameIndex]);
     }
 
+    /**
+     * Get the ghost eyes drawable for this direction.
+     *
+     * @param context Context to get drawable with
+     * @return Drawable of ghost eyes for this direction.
+     */
     Drawable getDrawableEyes(Context context) {
         return AppCompatResources.getDrawable(context, drawableEyesId);
     }
