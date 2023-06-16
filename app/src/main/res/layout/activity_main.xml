@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,29 +7,70 @@
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".MainActivity"
-    android:id="@+id/linearLayout">
+    android:id="@+id/layout">
+
+    <include
+        android:id="@+id/clock"
+        layout="@layout/clock"
+        android:layout_width="0dp"
+        android:layout_height="28dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toStartOf="@id/score"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/score"
+        layout="@layout/score"
+        android:layout_width="0dp"
+        android:layout_height="28dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/clock"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <include
         android:id="@+id/map"
-        android:layout_height="500dp"
-        android:layout_width="match_parent"
-        layout="@layout/map" />
+        layout="@layout/map"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxHeight="500dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintBottom_toTopOf="@id/addressText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/score"/>
 
     <TextView
         android:id="@+id/addressText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="User Address"
+        android:text="User location"
         android:textColor="@android:color/black"
-        android:textSize="19sp" />
+        android:textSize="19sp"
+        tools:layout_editor_absoluteX="148dp"
+        tools:layout_editor_absoluteY="622dp"
+        app:layout_constraintBottom_toTopOf="@id/locationButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/map" />
 
     <Button
         android:id="@+id/locationButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Get Current Location"
+        android:text="Toggle location updates"
         android:textAllCaps="false"
-        android:textSize="19sp" />
+        android:textSize="19sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addressText" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -77,7 +77,7 @@ public class Ghost extends Character {
 
         for (Direction direction: Direction.values()) {
             AnimationDrawable animationDrawable = new AnimationDrawable();
-            for (int frameIndex = 0; frameIndex <= frameCount; frameIndex++) {
+            for (int frameIndex = 0; frameIndex < frameCount; frameIndex++) {
                 animationDrawable.addFrame(createFrame(direction, frameIndex, color, context),
                         frameDuration);
             }

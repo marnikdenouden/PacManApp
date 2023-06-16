@@ -3,7 +3,6 @@ package com.example.pacmanapp;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
@@ -12,25 +11,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.os.Bundle;
 
 import android.os.Looper;
+import android.text.Layout;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pacmanapp.displays.Clock;
+import com.example.pacmanapp.displays.Score;
 import com.example.pacmanapp.markers.Ghost;
-import com.example.pacmanapp.markers.GhostType;
 import com.example.pacmanapp.markers.PacDot;
 import com.example.pacmanapp.markers.PacMan;
 import com.example.pacmanapp.markers.PowerPallet;
@@ -48,6 +45,7 @@ import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.time.Duration;
 import java.util.Random;
 
 
@@ -56,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView AddressText;
     private Button LocationButton;
 
-    private LinearLayout linearLayout;
+    private View layout;
 
     private LocationRequest locationRequest;
 
@@ -68,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
     private PacMan pacman;
     private Ghost ghost;
 
+    private String TAG = "MainActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +75,13 @@ public class MainActivity extends AppCompatActivity {
 
         AddressText = findViewById(R.id.addressText);
         LocationButton = findViewById(R.id.locationButton);
-        linearLayout = findViewById(R.id.linearLayout);
+        layout = findViewById(R.id.layout);
+
+        Clock clock = new Clock(MainActivity.this, MainActivity.this);
+        clock.setTime(Duration.ofSeconds(10293));
+
+        Score score = new Score(5, R.id.scoreLayout, MainActivity.this, MainActivity.this);
+        score.setValue(10293);
 
         locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
                 .setWaitForAccurateLocation(false)
@@ -92,10 +98,9 @@ public class MainActivity extends AppCompatActivity {
 
                 Location location = locationResult.getLastLocation(); // Is this the same as get index - 1?
 
-                AddressText.setText("Latitude " + location.getLatitude() + ", Longitude " + location.getLatitude());
+                AddressText.setText("Latitude " + location.getLatitude() + ", Longitude " + location.getLongitude());
 
-                pacman.move(location.getLatitude(), location.getLongitude(), MainActivity.this, MainActivity.this);
-                ghost.move(location.getLatitude() - 0.002, location.getLongitude() + 0.002, MainActivity.this, MainActivity.this);
+                updateMarkerLocations(location);
 
                 for (Location resultLocations : locationResult.getLocations()) {
                     // Update UI with location data
@@ -104,13 +109,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        // Todo set start location instead of 0 0.
-        //pacman = new PacMan(0, 0, MainActivity.this, MainActivity.this);
-        ghost = new Ghost(GhostType.Blinky, 0, 0, MainActivity.this, MainActivity.this);
-        //PowerPallet powerPallet = new PowerPallet(51.4191983, 5.492802, MainActivity.this, MainActivity.this);
-        //PacDot pacDot1 = new PacDot(51.419331, 5.48632, MainActivity.this, MainActivity.this);
-
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(MainActivity.this);
 
         LocationButton.setOnClickListener(new View.OnClickListener() {
@@ -118,12 +116,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (requestingLocationUpdates) {
                     stopLocationUpdates();
-                    linearLayout.setBackgroundColor(getResources().getColor(R.color.white, getTheme()));
-                    System.out.println("Stop location updates");
+                    layout.setBackgroundColor(getResources().getColor(R.color.white, getTheme()));
+                    Log.i(TAG, "Stop location updates");
+                    createMarkers(); // TODO move create markers so it is run at a good time.
                 } else {
                     startLocationUpdates();
-                    System.out.println("Start location updates");
-                    linearLayout.setBackgroundColor(getResources().getColor(R.color.black, getTheme()));
+                    Log.i(TAG, "Start location updates");
+                    layout.setBackgroundColor(getResources().getColor(R.color.black, getTheme()));
                 }
             }
         });
@@ -143,6 +142,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void createMarkers() {
+        ImageView map = findViewById(R.id.map_image);
+        if (map.getHeight() > 0 && map.getWidth() > 0) {
+            pacman = new PacMan(51.4198767, 5.485905, MainActivity.this, MainActivity.this);
+            //ghost = new Ghost(GhostType.Blinky, 0, 0, MainActivity.this, MainActivity.this);
+            PowerPallet powerPallet = new PowerPallet(51.4191983, 5.492802, MainActivity.this, MainActivity.this);
+            PacDot pacDot = new PacDot(51.419331, 5.48632, MainActivity.this, MainActivity.this);
+        }
+    }
+
+    private void updateMarkerLocations(Location location) {
+        if (pacman != null) {
+            pacman.move(location.getLatitude(), location.getLongitude(), MainActivity.this, MainActivity.this);
+        }
+        if (ghost != null) {
+            //ghost.move(location.getLatitude() - 0.002, location.getLongitude() + 0.002, MainActivity.this, MainActivity.this);
+        }
+
+    }
+
     /**
      * Stop location updates.
      */
@@ -155,7 +174,9 @@ public class MainActivity extends AppCompatActivity {
      * Start location updates. after checking permissions and GPS.
      */
     private void startLocationUpdates() {
-        if (!(ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
+        if (!(ActivityCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
+            // Request location permission if it is not yet given.
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
         }
