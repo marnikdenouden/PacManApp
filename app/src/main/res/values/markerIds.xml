@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="pacman" />
+    <item type="id" name="blinky" />
+    <item type="id" name="pinky" />
+    <item type="id" name="inky" />
+    <item type="id" name="clyde" />
+    <item type="id" name="pacdot" />
+    <item type="id" name="powerpallet" />
+</resources>

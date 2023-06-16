@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="Blinky">#FF0000</color>
+    <color name="Pinky">#FFB8FF</color>
+    <color name="Inky">#00FFFF</color>
+    <color name="Clyde">#FFB852</color>
+</resources>

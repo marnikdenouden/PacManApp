@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -28,8 +29,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pacmanapp.markers.Ghost;
+import com.example.pacmanapp.markers.GhostType;
+import com.example.pacmanapp.markers.PacDot;
+import com.example.pacmanapp.markers.PacMan;
+import com.example.pacmanapp.markers.PowerPallet;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -49,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView AddressText;
     private Button LocationButton;
 
+    private LinearLayout linearLayout;
+
     private LocationRequest locationRequest;
 
     private LocationManager locationManager = null;
@@ -56,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
     private LocationCallback locationCallback;
     private boolean requestingLocationUpdates = true;
 
+    private PacMan pacman;
+    private Ghost ghost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +75,13 @@ public class MainActivity extends AppCompatActivity {
 
         AddressText = findViewById(R.id.addressText);
         LocationButton = findViewById(R.id.locationButton);
+        linearLayout = findViewById(R.id.linearLayout);
 
         locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
                 .setWaitForAccurateLocation(false)
                 .setMinUpdateIntervalMillis(1000)
                 .setMaxUpdateDelayMillis(20000)
+                .build();
 
         locationCallback = new LocationCallback() {
             @Override

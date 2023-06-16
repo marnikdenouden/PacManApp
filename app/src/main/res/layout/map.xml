@@ -5,6 +5,17 @@
     android:layout_height="match_parent">
 
     <ImageView
+        android:id="@+id/map_background"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/map_image"
+        app:layout_constraintEnd_toEndOf="@+id/map_image"
+        app:layout_constraintStart_toStartOf="@+id/map_image"
+        app:layout_constraintTop_toTopOf="@+id/map_image"
+        android:background="@color/black"
+        />
+
+    <ImageView
         android:id="@+id/map_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
