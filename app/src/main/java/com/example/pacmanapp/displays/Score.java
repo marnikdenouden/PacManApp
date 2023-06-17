@@ -1,12 +1,10 @@
 package com.example.pacmanapp.displays;
 
 import android.content.Context;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.ResourcesCompat;
 
 import com.example.pacmanapp.R;
 

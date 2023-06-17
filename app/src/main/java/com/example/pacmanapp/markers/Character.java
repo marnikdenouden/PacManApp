@@ -2,52 +2,67 @@ package com.example.pacmanapp.markers;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.widget.ImageView;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.content.res.ResourcesCompat;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.map.MapArea;
+import com.example.pacmanapp.map.MapPosition;
+
+import org.jetbrains.annotations.NotNull;
 
 public abstract class Character extends Marker {
+    private final static String TAG = "Character";
 
     /**
      * Create a character marker for specified context, activity and alike.
      *
-     * @param latitude Latitude used to position marker on map
-     * @param longitude Longitude used to position marker on map
-     * @param markerWidth Marker width used to position and size marker
-     * @param markerHeight Marker height used to position and size marker
-     * @param drawableId DrawableId used to get drawable to display for the marker
-     * @param markerId MarkerId set to ImageView for potential reference
-     * @param context Context in which the marker is created
-     * @param activity Activity in which the marker is placed
-     * @return ImageView of created marker
+     * @param mapArea   MapArea that the marker is placed on
+     * @param latitude  Latitude used to position character on map area
+     * @param longitude Longitude used to position character on map area
+     * @param drawable  Drawable used as display for the marker
+     * @param markerId  MarkerId set to ImageView for potential reference
+     * @param context   Context in which the marker is created
+     * @param activity  Activity in which the marker is placed
      */
-    ImageView create(double latitude, double longitude, int markerWidth, int markerHeight,
-                    int drawableId, int markerId, Context context, AppCompatActivity activity) {
-        return super.create(latitude, longitude, markerWidth, markerHeight, drawableId, markerId,
+    Character(MapArea mapArea, double latitude, double longitude, @NotNull Drawable drawable, int markerId,
+              @NotNull Context context, @NotNull AppCompatActivity activity) {
+        super(mapArea, latitude, longitude, drawable, markerId, context, activity, true
+        );
+    }
+
+    /**
+     * Create a character marker for specified context, activity and alike.
+     *
+     * @param mapArea    MapArea that the marker is placed on
+     * @param latitude   Latitude used to position character on map area
+     * @param longitude  Longitude used to position character on map area
+     * @param drawableId DrawableId used to get drawable to display for the marker
+     * @param markerId   MarkerId set to ImageView for potential reference
+     * @param context    Context in which the marker is created
+     * @param activity   Activity in which the marker is placed
+     */
+    Character(MapArea mapArea, double latitude, double longitude, int drawableId, int markerId,
+              @NotNull Context context, @NotNull AppCompatActivity activity) {
+        super(mapArea, latitude, longitude, drawableId, markerId,
                 true, context, activity);
     }
 
     /**
      * Create a character marker for specified context, activity and alike.
      *
-     * @param latitude Latitude used to position marker on map
-     * @param longitude Longitude used to position marker on map
-     * @param markerWidth Marker width used to position and size marker
-     * @param markerHeight Marker height used to position and size marker
-     * @param drawable Drawable used as display for the marker
-     * @param markerId MarkerId set to ImageView for potential reference
-     * @param context Context in which the marker is created
-     * @param activity Activity in which the marker is placed
-     * @return ImageView of created marker
+     * @param mapArea   MapArea that the marker is placed on
+     * @param latitude  Latitude used to position character on map area
+     * @param longitude Longitude used to position character on map area
+     * @param markerId  MarkerId set to ImageView for potential reference
+     * @param context   Context in which the marker is created
+     * @param activity  Activity in which the marker is placed
      */
-    ImageView create(double latitude, double longitude, int markerWidth, int markerHeight,
-                            Drawable drawable, int markerId, Context context, AppCompatActivity activity) {
-        return super.create(latitude, longitude, markerWidth, markerHeight, drawable, markerId,
-                true, context, activity);
+    Character(MapArea mapArea, double latitude, double longitude, int markerId,
+              @NotNull Context context, @NotNull AppCompatActivity activity) {
+        super(mapArea, latitude, longitude, markerId, true,
+                context, activity);
     }
 
     /**
@@ -55,29 +70,29 @@ public abstract class Character extends Marker {
      *
      * @param latitude Latitude of the target location
      * @param longitude Longitude of the target location
-     * @param context Context in which it takes place
-     * @param activity Activity in which to move
      */
-    public void move(double latitude, double longitude,
-                     Context context, AppCompatActivity activity) {
+    public void move(double latitude, double longitude) {
         // Get the map location for the specified values
-        MapLocation mapLocation = new MapLocation(latitude, longitude, activity,
-                imageView.getWidth(), imageView.getHeight());
+        MapPosition mapPosition =
+                MapPosition.getPosition(mapArea, latitude, longitude, getWidth(), getHeight());
 
         // Get target x and y value
-        int targetX = mapLocation.getX();
-        int targetY = mapLocation.getY();
+        int targetX = mapPosition.getX();
+        int targetY = mapPosition.getY();
 
         // Set the rotation of the character to the movement direction
         setRotation(getDirection(targetX, targetY));
 
         // Animate the character to the target position
         Runnable relocate = () -> {
-            place(mapLocation.getX(), mapLocation.getY());
+            place(latitude, longitude);
             //updateDistances(); TODO Do game logic computation on character location change event.
         };
-        imageView.animate().x(targetX).y(targetY).setDuration(1000)
-                .withEndAction(relocate).start();
+        animate().x(targetX).y(targetY).withEndAction(relocate)
+                .setDuration(getContext().getResources().getInteger(R.integer.moveAnimationTime))
+                .start();
+
+        Log.d(TAG, "Moving character"); // TODO remove line
     }
 
     /**
@@ -88,11 +103,8 @@ public abstract class Character extends Marker {
      * @return Direction that the target is in relative to character location
      */
     private Direction getDirection(int targetX, int targetY) {
-        int currentX = (int) imageView.getX();
-        int currentY = (int) imageView.getY();
-
-        int xDirection = targetX - currentX;
-        int yDirection = targetY - currentY;
+        int xDirection = targetX - (int) getX();
+        int yDirection = targetY - (int) getY();
 
         if (Math.abs(xDirection) > Math.abs(yDirection)) {
             if (xDirection < 0) {

@@ -1,41 +1,37 @@
 package com.example.pacmanapp.markers;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.widget.ImageView;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.map.MapArea;
 
+@SuppressLint("ViewConstructor")
 public class PacDot extends Marker {
+    private final static int drawableId = R.drawable.pac_dot_v1_2;
+    private final static int markerId = R.id.pacdot;
 
     /**
-     * PacDot marker to display on the map and use.
+     * Pac-dot marker to display on the map and use.
      *
-     * @param latitude latitude that the marker is placed at
-     * @param longitude longitude that the marker is placed at
-     * @param context Context that the marker is created in
-     * @param activity Activity that the marker is placed in
+     * @param mapArea   MapArea that the pac-dot is placed on
+     * @param latitude  latitude that the pac-dot is placed at
+     * @param longitude longitude that the pac-dot is placed at
+     * @param context   Context that the pac-dot is created in
+     * @param activity  Activity that the pac-dot is placed in
      */
-    public PacDot(double latitude, double longitude, Context context, AppCompatActivity activity) {
-        create(latitude, longitude, context, activity);
+    public PacDot(MapArea mapArea, double latitude, double longitude, Context context, AppCompatActivity activity) {
+        super(mapArea, latitude, longitude, drawableId, markerId, false, context, activity);
+
+        setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setX(getX() + 50);
+            }
+        });
     }
 
-    /**
-     * Create a pacdot marker for specified context, activity and alike.
-     *
-     * @param latitude Latitude used to position marker on map
-     * @param longitude Longitude used to position marker on map
-     * @param context Context in which the marker is created
-     * @param activity Activity in which the marker is placed
-     * @return ImageView of created pacdot marker
-     */
-    ImageView create(double latitude, double longitude,
-                     Context context, AppCompatActivity activity) {
-        int markerWidth = (int) (activity.getResources().getDimension(R.dimen.pacDotSize));
-        int markerHeight = (int) (activity.getResources().getDimension(R.dimen.pacDotSize));
-
-        return super.create(latitude, longitude, markerWidth, markerHeight,
-                R.drawable.pac_dot_v1_1, R.id.pacdot, false, context, activity);
-    }
 }

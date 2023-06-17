@@ -1,20 +1,23 @@
 package com.example.pacmanapp.markers;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
-import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.map.MapArea;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressLint("ViewConstructor")
 public class Ghost extends Character {
+    private final static String TAG = "Ghost";
     private final Map<Direction, AnimationDrawable> animationDrawableMap;
     private final GhostType ghostType;
     private static final Direction startDirection = Direction.RIGHT;
@@ -23,33 +26,29 @@ public class Ghost extends Character {
      * Ghost marker to display on the map and control.
      *
      * @param ghostType GhostType that ghost displays as
-     * @param latitude latitude that the marker starts at
-     * @param longitude longitude that the marker start at
-     * @param context Context that the marker is created in
-     * @param activity Activity that the marker is placed in
+     * @param mapArea   MapArea that the ghost is placed on
+     * @param latitude  latitude that the ghost starts at
+     * @param longitude longitude that the ghost start at
+     * @param context   Context that the ghost is created in
+     * @param activity  Activity that the ghost is placed in
      */
-    public Ghost(GhostType ghostType, double latitude, double longitude, Context context,
+    public Ghost(GhostType ghostType, MapArea mapArea, double latitude, double longitude, Context context,
                  AppCompatActivity activity) {
-        int color = ghostType.getColor(context);
+        super(mapArea, latitude, longitude, ghostType.getId(), context, activity);
         this.ghostType = ghostType;
+        int color = ghostType.getColor(context);
         animationDrawableMap = createAnimationDrawables(color, context);
-        create(latitude, longitude, context, activity);
+        setDrawable(getAnimationDrawable(startDirection));
     }
 
     /**
-     * Create a ghost marker for specified context, activity and alike.
+     * Get marker size in pixels.
      *
-     * @param latitude Latitude used to position marker on map
-     * @param longitude Longitude used to position marker on map
-     * @param context Context in which the marker is created
-     * @param activity Activity in which the marker is placed
-     * @return ImageView of created ghost marker
+     * @param activity Activity to get resources from
+     * @return Marker size in pixels
      */
-    ImageView create(double latitude, double longitude, Context context,
-                            AppCompatActivity activity) {
-        int markerSize = activity.getResources().getDimensionPixelSize(R.dimen.ghostMarkerSize);
-        return super.create(latitude, longitude, markerSize, markerSize,
-                getAnimationDrawable(startDirection), ghostType.getId(), context, activity);
+    private static int getMarkerSize(AppCompatActivity activity) {
+        return activity.getResources().getDimensionPixelSize(R.dimen.ghostMarkerSize);
     }
 
     /**
@@ -73,7 +72,7 @@ public class Ghost extends Character {
         int frameDuration = context.getResources().getInteger(R.integer.ghostFrameDuration);
         int frameCount = context.getResources().getInteger(R.integer.ghostFrameCount);
 
-        HashMap<Direction, AnimationDrawable> map = new HashMap<>();
+        HashMap<Direction, AnimationDrawable> drawableHashMap = new HashMap<>();
 
         for (Direction direction: Direction.values()) {
             AnimationDrawable animationDrawable = new AnimationDrawable();
@@ -81,10 +80,10 @@ public class Ghost extends Character {
                 animationDrawable.addFrame(createFrame(direction, frameIndex, color, context),
                         frameDuration);
             }
-            map.put(direction, animationDrawable);
+            drawableHashMap.put(direction, animationDrawable);
         }
 
-        return map;
+        return drawableHashMap;
     }
 
     /**
@@ -98,19 +97,19 @@ public class Ghost extends Character {
      */
     private LayerDrawable createFrame(Direction direction, int frameIndex, int color,
                                       Context context) {
-        Drawable drawableBase = direction.getDrawableBase(context, frameIndex);
+        Drawable drawableBase = direction.getDrawableGhostBase(context, frameIndex);
 
         assert drawableBase != null;
         drawableBase.setTintMode(PorterDuff.Mode.SRC_ATOP);
         drawableBase.setTint(color);
 
-        return new LayerDrawable(new Drawable[] {drawableBase, direction.getDrawableEyes(context)});
+        return new LayerDrawable(new Drawable[] {drawableBase, direction.getDrawableGhostEyes(context)});
     }
 
     @Override
     void setRotation(Direction direction) {
         // Replace the imageView with the new direction.
-        imageView.setImageDrawable(getAnimationDrawable(direction));
+        setDrawable(getAnimationDrawable(direction));
     }
 
 }

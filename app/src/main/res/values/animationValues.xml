@@ -2,4 +2,5 @@
 <resources>
     <integer name="ghostFrameDuration">100</integer>
     <integer name="ghostFrameCount">2</integer>
+    <integer name="moveAnimationTime">2000</integer>
 </resources>

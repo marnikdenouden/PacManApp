@@ -1,40 +1,42 @@
 package com.example.pacmanapp.markers;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.map.MapArea;
 
+@SuppressLint("ViewConstructor")
 public class PowerPallet extends Marker {
+    private final static int drawableId =  R.drawable.power_pallet_v1_1;
+    private final static int markerId = R.id.powerpallet;
+
     /**
      * PowerPallet marker to display on the map and use.
      *
-     * @param latitude latitude that the marker is placed at
-     * @param longitude longitude that the marker is placed at
-     * @param context Context that the marker is created in
-     * @param activity Activity that the marker is placed in
+     * @param mapArea   MapArea that the power pallet is placed on
+     * @param latitude  latitude that the power pallet is placed at
+     * @param longitude longitude that the power pallet is placed at
+     * @param context   Context that the power pallet is created in
+     * @param activity  Activity that the power pallet is placed in
      */
-    public PowerPallet(double latitude, double longitude, Context context, AppCompatActivity activity) {
-        create(latitude, longitude, context, activity);
+    public PowerPallet(MapArea mapArea, double latitude, double longitude, Context context, AppCompatActivity activity) {
+        super(mapArea, latitude, longitude, drawableId, markerId, false, context, activity);
     }
 
-    /**
-     * Create a power pallet marker for specified context, activity and alike.
-     *
-     * @param latitude Latitude used to position marker on map
-     * @param longitude Longitude used to position marker on map
-     * @param context Context in which the marker is created
-     * @param activity Activity in which the marker is placed
-     * @return ImageView of created power pallet marker
-     */
-    ImageView create(double latitude, double longitude,
-                     Context context, AppCompatActivity activity) {
-        int markerWidth = (int) (activity.getResources().getDimension(R.dimen.powerPalletSize));
-        int markerHeight = (int) (activity.getResources().getDimension(R.dimen.powerPalletSize));
+    private static int getPowerPalletSize(AppCompatActivity activity) {
+        return (int) (activity.getResources().getDimension(R.dimen.powerPalletSize));
+    }
 
-        return super.create(latitude, longitude, markerWidth, markerHeight,
-                R.drawable.power_pallet_v1_1, R.id.powerpallet, false, context, activity);
+    @Override
+    int getPixelWidth(AppCompatActivity activity) {
+        return getPowerPalletSize(activity);
+    }
+
+    @Override
+    int getPixelHeight(AppCompatActivity activity) {
+        return getPowerPalletSize(activity);
     }
 }

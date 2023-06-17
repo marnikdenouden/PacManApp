@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <dimen name="pacmanMarkerSize">16dp</dimen>
-    <dimen name="ghostMarkerSize">16dp</dimen>
-    <dimen name="powerPalletSize">8dp</dimen>
-    <dimen name="pacDotSize">4dp</dimen>
-    <dimen name="digitSize">14dp</dimen>
-</resources>

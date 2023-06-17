@@ -3,24 +3,19 @@ package com.example.pacmanapp;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 
-import android.os.Looper;
-import android.text.Layout;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.pacmanapp.displays.Clock;
@@ -28,16 +23,14 @@ import com.example.pacmanapp.displays.Score;
 import com.example.pacmanapp.location.LocationUpdater;
 import com.example.pacmanapp.location.locationObserver;
 import com.example.pacmanapp.markers.Ghost;
+import com.example.pacmanapp.map.MapArea;
+import com.example.pacmanapp.markers.GhostType;
 import com.example.pacmanapp.markers.PacDot;
 import com.example.pacmanapp.markers.PacMan;
 import com.example.pacmanapp.markers.PowerPallet;
 import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.Priority;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 
 import java.time.Duration;
-import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity implements locationObserver {
@@ -47,14 +40,16 @@ public class MainActivity extends AppCompatActivity implements locationObserver 
     private TextView AddressText;
     private Button LocationButton;
 
-    private View layout;
-
+    private ViewGroup layout;
+    private MapArea mapArea;
 
 
     private PacMan pacman;
     private Ghost ghost;
+    private PowerPallet powerPallet;
+    private PacDot pacDot;
 
-    private String TAG = "MainActivity";
+    private final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,22 +60,26 @@ public class MainActivity extends AppCompatActivity implements locationObserver 
         LocationButton = findViewById(R.id.locationButton);
         layout = findViewById(R.id.layout);
 
+        ViewGroup mapFrame = findViewById(R.id.mapFrame);
+        mapArea = MapArea.addMap(mapFrame);
+
+        createMarkers();
+
         Clock clock = new Clock(MainActivity.this, MainActivity.this);
-        clock.setTime(Duration.ofSeconds(10293));
+        clock.setTime(Duration.ofSeconds(2678));
 
         Score score = new Score(5, R.id.scoreLayout, MainActivity.this, MainActivity.this);
-        score.setValue(10293);
-
-
+        score.setValue(4678);
 
         locationUpdater = new LocationUpdater(MainActivity.this, MainActivity.this);
 
         LocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (locationUpdater.isRequestingLocationUpdates()) {
+                    locationUpdater.stopLocationUpdates();
                     layout.setBackgroundColor(getResources().getColor(R.color.white, getTheme()));
                     Log.i(TAG, "Stop location updates");
-                    createMarkers(); // TODO move create markers so it is run at a good time.
                 } else {
                     locationUpdater.startLocationUpdates();
                     Log.i(TAG, "Start location updates");
@@ -105,13 +104,10 @@ public class MainActivity extends AppCompatActivity implements locationObserver 
     }
 
     private void createMarkers() {
-        ImageView map = findViewById(R.id.map_image);
-        if (map.getHeight() > 0 && map.getWidth() > 0) {
-            pacman = new PacMan(51.4198767, 5.485905, MainActivity.this, MainActivity.this);
-            //ghost = new Ghost(GhostType.Blinky, 0, 0, MainActivity.this, MainActivity.this);
-            PowerPallet powerPallet = new PowerPallet(51.4191983, 5.492802, MainActivity.this, MainActivity.this);
-            PacDot pacDot = new PacDot(51.419331, 5.48632, MainActivity.this, MainActivity.this);
-        }
+        pacman = new PacMan(mapArea, 51.4198767, 5.485905, MainActivity.this, MainActivity.this);
+        ghost = new Ghost(GhostType.Blinky, mapArea, 0, 0, MainActivity.this, MainActivity.this);
+        powerPallet = new PowerPallet(mapArea,51.4191983, 5.492802, MainActivity.this, MainActivity.this);
+        pacDot = new PacDot(mapArea,51.419331, 5.48632, MainActivity.this, MainActivity.this);
     }
 
     // Location result updating. //
@@ -123,12 +119,17 @@ public class MainActivity extends AppCompatActivity implements locationObserver 
      */
     public void updateMarkerLocations(Location location) {
         if (pacman != null) {
-            pacman.move(location.getLatitude(), location.getLongitude(), MainActivity.this, MainActivity.this);
+            pacman.move(location.getLatitude(), location.getLongitude());
+            // Tracking pacman
+            mapArea.moveMapCenter(pacman);
+            pacman.updatePlacement();
         }
         if (ghost != null) {
             //ghost.move(location.getLatitude() - 0.002, location.getLongitude() + 0.002, MainActivity.this, MainActivity.this);
         }
 
+        if (pacDot != null) {
+            pacDot.updatePlacement();
         }
 
     }

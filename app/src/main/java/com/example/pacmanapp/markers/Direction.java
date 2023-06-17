@@ -13,14 +13,14 @@ public enum Direction {
     UP(270, new int[] {R.drawable.ghosts_base_up_0, R.drawable.ghosts_base_up_1}, R.drawable.ghosts_eyes_up),
     DOWN(90, new int[] {R.drawable.ghosts_base_0, R.drawable.ghosts_base_1}, R.drawable.ghosts_eyes_down);
 
-    private int degrees;
-    private int[] drawableBaseIds;
-    private int drawableEyesId;
+    private final int degrees;
+    private final int[] drawableGhostBaseIds;
+    private final int drawableGhostEyesId;
 
-    Direction(int degrees, int[] drawableBaseIds, int drawableEyesId) {
+    Direction(int degrees, int[] drawableGhostBaseIds, int drawableGhostEyesId) {
         this.degrees = degrees;
-        this.drawableBaseIds = drawableBaseIds;
-        this.drawableEyesId = drawableEyesId;
+        this.drawableGhostBaseIds = drawableGhostBaseIds;
+        this.drawableGhostEyesId = drawableGhostEyesId;
     }
 
     int getDegrees() {
@@ -36,11 +36,11 @@ public enum Direction {
      * @return Drawable for the frame index
      * @throws IllegalArgumentException if pre condition is violated
      */
-    Drawable getDrawableBase(Context context, int frameIndex) {
+    Drawable getDrawableGhostBase(Context context, int frameIndex) {
         if (frameIndex < 0 || frameIndex >= context.getResources().getInteger(R.integer.ghostFrameCount)) {
             throw new IllegalArgumentException("Frame index is not valid for the frame count.");
         }
-        return AppCompatResources.getDrawable(context, drawableBaseIds[frameIndex]);
+        return AppCompatResources.getDrawable(context, drawableGhostBaseIds[frameIndex]);
     }
 
     /**
@@ -49,7 +49,7 @@ public enum Direction {
      * @param context Context to get drawable with
      * @return Drawable of ghost eyes for this direction.
      */
-    Drawable getDrawableEyes(Context context) {
-        return AppCompatResources.getDrawable(context, drawableEyesId);
+    Drawable getDrawableGhostEyes(Context context) {
+        return AppCompatResources.getDrawable(context, drawableGhostEyesId);
     }
 }

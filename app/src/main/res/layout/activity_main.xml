@@ -35,13 +35,12 @@
         app:layout_constraintStart_toEndOf="@id/clock"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <include
-        android:id="@+id/map"
-        layout="@layout/map"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:maxHeight="500dp"
+    <FrameLayout
+        android:id="@+id/mapFrame"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
         android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toTopOf="@id/addressText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,12 +53,10 @@
         android:text="User location"
         android:textColor="@android:color/black"
         android:textSize="19sp"
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="622dp"
         app:layout_constraintBottom_toTopOf="@id/locationButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/map" />
+        app:layout_constraintTop_toBottomOf="@id/mapFrame" />
 
     <Button
         android:id="@+id/locationButton"

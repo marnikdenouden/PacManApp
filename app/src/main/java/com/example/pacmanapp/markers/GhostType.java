@@ -10,8 +10,8 @@ public enum GhostType {
     Inky(R.color.Inky, R.id.inky),
     Clyde(R.color.Clyde, R.id.clyde);
 
-    private int colorId;
-    private int markerId;
+    private final int colorId;
+    private final int markerId;
 
     GhostType(int colorId, int markerId) {
         this.colorId = colorId;

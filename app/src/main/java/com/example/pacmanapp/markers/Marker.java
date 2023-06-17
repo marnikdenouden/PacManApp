@@ -1,156 +1,252 @@
 package com.example.pacmanapp.markers;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
-import android.widget.ImageView;
+import android.location.Location;
+import android.util.Log;
 import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.map.MapArea;
+import com.example.pacmanapp.map.MapPosition;
 
 import org.jetbrains.annotations.NotNull;
 
-public class Marker {
-    ImageView imageView;
+@SuppressLint("ViewConstructor")
+public class Marker extends androidx.appcompat.widget.AppCompatImageView {
+    private final String TAG = "Marker";
+    private double latitude;
+    private double longitude;
+    final MapArea mapArea; // MapArea that the marker is placed on
+    private final boolean animate; // Determines if drawable gets animated
 
     /**
      * Create a marker for specified context, activity and alike.
      *
-     * @param latitude Latitude used to position marker on map
-     * @param longitude Longitude used to position marker on map
-     * @param markerWidth Marker width used to position and size marker
-     * @param markerHeight Marker height used to position and size marker
-     * @param drawable Drawable used as display for the marker
-     * @param markerId MarkerId set to ImageView for potential reference
-     * @param animate Boolean animate to state if drawable should animate
-     * @param context Context in which the marker is created
-     * @param activity Activity in which the marker is placed
-     * @return ImageView of created marker
+     * @param mapArea   MapArea that the marker is placed on
+     * @param latitude  Latitude used to position marker on map area
+     * @param longitude Longitude used to position marker on map area
+     * @param drawable  Drawable used as display for the marker
+     * @param markerId  MarkerId set to ImageView for potential reference
+     * @param context   Context in which the marker is created
+     * @param activity  Activity in which the marker is placed
+     * @param animate   Boolean animate to state if drawable should animate
      */
-    ImageView create(double latitude, double longitude, int markerWidth, int markerHeight,
-                       Drawable drawable, int markerId, boolean animate,
-                       Context context, AppCompatActivity activity) {
+    Marker(MapArea mapArea, double latitude, double longitude, @NotNull Drawable drawable, int markerId,
+           @NotNull Context context, @NotNull AppCompatActivity activity, boolean animate) {
+        super(context);
+        // Set marker values
+        this.mapArea = mapArea;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.animate = animate;
 
-        // Create layout params for marker in relative layout
-        RelativeLayout.LayoutParams layoutParams =
-                createLayoutParams(latitude, longitude, markerWidth, markerHeight, activity);
+        // Set imageView values
+        setLayoutParams(latitude, longitude, activity);
+        setId(markerId);
+        setDrawable(drawable);
 
-        // Gets the relative layout with markers id that marker will be added to
-        RelativeLayout layout = activity.findViewById(R.id.markers);
+        // Add marker to map area
+        mapArea.addMarker(this);
+    }
 
-        // Create imageView for marker
-        this.imageView = createImageView(context, layoutParams, markerId, drawable);
+    /**
+     * Create a marker for specified context, activity and alike.
+     *
+     * @param mapArea   MapArea that the marker is placed on
+     * @param latitude  Latitude used to position marker on map area
+     * @param longitude Longitude used to position marker on map area
+     * @param markerId  MarkerId set to ImageView for potential reference
+     * @param animate   Boolean animate to state if drawable should animate
+     * @param context   Context in which the marker is created
+     * @param activity  Activity in which the marker is placed
+     */
+    Marker(MapArea mapArea, double latitude, double longitude, int markerId, boolean animate,
+           @NotNull Context context, @NotNull AppCompatActivity activity) {
+        super(context);
+        // Set marker values
+        this.mapArea = mapArea;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.animate = animate;
 
-        // Add the imageView to the layout
-        layout.addView(imageView);
+        // Set imageView values
+        setLayoutParams(latitude, longitude, activity);
+        setId(markerId);
 
+        // Add marker to map area
+        mapArea.addMarker(this);
+    }
+
+    /**
+     * Create a marker for specified context, activity and alike.
+     *
+     * @param mapArea    MapArea that the marker is placed on
+     * @param latitude   Latitude used to position marker on map area
+     * @param longitude  Longitude used to position marker on map area
+     * @param drawableId DrawableId used to get drawable to display for the marker
+     * @param markerId   MarkerId set to ImageView for potential reference
+     * @param animate    Boolean animate to state if drawable should animate
+     * @param context    Context in which the marker is created
+     * @param activity   Activity in which the marker is placed
+     */
+    Marker(MapArea mapArea, double latitude, double longitude, int drawableId, int markerId, boolean animate,
+           Context context, AppCompatActivity activity) {
+        super(context);
+        // Set marker values
+        this.mapArea = mapArea;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.animate = animate;
+
+        // Set imageView values
+        setLayoutParams(latitude, longitude, activity);
+        setId(markerId);
+        setDrawable(drawableId);
+
+        // Add marker to map area
+        mapArea.addMarker(this);
+    }
+
+    /**
+     * Get the pixel width for the marker.
+     *
+     * @param activity Activity to get dimension from
+     * @return pixel width in int
+     */
+    int getPixelWidth(AppCompatActivity activity) {
+        return (int) activity.getResources().getDimension(R.dimen.defaultMarkerSize);
+    }
+
+    /**
+     * Get the pixel height for the marker.
+     *
+     * @param activity Activity to get dimension from
+     * @return pixel height in int
+     */
+    int getPixelHeight(AppCompatActivity activity) {
+        return (int) activity.getResources().getDimension(R.dimen.defaultMarkerSize);
+    }
+
+    /**
+     * Set drawable for given drawable Id.
+     *
+     * @param drawableId Id to get drawable with
+     */
+    void setDrawable(int drawableId) {
+        Drawable drawable = AppCompatResources.getDrawable(getContext(), drawableId);
+        if (drawable == null) {
+            Log.e(TAG, "Could not set drawable on marker for id: " + drawableId);
+            return;
+        }
+        setDrawable(drawable);
+    }
+
+    /**
+     * Set drawable for given drawable
+     *
+     * @param drawable Drawable to set.
+     */
+    void setDrawable(@NotNull Drawable drawable) {
+        setImageDrawable(drawable);
+        tryAnimate(animate);
+    }
+
+    /**
+     * Try to animate the animation drawable.
+     *
+     * @param animate Boolean if the marker is set to animate
+     */
+    void tryAnimate(boolean animate) {
         // If animate is true, cast and start to animate the drawable.
-        if (animate && drawable != null) {
-            animate((AnimationDrawable) drawable);
+        if (animate) {
+            try {
+                // Cast the drawable to animation drawable
+                AnimationDrawable animationDrawable = ((AnimationDrawable) getDrawable());
+
+                // Start the animation drawable
+                animationDrawable.start();
+            } catch(ClassCastException classCastException) {
+                Log.e(TAG, "Could not cast drawable to animationDrawable," +
+                        " while animate is set to true");
+            }
         }
 
-        return imageView;
     }
 
     /**
-     * Create a marker for specified context, activity and alike.
-     *
-     * @param latitude Latitude used to position marker on map
-     * @param longitude Longitude used to position marker on map
-     * @param markerWidth Marker width used to position and size marker
-     * @param markerHeight Marker height used to position and size marker
-     * @param drawableId DrawableId used to get drawable to display for the marker
-     * @param markerId MarkerId set to ImageView for potential reference
-     * @param animate Boolean animate to state if drawable should animate
-     * @param context Context in which the marker is created
-     * @param activity Activity in which the marker is placed
-     * @return ImageView of created marker
-     */
-    ImageView create(double latitude, double longitude, int markerWidth, int markerHeight,
-                            int drawableId, int markerId, boolean animate,
-                            Context context, AppCompatActivity activity) {
-        Drawable drawable = AppCompatResources.getDrawable(context, drawableId);
-        return create(latitude, longitude, markerWidth, markerHeight, drawable, markerId, animate,
-                context, activity);
-    }
-
-    /**
-     * Create ImageView for marker.
-     *
-     * @param context Context to create imageView in
-     * @param layoutParams Layout params to use for imageView
-     * @param markerId Id for marker reference
-     * @param drawable Drawable to display in imageView
-     * @return ImageView that is created
-     */
-    private ImageView createImageView(Context context, RelativeLayout.LayoutParams layoutParams,
-                                      int markerId, Drawable drawable) {
-        ImageView imageView = new ImageView(context);
-        imageView.setLayoutParams(layoutParams);
-        imageView.setId(markerId);
-        imageView.setImageDrawable(drawable);
-        return imageView;
-    }
-
-    /**
-     * Create layout params for marker in relative layout.
+     * Set layout params for marker in relative layout.
      *
      * @param latitude Latitude to use for marker map location
      * @param longitude Longitude to use for marker map location
-     * @param markerWidth Marker width used for layout params and map location
-     * @param markerHeight Marker height used for layout params and map location
      * @param activity Activity to use for map location context
-     * @return Layout params that is created
      */
-    private RelativeLayout.LayoutParams createLayoutParams(double latitude, double longitude,
-                                                           int markerWidth, int markerHeight,
-                                                           AppCompatActivity activity) {
+    private void setLayoutParams(double latitude, double longitude, AppCompatActivity activity) {
         // Create the relative layout params with specified height and width
         RelativeLayout.LayoutParams layoutParams =
-                new RelativeLayout.LayoutParams(markerWidth, markerHeight);
+                new RelativeLayout.LayoutParams(getPixelWidth(activity), getPixelHeight(activity));
 
         // Create map location from latitude and longitude
-        MapLocation mapLocation = new MapLocation(latitude, longitude, activity,
-                markerWidth, markerHeight);
+        MapPosition mapPosition = MapPosition.getPosition(mapArea, latitude, longitude,
+                getPixelWidth(activity), getPixelHeight(activity));
 
         // set the margins of the layout params
-        layoutParams.setMargins(mapLocation.getX(), mapLocation.getY(), 0, 0);
-        return layoutParams;
+        layoutParams.setMargins(mapPosition.getX(), mapPosition.getY(), 0, 0);
+        setLayoutParams(layoutParams);
     }
 
     /**
-     * Place the character to a new location.
+     * Place the marker to a new location.
      *
-     * @param newX X location
-     * @param newY Y location
+     * @param location to place marker to
      */
-    public void place(int newX, int newY) {
-        imageView.setX(newX);
-        imageView.setY(newY);
+    void place(@NotNull Location location) {
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+        place(latitude, longitude);
+    }
+
+    /**
+     * Place the marker to a new location.
+     *
+     * @param latitude Used to set the y location
+     * @param longitude Used to set the x location
+     */
+    void place(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        updatePlacement();
     }
 
     /**
      * Place the character to a new map location.
      *
-     * @param mapLocation the new map location.
+     * @param mapPosition the new map location.
      */
-    public void place(MapLocation mapLocation) {
-        place(mapLocation.getX(), mapLocation.getY());
+    private void place(MapPosition mapPosition) {
+        setX(mapPosition.getX());
+        setY(mapPosition.getY());
     }
-
 
     /**
-     * Animate the animation drawable.
-     *
-     * @param animationDrawable animationDrawable to start animation for.
+     * Update the marker position for its stored location.
      */
-    private static void animate(@NotNull AnimationDrawable animationDrawable) {
-        // Start the animation drawable
-        animationDrawable.start();
+    public void updatePlacement() {
+        MapPosition mapPosition = MapPosition.getPosition(mapArea, latitude, longitude,
+                getWidth(), getHeight());
+        place(mapPosition);
     }
 
+    @NotNull
+    public MapPosition getMapPosition() {
+        int xPosition = (int) getX();
+        int yPosition = (int) getY();
+        return new MapPosition(xPosition, yPosition);
+    }
 
 }
