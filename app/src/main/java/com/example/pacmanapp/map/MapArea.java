@@ -175,13 +175,14 @@ public class MapArea extends ConstraintLayout {
      * @param targetY y position to move the map image to
      */
     private void moveMap(int targetX, int targetY) {
-        // Animate the character to the target position
+        // Animate the map image and marker layout to the target position
         Runnable moveMapCenter = () -> {
             placeMap(targetX, targetY);
         };
+        int animationTime = getContext().getResources().getInteger(R.integer.moveAnimationTime);
         mapView.animate().x(targetX).y(targetY).withEndAction(moveMapCenter)
-                .setDuration(getContext().getResources().getInteger(R.integer.moveAnimationTime))
-                .start();
+                .setDuration(animationTime).start();
+        markerLayout.animate().x(targetX).y(targetY).setDuration(animationTime).start();
     }
 
     /**
