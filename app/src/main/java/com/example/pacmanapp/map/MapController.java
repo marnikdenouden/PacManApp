@@ -66,6 +66,7 @@ public class MapController extends View {
                 velocityTracker = VelocityTracker.obtain();
                 velocityTracker.addMovement(event);
                 return true;
+
             case MotionEvent.ACTION_MOVE:
                 moveX = lastRawX - event.getRawX();
                 moveY = lastRawY - event.getRawY();
@@ -78,6 +79,7 @@ public class MapController extends View {
                 velocityTracker.addMovement(event);
                 setLastTouchPosition(event);
                 return true;
+
             case MotionEvent.ACTION_UP:
                 moveX = lastRawX - event.getRawX();
                 moveY = lastRawY - event.getRawY();
@@ -96,6 +98,7 @@ public class MapController extends View {
 
                 mapArea.invalidate();
                 return true;
+
             case MotionEvent.ACTION_CANCEL:
                 recycleVelocityTracker();
                 return true;
