@@ -86,7 +86,7 @@ public class MapArea extends ConstraintLayout {
     public static MapArea addMap(ViewGroup view) {
         MapArea mapArea = new MapArea(view.getContext());
         view.addView(mapArea);
-        view.addView(new MapController(mapArea));
+        view.addView(new MapController(mapArea), 0);
         return mapArea;
     }
 

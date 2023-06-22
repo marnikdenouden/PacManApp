@@ -12,7 +12,7 @@ import com.example.pacmanapp.R;
 @SuppressLint("ViewConstructor")
 public class MapController extends View {
     private final static String TAG = "MapController";
-    private final static int mapMoverId = R.id.mapMover;
+    private final static int mapMoverId = R.id.mapController;
     private final MapArea mapArea;
 
     public MapController(MapArea mapArea) {
