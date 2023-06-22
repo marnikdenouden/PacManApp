@@ -1,6 +1,7 @@
 package com.example.pacmanapp.map;
 
-import android.view.MotionEvent;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
@@ -11,6 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.markers.Marker;
 
+@SuppressLint("ViewConstructor")
 public class MapArea extends ConstraintLayout {
     private final static String TAG = "MapArea";
     private final static int mapAreaId = R.id.mapArea;
@@ -25,35 +27,23 @@ public class MapArea extends ConstraintLayout {
 
     private final MapView mapView; // Map view that determines the area of the map
     private final MarkerLayout markerLayout; // Relative layout to contain markers on top of the map
-    private final MapMover mapMover; // View to detect touch input to move the map
 
-    public Move move; // Used to move the map around
-    OverScroller scroller;
-
-    // TODO Allow the map to be moved to be centered on a location,
-    //  since the constraint layout map area provides a view section on the map.
-    // TODO Additionally allow the map to be scaled.
+    //>>> Methods to create the map area layout <<<//
 
     /**
      * Create a map area layout for a context.
      *
-     * @param view View that map area is added to
+     * @param context to create layout with
      */
-    private MapArea(ViewGroup view) {
-        super(view.getContext());
-        view.addView(this);
+    private MapArea(Context context) {
+        super(context);
 
-        mapView = new MapView(this);
-        markerLayout = new MarkerLayout(this);
-
-        mapMover = new MapMover(this);
-        view.addView(mapMover); // Detects touch to move the map, set on top of map area
+        mapView = new MapView(this); // Visual map that is behind the markers
+        markerLayout = new MarkerLayout(this); // Contains the markers on top of the map
 
         setupMapArea();
 
-        move = new Move(this);
         createOverScroller();
-
     }
 
     /**
@@ -76,6 +66,46 @@ public class MapArea extends ConstraintLayout {
         setLayoutParams(layoutParams);
     }
 
+    //>>> Public methods to call for map area <<<//
+
+    /**
+     * Adds a marker to the map.
+     *
+     * @param marker Marker to add to the map
+     */
+    public void addMarker(Marker marker) {
+        markerLayout.addView(marker);
+    }
+
+    /**
+     * Adds a map to the given view.
+     *
+     * @param view View to add map to
+     * @return MapArea map area added to the view
+     */
+    public static MapArea addMap(ViewGroup view) {
+        MapArea mapArea = new MapArea(view.getContext());
+        view.addView(mapArea);
+        view.addView(new MapController(mapArea));
+        return mapArea;
+    }
+
+    /**
+     * Get the map position from a latitude and longitude location.
+     *
+     * @param latitude  latitude that is converted to map y position
+     * @param longitude longitude that is converted to map x position
+     * @return MapPosition that corresponds to the specified location
+     */
+    public MapPosition getMapLocation(double latitude, double longitude) {
+        // Convert the latitude and longitude to X and Y values on the map
+        double xPosition = (longitude - longitudeStart) * mapView.getWidth() / longitudeWidth;
+        double yPosition = (latitude - latitudeStart) * mapView.getHeight() / latitudeHeight;
+        return new MapPosition((int) xPosition, (int) yPosition);
+    }
+
+    //>>> Methods to call within package to orchestrate the map <<<//
+
     /**
      * Get the map view of this map area.
      *
@@ -94,49 +124,9 @@ public class MapArea extends ConstraintLayout {
         return markerLayout;
     }
 
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh); // TODO update the use of this method
-    }
+    //>>> Map Area scroller code <<<//
 
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        super.onLayout(changed, l, t, r, b); // TODO update the use of this method
-        //move.centerMap();
-    }
-
-    /**
-     * Adds a marker to the map.
-     *
-     * @param marker Marker to add to the map
-     */
-    public void addMarker(Marker marker) {
-        markerLayout.addView(marker);
-    }
-
-    /**
-     * Adds a map to the given view.
-     *
-     * @param view View to add map to
-     * @return Map map added to the view
-     */
-    public static MapArea addMap(ViewGroup view) {
-        return new MapArea(view);
-    }
-
-    /**
-     * Get the map position from a latitude and longitude location.
-     *
-     * @param latitude  latitude that is converted to map y position
-     * @param longitude longitude that is converted to map x position
-     * @return MapPosition that corresponds to the specified location
-     */
-    public MapPosition getMapLocation(double latitude, double longitude) {
-        // Convert the latitude and longitude to X and Y values on the map
-        double xPosition = (longitude - longitudeStart) * mapView.getWidth() / longitudeWidth;
-        double yPosition = (latitude - latitudeStart) * mapView.getHeight() / latitudeHeight;
-        return new MapPosition((int) xPosition, (int) yPosition);
-    }
+    OverScroller scroller; // Allow map controller to use scroller
 
     private void createOverScroller() {
         scroller = new OverScroller(getContext(), new AccelerateDecelerateInterpolator());
@@ -151,10 +141,4 @@ public class MapArea extends ConstraintLayout {
         }
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        return mapMover.handleTouchEvent(event); // TODO I am not sure what the right strategy is to get it to work well.
-    }
-
-    // Maybe map mover code can be moved here>
 }

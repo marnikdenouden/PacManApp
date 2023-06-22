@@ -29,6 +29,30 @@ public class MapPosition {
     }
 
     /**
+     * Gets the top left map position of a square with specified width and height,
+     * which has at the center the specified latitude and longitude location on the map area.
+     *
+     * @param mapArea Map on which to get the map location
+     * @param latitude Latitude to convert to y location
+     * @param longitude Longitude to convert to x location
+     * @param width Width of square to align longitude center of
+     * @param height Height of square to align latitude center of
+     */
+    public static MapPosition getPosition(MapArea mapArea, double latitude, double longitude,
+                                          int width, int height) {
+        MapPosition mapPosition = mapArea.getMapLocation(latitude, longitude);
+        int xPosition = mapPosition.getX() - (width / 2);
+        int yPosition = mapPosition.getY() - (height / 2);
+
+        return new MapPosition(xPosition, yPosition);
+    }
+
+
+
+
+    //>>> Code for position calculation <<<// TODO replace code with settings and automation of map movement.
+
+    /**
      * Gets the bounded position of a location on the map area.
      *
      * @param mapArea Map area to convert the location to position on
@@ -73,25 +97,6 @@ public class MapPosition {
                                                  int width, int height) {
         MapPosition mapPosition = getPosition(mapArea, latitude, longitude, width, height);
         return boundOnMap(mapArea, mapPosition, width, height);
-    }
-
-    /**
-     * Gets the top left map position of a square with specified width and height,
-     * which has at the center the specified latitude and longitude location on the map area.
-     *
-     * @param mapArea Map on which to get the map location
-     * @param latitude Latitude to convert to y location
-     * @param longitude Longitude to convert to x location
-     * @param width Width of square to align longitude center of
-     * @param height Height of square to align latitude center of
-     */
-    public static MapPosition getPosition(MapArea mapArea, double latitude, double longitude,
-                                          int width, int height) {
-        MapPosition mapPosition = mapArea.getMapLocation(latitude, longitude);
-        int xPosition = mapPosition.getX() - (width / 2);
-        int yPosition = mapPosition.getY() - (height / 2);
-
-        return new MapPosition(xPosition, yPosition);
     }
 
     /**

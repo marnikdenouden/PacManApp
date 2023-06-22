@@ -1,27 +1,35 @@
 package com.example.pacmanapp.map;
 
-import android.view.MotionEvent;
+import android.annotation.SuppressLint;
 import android.widget.RelativeLayout;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.pacmanapp.R;
 
+@SuppressLint("ViewConstructor")
 public class MarkerLayout extends RelativeLayout {
     private final static String TAG = "MarkerLayout";
     private final static int markerLayoutId = R.id.markerLayout;
-    private final MapArea mapArea;
 
     public MarkerLayout(MapArea mapArea) {
         super(mapArea.getContext());
-        this.mapArea = mapArea;
 
-        setId(markerLayoutId);
-
+        // Setup the relative layout
+        setViewValues();
         setLayoutParams(mapArea.getMapView());
 
         // Add marker layout to the map area
         mapArea.addView(this);
+    }
+
+    /**
+     * Set values for the view, such as id.
+     */
+    private void setViewValues() {
+        setId(markerLayoutId);
+        setClickable(false);
+        setFocusable(false);
     }
 
 
@@ -44,16 +52,5 @@ public class MarkerLayout extends RelativeLayout {
         // Set the layout parameters to the marker layout
         setLayoutParams(layoutParams);
     }
-
-    @Override
-    public boolean performClick() {
-        return false; // Marker layout should not be clicked
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        return false; // Marker layout should not be touched
-    }
-
 
 }

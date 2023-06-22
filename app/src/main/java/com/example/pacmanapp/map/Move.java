@@ -10,6 +10,13 @@ public class Move {
     //  It could have a method onLocationResult() from location observer and use it.
     //  Maybe it could track a marker in different ways or move to selected map positions etc. Also check how map position is configured for such use.
 
+
+    // Moved from map area to here.
+    // TODO Allow the map to be moved to be centered on a location,
+    //  since the constraint layout map area provides a view section on the map.
+    // TODO Additionally allow the map to be scaled.
+
+
     private final MapArea mapArea;
     private final MapView mapView;
     private final MarkerLayout markerLayout;
