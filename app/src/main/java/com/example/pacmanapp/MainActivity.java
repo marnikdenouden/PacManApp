@@ -3,7 +3,6 @@ package com.example.pacmanapp;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,7 +14,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.pacmanapp.displays.Clock;
@@ -120,8 +118,6 @@ public class MainActivity extends AppCompatActivity implements locationObserver 
     public void updateMarkerLocations(Location location) {
         if (pacman != null) {
             pacman.move(location.getLatitude(), location.getLongitude());
-            // Tracking pacman
-            mapArea.moveMapCenter(pacman);
             pacman.updatePlacement();
         }
         if (ghost != null) {

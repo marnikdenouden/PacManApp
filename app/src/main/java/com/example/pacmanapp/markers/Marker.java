@@ -187,6 +187,10 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView {
      * @param activity Activity to use for map location context
      */
     private void setLayoutParams(double latitude, double longitude, AppCompatActivity activity) {
+        // Set the marker clickable and focusable
+        setClickable(true);
+        setFocusable(true);
+
         // Create the relative layout params with specified height and width
         RelativeLayout.LayoutParams layoutParams =
                 new RelativeLayout.LayoutParams(getPixelWidth(activity), getPixelHeight(activity));
@@ -242,11 +246,28 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView {
         place(mapPosition);
     }
 
+    /**
+     * Get the map position of this marker.
+     *
+     * @return Map position of this marker
+     */
     @NotNull
     public MapPosition getMapPosition() {
         int xPosition = (int) getX();
         int yPosition = (int) getY();
         return new MapPosition(xPosition, yPosition);
+    }
+
+    /**
+     * Get the distance to another marker.
+     *
+     * @param marker Marker to get distance to
+     * @return Distance between this marker and the specified marker.
+     */
+    public float distanceTo(Marker marker) {
+        float[] results = new float[3];
+        Location.distanceBetween(latitude, longitude, marker.latitude, marker.longitude, results);
+        return results[0];
     }
 
 }

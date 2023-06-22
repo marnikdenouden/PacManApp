@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="defaultMapSize">600dp</dimen>
+    <dimen name="defaultMapSize">660dp</dimen>
     <dimen name="defaultMarkerSize">16dp</dimen>
         <dimen name="powerPalletSize">8dp</dimen>
         <dimen name="pacDotSize">16dp</dimen>

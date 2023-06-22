@@ -49,7 +49,7 @@ public class LocationUpdater {
         locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
                 .setWaitForAccurateLocation(false)
                 .setMinUpdateIntervalMillis(2000)
-                .setMaxUpdateDelayMillis(20000)
+                .setMaxUpdateDelayMillis(10000)
                 .build();
 
         locationCallback = new LocationCallback() {

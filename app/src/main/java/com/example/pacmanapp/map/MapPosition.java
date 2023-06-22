@@ -49,10 +49,12 @@ public class MapPosition {
      * @return Map position that is within the map bounds
      */
     public static MapPosition boundOnMap(MapArea mapArea, MapPosition mapPosition) {
-        int markerX = Math.max(0, Math.min(mapPosition.getX(), mapArea.getWidth()));
-        int markerY = Math.max(0, Math.min(mapPosition.getY(), mapArea.getHeight()));
+        int leftBound = 0;
+        int rightBound = mapArea.getWidth();
+        int topBound = 0;
+        int bottomBound = mapArea.getHeight();
 
-        return new MapPosition(markerX, markerY);
+        return bound(mapPosition, leftBound, rightBound, topBound, bottomBound);
     }
 
     /**
@@ -103,10 +105,20 @@ public class MapPosition {
      */
     public static MapPosition boundOnMap(MapArea mapArea, MapPosition mapPosition,
                                          int width, int height) {
-        int markerX = Math.max(0, Math.min(mapPosition.getX(), mapArea.getWidth() - width));
-        int markerY = Math.max(0, Math.min(mapPosition.getY(), mapArea.getHeight() - height));
+        int leftBound = 0;
+        int rightBound = mapArea.getWidth() - width;
+        int topBound = 0;
+        int bottomBound = mapArea.getHeight() - height;
 
-        return new MapPosition(markerX, markerY);
+        return bound(mapPosition, leftBound, rightBound, topBound, bottomBound);
+    }
+
+    private static MapPosition bound(MapPosition mapPosition, int leftBound, int rightBound,
+                                     int topBound, int bottomBound) {
+        int positionX = Math.max(leftBound, Math.min(mapPosition.getX(), rightBound));
+        int positionY = Math.max(topBound, Math.min(mapPosition.getY(), bottomBound));
+
+        return new MapPosition(positionX, positionY);
     }
 
 }
