@@ -26,6 +26,8 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView {
     protected final int frameId; // mapFrameId reference to the map area that marker is placed on
     private final boolean animate; // Determines if drawable gets animated
 
+    //>>> Constructors for marker <<<//
+
     /**
      * Create a marker for specified context, activity and alike.
      *
@@ -113,6 +115,8 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView {
         // Add marker to map area
         MapManager.getMapArea(frameId).addMarker(this);
     }
+
+    //>>> Methods to set marker values <<<//
 
     /**
      * Get the pixel width for the marker.
@@ -205,6 +209,8 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView {
         setLayoutParams(layoutParams);
     }
 
+    //>>> place marker methods <<<//
+
     /**
      * Place the marker to a new location.
      *
@@ -237,6 +243,8 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView {
         setX(mapPosition.getX());
         setY(mapPosition.getY());
     }
+
+    //>>> Public methods to use on marker <<<//
 
     /**
      * Update the marker position for its stored location.
