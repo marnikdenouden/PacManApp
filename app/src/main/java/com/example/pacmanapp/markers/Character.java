@@ -15,6 +15,8 @@ import org.jetbrains.annotations.NotNull;
 public abstract class Character extends Marker {
     private final static String TAG = "Character";
 
+    //>>> Constructors for character <<<//
+
     /**
      * Create a character marker for specified context, activity and alike.
      *
@@ -64,6 +66,8 @@ public abstract class Character extends Marker {
         super(frameId, latitude, longitude, markerId, true,
                 context, activity);
     }
+
+    //>>> Methods to control the character <<<//
 
     /**
      * Move the character to a new target location.
