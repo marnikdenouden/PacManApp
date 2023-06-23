@@ -10,13 +10,14 @@ import android.graphics.drawable.LayerDrawable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
-import com.example.pacmanapp.map.MapArea;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 @SuppressLint("ViewConstructor")
-public class Ghost extends Character {
+public class Ghost extends Character implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final static String TAG = "Ghost";
     private final Map<Direction, AnimationDrawable> animationDrawableMap;
     private final GhostType ghostType;

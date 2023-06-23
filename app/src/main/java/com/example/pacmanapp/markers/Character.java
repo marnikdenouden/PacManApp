@@ -7,12 +7,14 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
-import com.example.pacmanapp.map.MapArea;
 import com.example.pacmanapp.map.MapPosition;
 
 import org.jetbrains.annotations.NotNull;
 
-public abstract class Character extends Marker {
+import java.io.Serializable;
+
+public abstract class Character extends Marker implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final static String TAG = "Character";
 
     //>>> Constructors for character <<<//

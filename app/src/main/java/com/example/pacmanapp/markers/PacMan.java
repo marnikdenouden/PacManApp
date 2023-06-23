@@ -6,10 +6,12 @@ import android.content.Context;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
-import com.example.pacmanapp.map.MapArea;
+
+import java.io.Serializable;
 
 @SuppressLint("ViewConstructor")
-public class PacMan extends Character {
+public class PacMan extends Character implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final static int drawableId = R.drawable.pacman_marker_animation;
     private final static int markerId = R.id.pacman;
 

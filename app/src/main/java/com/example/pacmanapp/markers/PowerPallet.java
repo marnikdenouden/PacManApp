@@ -6,10 +6,12 @@ import android.content.Context;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
-import com.example.pacmanapp.map.MapArea;
+
+import java.io.Serializable;
 
 @SuppressLint("ViewConstructor")
-public class PowerPallet extends Marker {
+public class PowerPallet extends Marker implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final static int drawableId =  R.drawable.power_pallet_v1_1;
     private final static int markerId = R.id.powerpallet;
 

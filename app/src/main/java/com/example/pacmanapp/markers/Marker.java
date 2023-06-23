@@ -12,14 +12,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.pacmanapp.R;
-import com.example.pacmanapp.map.MapArea;
 import com.example.pacmanapp.map.MapManager;
 import com.example.pacmanapp.map.MapPosition;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
+
 @SuppressLint("ViewConstructor")
-public class Marker extends androidx.appcompat.widget.AppCompatImageView {
+public class Marker extends androidx.appcompat.widget.AppCompatImageView implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final String TAG = "Marker";
     private double latitude;
     private double longitude;
