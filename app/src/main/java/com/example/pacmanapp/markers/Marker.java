@@ -266,8 +266,19 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView {
      * @return Distance between this marker and the specified marker.
      */
     public float distanceTo(Marker marker) {
+        return distanceTo(marker.latitude, marker.longitude);
+    }
+
+    /**
+     * Get the distance to another location.
+     *
+     * @param latitude to get distance to
+     * @param longitude to get distance to
+     * @return Distance between this marker and the specified location.
+     */
+    public float distanceTo(double latitude, double longitude) {
         float[] results = new float[3];
-        Location.distanceBetween(latitude, longitude, marker.latitude, marker.longitude, results);
+        Location.distanceBetween(this.latitude, this.longitude, latitude, longitude, results);
         return results[0];
     }
 
