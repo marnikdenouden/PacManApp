@@ -20,6 +20,7 @@ import com.example.pacmanapp.displays.Clock;
 import com.example.pacmanapp.displays.Score;
 import com.example.pacmanapp.location.LocationUpdater;
 import com.example.pacmanapp.location.locationObserver;
+import com.example.pacmanapp.map.MapType;
 import com.example.pacmanapp.markers.Ghost;
 import com.example.pacmanapp.map.MapArea;
 import com.example.pacmanapp.markers.GhostType;
@@ -39,8 +40,6 @@ public class MainActivity extends AppCompatActivity implements locationObserver 
     private Button LocationButton;
 
     private ViewGroup layout;
-    private MapArea mapArea;
-
 
     private PacMan pacman;
     private Ghost ghost;
@@ -58,10 +57,9 @@ public class MainActivity extends AppCompatActivity implements locationObserver 
         LocationButton = findViewById(R.id.locationButton);
         layout = findViewById(R.id.layout);
 
-        ViewGroup mapFrame = findViewById(R.id.mapFrame);
-        mapArea = MapArea.addMap(mapFrame);
-
-        createMarkers();
+        ViewGroup mapFrame = findViewById(R.id.pacManMapFrame);
+        MapArea.addMap(MapType.PacMan, mapFrame);
+        createMarkers(R.id.pacManMapFrame);
 
         Clock clock = new Clock(MainActivity.this, MainActivity.this);
         clock.setTime(Duration.ofSeconds(2678));
@@ -101,11 +99,11 @@ public class MainActivity extends AppCompatActivity implements locationObserver 
         }
     }
 
-    private void createMarkers() {
-        pacman = new PacMan(mapArea, 51.4198767, 5.485905, MainActivity.this, MainActivity.this);
-        ghost = new Ghost(GhostType.Blinky, mapArea, 0, 0, MainActivity.this, MainActivity.this);
-        powerPallet = new PowerPallet(mapArea,51.4191983, 5.492802, MainActivity.this, MainActivity.this);
-        pacDot = new PacDot(mapArea,51.419331, 5.48632, MainActivity.this, MainActivity.this);
+    private void createMarkers(int mapFrameId) {
+        pacman = new PacMan(mapFrameId, 51.4198767, 5.485905, MainActivity.this, MainActivity.this);
+        ghost = new Ghost(GhostType.Blinky, mapFrameId, 0, 0, MainActivity.this, MainActivity.this);
+        powerPallet = new PowerPallet(mapFrameId,51.4191983, 5.492802, MainActivity.this, MainActivity.this);
+        pacDot = new PacDot(mapFrameId,51.419331, 5.48632, MainActivity.this, MainActivity.this);
     }
 
     // Location result updating. //

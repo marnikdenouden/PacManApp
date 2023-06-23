@@ -26,15 +26,15 @@ public class Ghost extends Character {
      * Ghost marker to display on the map and control.
      *
      * @param ghostType GhostType that ghost displays as
-     * @param mapArea   MapArea that the ghost is placed on
+     * @param frameId   FrameId reference to map area that the ghost is placed on
      * @param latitude  latitude that the ghost starts at
      * @param longitude longitude that the ghost start at
      * @param context   Context that the ghost is created in
      * @param activity  Activity that the ghost is placed in
      */
-    public Ghost(GhostType ghostType, MapArea mapArea, double latitude, double longitude, Context context,
+    public Ghost(GhostType ghostType, int frameId, double latitude, double longitude, Context context,
                  AppCompatActivity activity) {
-        super(mapArea, latitude, longitude, ghostType.getId(), context, activity);
+        super(frameId, latitude, longitude, ghostType.getId(), context, activity);
         this.ghostType = ghostType;
         int color = ghostType.getColor(context);
         animationDrawableMap = createAnimationDrawables(color, context);

@@ -13,6 +13,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.map.MapArea;
+import com.example.pacmanapp.map.MapManager;
 import com.example.pacmanapp.map.MapPosition;
 
 import org.jetbrains.annotations.NotNull;
@@ -22,13 +23,13 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView {
     private final String TAG = "Marker";
     private double latitude;
     private double longitude;
-    final MapArea mapArea; // MapArea that the marker is placed on
+    protected final int frameId; // mapFrameId reference to the map area that marker is placed on
     private final boolean animate; // Determines if drawable gets animated
 
     /**
      * Create a marker for specified context, activity and alike.
      *
-     * @param mapArea   MapArea that the marker is placed on
+     * @param frameId   FrameId reference to map area that the marker is placed on
      * @param latitude  Latitude used to position marker on map area
      * @param longitude Longitude used to position marker on map area
      * @param drawable  Drawable used as display for the marker
@@ -37,11 +38,11 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView {
      * @param activity  Activity in which the marker is placed
      * @param animate   Boolean animate to state if drawable should animate
      */
-    Marker(MapArea mapArea, double latitude, double longitude, @NotNull Drawable drawable, int markerId,
+    Marker(int frameId, double latitude, double longitude, @NotNull Drawable drawable, int markerId,
            @NotNull Context context, @NotNull AppCompatActivity activity, boolean animate) {
         super(context);
         // Set marker values
-        this.mapArea = mapArea;
+        this.frameId = frameId;
         this.latitude = latitude;
         this.longitude = longitude;
         this.animate = animate;
@@ -52,13 +53,13 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView {
         setDrawable(drawable);
 
         // Add marker to map area
-        mapArea.addMarker(this);
+        MapManager.getMapArea(frameId).addMarker(this);
     }
 
     /**
      * Create a marker for specified context, activity and alike.
      *
-     * @param mapArea   MapArea that the marker is placed on
+     * @param frameId   FrameId reference to map area that the marker is placed on
      * @param latitude  Latitude used to position marker on map area
      * @param longitude Longitude used to position marker on map area
      * @param markerId  MarkerId set to ImageView for potential reference
@@ -66,11 +67,11 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView {
      * @param context   Context in which the marker is created
      * @param activity  Activity in which the marker is placed
      */
-    Marker(MapArea mapArea, double latitude, double longitude, int markerId, boolean animate,
+    Marker(int frameId, double latitude, double longitude, int markerId, boolean animate,
            @NotNull Context context, @NotNull AppCompatActivity activity) {
         super(context);
         // Set marker values
-        this.mapArea = mapArea;
+        this.frameId = frameId;
         this.latitude = latitude;
         this.longitude = longitude;
         this.animate = animate;
@@ -80,13 +81,13 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView {
         setId(markerId);
 
         // Add marker to map area
-        mapArea.addMarker(this);
+        MapManager.getMapArea(frameId).addMarker(this);
     }
 
     /**
      * Create a marker for specified context, activity and alike.
      *
-     * @param mapArea    MapArea that the marker is placed on
+     * @param frameId    FrameId reference to map area that the marker is placed on
      * @param latitude   Latitude used to position marker on map area
      * @param longitude  Longitude used to position marker on map area
      * @param drawableId DrawableId used to get drawable to display for the marker
@@ -95,11 +96,11 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView {
      * @param context    Context in which the marker is created
      * @param activity   Activity in which the marker is placed
      */
-    Marker(MapArea mapArea, double latitude, double longitude, int drawableId, int markerId, boolean animate,
+    Marker(int frameId, double latitude, double longitude, int drawableId, int markerId, boolean animate,
            Context context, AppCompatActivity activity) {
         super(context);
         // Set marker values
-        this.mapArea = mapArea;
+        this.frameId = frameId;
         this.latitude = latitude;
         this.longitude = longitude;
         this.animate = animate;
@@ -110,7 +111,7 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView {
         setDrawable(drawableId);
 
         // Add marker to map area
-        mapArea.addMarker(this);
+        MapManager.getMapArea(frameId).addMarker(this);
     }
 
     /**
@@ -196,7 +197,7 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView {
                 new RelativeLayout.LayoutParams(getPixelWidth(activity), getPixelHeight(activity));
 
         // Create map location from latitude and longitude
-        MapPosition mapPosition = MapPosition.getPosition(mapArea, latitude, longitude,
+        MapPosition mapPosition = MapPosition.getPosition(frameId, latitude, longitude,
                 getPixelWidth(activity), getPixelHeight(activity));
 
         // set the margins of the layout params
@@ -241,7 +242,7 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView {
      * Update the marker position for its stored location.
      */
     public void updatePlacement() {
-        MapPosition mapPosition = MapPosition.getPosition(mapArea, latitude, longitude,
+        MapPosition mapPosition = MapPosition.getPosition(frameId, latitude, longitude,
                 getWidth(), getHeight());
         place(mapPosition);
     }

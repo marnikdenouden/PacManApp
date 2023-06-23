@@ -36,7 +36,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
-        android:id="@+id/mapFrame"
+        android:id="@+id/pacManMapFrame"
         android:layout_width="400dp"
         android:layout_height="400dp"
         android:layout_marginTop="32dp"
@@ -56,7 +56,7 @@
         app:layout_constraintBottom_toTopOf="@id/locationButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mapFrame" />
+        app:layout_constraintTop_toBottomOf="@id/pacManMapFrame" />
 
     <Button
         android:id="@+id/locationButton"

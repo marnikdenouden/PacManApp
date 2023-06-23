@@ -16,14 +16,14 @@ public class PowerPallet extends Marker {
     /**
      * PowerPallet marker to display on the map and use.
      *
-     * @param mapArea   MapArea that the power pallet is placed on
+     * @param frameId   FrameId reference to map area that the marker is placed on
      * @param latitude  latitude that the power pallet is placed at
      * @param longitude longitude that the power pallet is placed at
      * @param context   Context that the power pallet is created in
      * @param activity  Activity that the power pallet is placed in
      */
-    public PowerPallet(MapArea mapArea, double latitude, double longitude, Context context, AppCompatActivity activity) {
-        super(mapArea, latitude, longitude, drawableId, markerId, false, context, activity);
+    public PowerPallet(int frameId, double latitude, double longitude, Context context, AppCompatActivity activity) {
+        super(frameId, latitude, longitude, drawableId, markerId, false, context, activity);
     }
 
     private static int getPowerPalletSize(AppCompatActivity activity) {

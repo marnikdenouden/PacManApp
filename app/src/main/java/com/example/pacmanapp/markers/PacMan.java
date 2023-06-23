@@ -16,14 +16,14 @@ public class PacMan extends Character {
     /**
      * PacMan marker to display on the map and control.
      *
-     * @param mapArea   MapArea that pacman is placed on
+     * @param frameId   FrameId reference to map area that pacman is placed on
      * @param latitude  latitude that pacman starts at
      * @param longitude longitude that pacman start at
      * @param context   Context that pacman is created in
      * @param activity  Activity that pacman is placed in
      */
-    public PacMan(MapArea mapArea, double latitude, double longitude, Context context, AppCompatActivity activity) {
-        super(mapArea, latitude, longitude, drawableId, markerId, context, activity);
+    public PacMan(int frameId, double latitude, double longitude, Context context, AppCompatActivity activity) {
+        super(frameId, latitude, longitude, drawableId, markerId, context, activity);
     }
 
     @Override

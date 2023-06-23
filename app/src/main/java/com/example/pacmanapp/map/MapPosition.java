@@ -32,6 +32,21 @@ public class MapPosition {
      * Gets the top left map position of a square with specified width and height,
      * which has at the center the specified latitude and longitude location on the map area.
      *
+     * @param frameId FrameId reference to map from which to get the location
+     * @param latitude Latitude to convert to y location
+     * @param longitude Longitude to convert to x location
+     * @param width Width of square to align longitude center of
+     * @param height Height of square to align latitude center of
+     */
+    public static MapPosition getPosition(int frameId, double latitude, double longitude,
+                                          int width, int height) {
+        return getPosition(MapManager.getMapArea(frameId), latitude, longitude, width, height);
+    }
+
+    /**
+     * Gets the top left map position of a square with specified width and height,
+     * which has at the center the specified latitude and longitude location on the map area.
+     *
      * @param mapArea Map on which to get the map location
      * @param latitude Latitude to convert to y location
      * @param longitude Longitude to convert to x location

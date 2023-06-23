@@ -15,16 +15,8 @@ import com.example.pacmanapp.markers.Marker;
 @SuppressLint("ViewConstructor")
 public class MapArea extends ConstraintLayout {
     private final static String TAG = "MapArea";
-    private final static int mapAreaId = R.id.mapArea;
-
-    // latitude range on the map drawable
-    private final double latitudeStart = 51.424203344;
-    private final double latitudeHeight = -0.0084914531;
-
-    // longitude range on the map drawable
-    private final double longitudeStart = 5.48382758497;
-    private final double longitudeWidth = 0.013472188;
-
+    final static int mapAreaId = R.id.mapArea;
+    private final MapType mapType; // Map type that specifies map specific values
     private final MapView mapView; // Map view that determines the area of the map
     private final MarkerLayout markerLayout; // Relative layout to contain markers on top of the map
 
@@ -33,16 +25,17 @@ public class MapArea extends ConstraintLayout {
     /**
      * Create a map area layout for a context.
      *
+     * @param mapType Map to create map area for
      * @param context to create layout with
      */
-    private MapArea(Context context) {
+    private MapArea(MapType mapType, Context context) {
         super(context);
+        this.mapType = mapType;
 
         mapView = new MapView(this); // Visual map that is behind the markers
         markerLayout = new MarkerLayout(this); // Contains the markers on top of the map
 
         setupMapArea();
-
         createOverScroller();
     }
 
@@ -52,7 +45,7 @@ public class MapArea extends ConstraintLayout {
     private void setupMapArea() {
         setId(mapAreaId);
         setLayoutParams();
-        setBackgroundColor(getResources().getColor(R.color.mapBackground, getContext().getTheme()));
+        setBackgroundColor(getResources().getColor(mapType.getBackgroundColor(), getContext().getTheme()));
     }
 
     /**
@@ -83,10 +76,11 @@ public class MapArea extends ConstraintLayout {
      * @param view View to add map to
      * @return MapArea map area added to the view
      */
-    public static MapArea addMap(ViewGroup view) {
-        MapArea mapArea = new MapArea(view.getContext());
+    public static MapArea addMap(MapType mapType, ViewGroup view) {
+        MapArea mapArea = new MapArea(mapType, view.getContext());
         view.addView(mapArea);
         view.addView(new MapController(mapArea), 0);
+        MapManager.getMapManager().addMapArea(view.getId(), mapArea);
         return mapArea;
     }
 
@@ -98,13 +92,36 @@ public class MapArea extends ConstraintLayout {
      * @return MapPosition that corresponds to the specified location
      */
     public MapPosition getMapLocation(double latitude, double longitude) {
-        // Convert the latitude and longitude to X and Y values on the map
-        double xPosition = (longitude - longitudeStart) * mapView.getWidth() / longitudeWidth;
-        double yPosition = (latitude - latitudeStart) * mapView.getHeight() / latitudeHeight;
+        // Convert the longitude to the X position on the map
+        double xPosition = (longitude - mapType.getLongitudeStart())
+                * mapView.getWidth() / mapType.getLongitudeWidth();
+
+        // Convert the latitude to the Y position on the map
+        double yPosition = (latitude - mapType.getLatitudeStart())
+                * mapView.getHeight() / mapType.getLatitudeHeight();
+
         return new MapPosition((int) xPosition, (int) yPosition);
     }
 
+    /**
+     * Get the map area id.
+     *
+     * @return Id of the map area
+     */
+    public int getMapAreaId() {
+        return mapAreaId;
+    }
+
     //>>> Methods to call within package to orchestrate the map <<<//
+
+    /**
+     * Get the map type of this map area.
+     *
+     * @return Map reference
+     */
+    MapType getMapType() {
+        return mapType;
+    }
 
     /**
      * Get the map view of this map area.

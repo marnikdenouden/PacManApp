@@ -18,7 +18,7 @@ public abstract class Character extends Marker {
     /**
      * Create a character marker for specified context, activity and alike.
      *
-     * @param mapArea   MapArea that the marker is placed on
+     * @param frameId   FrameId reference to map area that the character is placed on
      * @param latitude  Latitude used to position character on map area
      * @param longitude Longitude used to position character on map area
      * @param drawable  Drawable used as display for the marker
@@ -26,16 +26,16 @@ public abstract class Character extends Marker {
      * @param context   Context in which the marker is created
      * @param activity  Activity in which the marker is placed
      */
-    Character(MapArea mapArea, double latitude, double longitude, @NotNull Drawable drawable, int markerId,
+    Character(int frameId, double latitude, double longitude, @NotNull Drawable drawable, int markerId,
               @NotNull Context context, @NotNull AppCompatActivity activity) {
-        super(mapArea, latitude, longitude, drawable, markerId, context, activity, true
+        super(frameId, latitude, longitude, drawable, markerId, context, activity, true
         );
     }
 
     /**
      * Create a character marker for specified context, activity and alike.
      *
-     * @param mapArea    MapArea that the marker is placed on
+     * @param frameId    FrameId reference to map area that the marker is placed on
      * @param latitude   Latitude used to position character on map area
      * @param longitude  Longitude used to position character on map area
      * @param drawableId DrawableId used to get drawable to display for the marker
@@ -43,25 +43,25 @@ public abstract class Character extends Marker {
      * @param context    Context in which the marker is created
      * @param activity   Activity in which the marker is placed
      */
-    Character(MapArea mapArea, double latitude, double longitude, int drawableId, int markerId,
+    Character(int frameId, double latitude, double longitude, int drawableId, int markerId,
               @NotNull Context context, @NotNull AppCompatActivity activity) {
-        super(mapArea, latitude, longitude, drawableId, markerId,
+        super(frameId, latitude, longitude, drawableId, markerId,
                 true, context, activity);
     }
 
     /**
      * Create a character marker for specified context, activity and alike.
      *
-     * @param mapArea   MapArea that the marker is placed on
+     * @param frameId   FrameId reference to map area that the marker is placed on
      * @param latitude  Latitude used to position character on map area
      * @param longitude Longitude used to position character on map area
      * @param markerId  MarkerId set to ImageView for potential reference
      * @param context   Context in which the marker is created
      * @param activity  Activity in which the marker is placed
      */
-    Character(MapArea mapArea, double latitude, double longitude, int markerId,
+    Character(int frameId, double latitude, double longitude, int markerId,
               @NotNull Context context, @NotNull AppCompatActivity activity) {
-        super(mapArea, latitude, longitude, markerId, true,
+        super(frameId, latitude, longitude, markerId, true,
                 context, activity);
     }
 
@@ -74,7 +74,7 @@ public abstract class Character extends Marker {
     public void move(double latitude, double longitude) {
         // Get the map location for the specified values
         MapPosition mapPosition =
-                MapPosition.getPosition(mapArea, latitude, longitude, getWidth(), getHeight());
+                MapPosition.getPosition(frameId, latitude, longitude, getWidth(), getHeight());
 
         // Get target x and y value
         int targetX = mapPosition.getX();

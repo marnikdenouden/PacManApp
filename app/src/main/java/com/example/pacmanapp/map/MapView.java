@@ -2,7 +2,6 @@ package com.example.pacmanapp.map;
 
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
-import android.view.MotionEvent;
 import android.widget.ImageView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -13,7 +12,6 @@ import com.example.pacmanapp.R;
 @SuppressLint("ViewConstructor")
 public class MapView extends androidx.appcompat.widget.AppCompatImageView {
     private final static String TAG = "MapView";
-    private final static int mapDrawable = R.drawable.map; // Drawable for the map
     private final static int mapViewId = R.id.mapView;
 
     MapView(MapArea mapArea) {
@@ -21,8 +19,8 @@ public class MapView extends androidx.appcompat.widget.AppCompatImageView {
 
         // Setup the image view
         setViewValues();
-        setMapDrawable();
-        setLayoutParams();
+        setMapDrawable(mapArea.getMapType());
+        setLayoutParams(mapArea.getMapType());
 
         // Center the image and adjust the bounds to the image size
         setScaleType(ImageView.ScaleType.CENTER);
@@ -44,20 +42,21 @@ public class MapView extends androidx.appcompat.widget.AppCompatImageView {
     /**
      * Add the map image to this map view.
      */
-    private void setMapDrawable() {
+    private void setMapDrawable(MapType mapType) {
         Drawable drawable = ResourcesCompat.getDrawable(getResources(),
-                mapDrawable, getContext().getTheme());
+                mapType.getDrawable(), getContext().getTheme());
         setImageDrawable(drawable);
     }
 
     /**
      * Set the layout params for this map view.
      */
-    private void setLayoutParams() {
-        // Create layout params with default map size
-        int mapSize = getResources().getDimensionPixelSize(R.dimen.defaultMapSize);
+    private void setLayoutParams(MapType mapType) {
+        // Create layout params with the map size
+        int width = getResources().getDimensionPixelSize(mapType.getWidth());
+        int height = getResources().getDimensionPixelSize(mapType.getHeight());
         ConstraintLayout.LayoutParams layoutParams =
-                new ConstraintLayout.LayoutParams(mapSize, mapSize);
+                new ConstraintLayout.LayoutParams(width, height);
 
         // Set the layout parameters to the map view
         setLayoutParams(layoutParams);

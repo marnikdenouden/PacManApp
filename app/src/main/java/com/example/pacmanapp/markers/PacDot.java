@@ -17,14 +17,14 @@ public class PacDot extends Marker {
     /**
      * Pac-dot marker to display on the map and use.
      *
-     * @param mapArea   MapArea that the pac-dot is placed on
+     * @param frameId   FrameId reference to map area that the pac-dot is placed on
      * @param latitude  latitude that the pac-dot is placed at
      * @param longitude longitude that the pac-dot is placed at
      * @param context   Context that the pac-dot is created in
      * @param activity  Activity that the pac-dot is placed in
      */
-    public PacDot(MapArea mapArea, double latitude, double longitude, Context context, AppCompatActivity activity) {
-        super(mapArea, latitude, longitude, drawableId, markerId, false, context, activity);
+    public PacDot(int frameId, double latitude, double longitude, Context context, AppCompatActivity activity) {
+        super(frameId, latitude, longitude, drawableId, markerId, false, context, activity);
 
         setOnClickListener(new View.OnClickListener() {
             @Override
