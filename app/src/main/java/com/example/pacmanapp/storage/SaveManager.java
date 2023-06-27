@@ -80,6 +80,24 @@ public class SaveManager {
         }
     }
 
+    public void loadSave(String saveName, Context context) {
+        File saveFile = new File(saveDirectory.getPath(), saveName);
+        try {
+            byte[] saveData = loadFileData(saveFile);
+            Log.d(TAG, "File data of save with name " + saveFile.getName() + ":" + Arrays.toString(saveData));
+            GameSave gameSave = GameSave.getGameSaveFromData(saveData);
+            if (gameSave == null) {
+                Log.d(TAG, "Could not load game save from save file with name " + saveFile.getName());
+                return;
+            }
+            saves.put(saveFile.getName(), gameSave);
+            gameSave.load(context);
+        } catch (IOException | ClassNotFoundException exception) {
+            exception.printStackTrace();
+            throw new RuntimeException(exception.getCause());
+        }
+    }
+
     public void loadSaves() {
         File[] files = saveDirectory.listFiles();
 

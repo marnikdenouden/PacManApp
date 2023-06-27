@@ -2,7 +2,10 @@ package com.example.pacmanapp.storage;
 
 import android.content.Context;
 
-public abstract class SaveObject {
+import java.io.Serializable;
+
+public abstract class SaveObject implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final String saveName;
 
     public SaveObject(String saveName, Context context) {

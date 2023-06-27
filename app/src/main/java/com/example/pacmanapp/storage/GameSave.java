@@ -16,13 +16,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-public class GameSave {
-    private static final String TAG = "GameSave";
+public class GameSave implements Serializable {
     private static final long serialVersionUID = 1L;
+    private static final String TAG = "GameSave";
 
     private final Collection<SaveObject> saveObjects;
-
-    //Map<Class<? extends SaveObject>, Collection<? extends SaveObject>> objectReferences;
 
     GameSave() {
         //objectReferences = new HashMap<>();
@@ -84,12 +82,15 @@ public class GameSave {
 //    }
 
     /**
-     * Load the all save objects.
+     * Load the all save objects that are part of this game save.
      */
-    public void loadSaveObjects(Context context) {
+    public void load(Context context) {
+        Collection<SaveObject> loadedSaveObjects = new HashSet<>();
         for (SaveObject saveObject: saveObjects) {
-            saveObject.load(context);
+            loadedSaveObjects.add(saveObject.load(context));
         }
+        saveObjects.clear();
+        saveObjects.addAll(loadedSaveObjects);
     }
 
     /**

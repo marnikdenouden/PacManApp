@@ -6,6 +6,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.appcompat.content.res.AppCompatResources;
@@ -106,6 +107,8 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView impleme
         setMarkerId(markerId);
         setDrawable(drawableId);
     }
+
+    // TODO can not serialize this class as it does not have a no-arg constructor. Maybe a good oppurtinity to rewrite and include a good way to load and unload a set of markers?
 
     /**
      * Add marker to map area from frame Id reference.

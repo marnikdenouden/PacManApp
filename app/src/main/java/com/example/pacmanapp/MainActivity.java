@@ -35,7 +35,7 @@ import com.google.android.gms.location.LocationResult;
 import java.time.Duration;
 
 
-public class MainActivity extends AppCompatActivity implements LocationObserver {
+public class MainActivity extends AppCompatActivity {
 
     private LocationUpdater locationUpdater;
 
@@ -46,11 +46,6 @@ public class MainActivity extends AppCompatActivity implements LocationObserver 
     private Button saveGameButton;
 
     private ViewGroup layout;
-
-    private PacMan pacman;
-    private Ghost ghost;
-    private PowerPallet powerPallet;
-    private PacDot pacDot;
 
     private SaveManager saveManager;
     private final String TAG = "MainActivity";
@@ -69,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements LocationObserver 
 
         ViewGroup mapFrame = findViewById(R.id.pacManMapFrame);
         MapArea.addMap(MapType.PacMan, mapFrame);
-        //createMarkers(R.id.pacManMapFrame);
         saveManager = SaveManager.getSaveManager(getApplicationContext());
 
         Clock clock = new Clock(MainActivity.this, MainActivity.this);
@@ -105,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements LocationObserver 
         loadGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadGame();
+                saveManager.loadSave("Test", getApplicationContext());
             }
         });
 
@@ -132,15 +126,18 @@ public class MainActivity extends AppCompatActivity implements LocationObserver 
     }
 
     private void createMarkers(int mapFrameId) {
-        pacman = new PacMan(mapFrameId, 51.4198767, 5.485905, MainActivity.this);
-        ghost = new Ghost(GhostType.Blinky, mapFrameId, 0, 0, MainActivity.this);
-        powerPallet = new PowerPallet(mapFrameId,51.4191983, 5.492802, MainActivity.this);
-        pacDot = new PacDot(mapFrameId,51.419331, 5.48632, MainActivity.this);
         MapMarkers mapMarkers = new MapMarkers("Test", getApplicationContext());
-        mapMarkers.addMarker(pacman);
-        mapMarkers.addMarker(ghost);
-        mapMarkers.addMarker(powerPallet);
-        mapMarkers.addMarker(pacDot);
+
+        // Create markers
+        mapMarkers.addMarker(new PacMan(mapFrameId, 51.4198767, 5.485905,
+                MainActivity.this));
+        //mapMarkers.addMarker(new Ghost(GhostType.Blinky, mapFrameId, 0, 0,
+        //        MainActivity.this));
+        mapMarkers.addMarker(new PowerPallet(mapFrameId,51.4191983, 5.492802,
+                MainActivity.this));
+        mapMarkers.addMarker(new PacDot(mapFrameId,51.419331, 5.48632,
+                MainActivity.this));
+
         mapMarkers.setLocationUpdater(locationUpdater);
     }
 
@@ -149,36 +146,9 @@ public class MainActivity extends AppCompatActivity implements LocationObserver 
     }
 
     private void loadGame() {
-        saveManager.loadSaves();
-        GameSave gameSave = saveManager.getGameSave("Test");
-        gameSave.loadSaveObjects(getApplicationContext());
-    }
-
-    // Location result updating. //
-
-    /**
-     * Update marker locations with a new location.
-     *
-     * @param location Location to update markers with
-     */
-    public void updateMarkerLocations(Location location) {
-        if (pacman != null) {
-            pacman.move(location.getLatitude(), location.getLongitude());
-            pacman.updatePlacement();
-        }
-        if (ghost != null) {
-            //ghost.move(location.getLatitude() - 0.002, location.getLongitude() + 0.002, MainActivity.this, MainActivity.this);
-        }
-
-        if (pacDot != null) {
-            pacDot.updatePlacement();
-        }
-
-    }
-
-    @Override
-    public void onLocationResult(LocationResult locationResult) {
-        updateMarkerLocations(locationResult.getLastLocation());
+        //saveManager.loadSaves();
+        //GameSave gameSave = saveManager.getGameSave("Test");
+        //gameSave.load(getApplicationContext());
     }
 
     // Location permission setup. //

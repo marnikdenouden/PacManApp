@@ -131,30 +131,6 @@ public class Ghost extends Character implements Serializable, LocationObserver {
     @Override
     Ghost load(Context context) {
         return new Ghost(ghostType, frameId, latitude, longitude, context);
-
-    }
-
-    /**
-     * Write the ghost object to the object output stream.
-     *
-     * @param objectOutputStream Object output stream to write to
-     * @throws IOException Thrown when exception occurs
-     */
-    private void writeObject(ObjectOutputStream objectOutputStream)
-            throws IOException {
-        objectOutputStream.defaultWriteObject();
-    }
-
-    /**
-     * Read the ghost object from the object input stream.
-     *
-     * @param objectInputStream Object input stream to read from
-     * @throws ClassNotFoundException Thrown when class was not found
-     * @throws IOException Thrown when exception occurs
-     */
-    private void readObject(ObjectInputStream objectInputStream)
-            throws ClassNotFoundException, IOException {
-        objectInputStream.defaultReadObject();
     }
 
 }
