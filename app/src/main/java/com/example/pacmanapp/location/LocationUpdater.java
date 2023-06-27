@@ -69,9 +69,13 @@ public class LocationUpdater {
      */
     private void notifyLocationResult(LocationResult locationResult) {
         // TODO improve this to allow multiple listeners and one time requests for location.
-        if (activity instanceof locationObserver) {
-            ((locationObserver) activity).onLocationResult(locationResult);
+        if (activity instanceof LocationObserver) {
+            ((LocationObserver) activity).onLocationResult(locationResult);
         }
+    }
+
+    public void addListener(LocationObserver locationObserver) {
+        // TODO implement
     }
 
     /**

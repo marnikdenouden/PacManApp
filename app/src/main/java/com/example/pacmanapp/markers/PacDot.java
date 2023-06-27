@@ -8,6 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 @SuppressLint("ViewConstructor")
@@ -23,10 +26,9 @@ public class PacDot extends Marker implements Serializable {
      * @param latitude  latitude that the pac-dot is placed at
      * @param longitude longitude that the pac-dot is placed at
      * @param context   Context that the pac-dot is created in
-     * @param activity  Activity that the pac-dot is placed in
      */
-    public PacDot(int frameId, double latitude, double longitude, Context context, AppCompatActivity activity) {
-        super(frameId, latitude, longitude, drawableId, markerId, false, context, activity);
+    public PacDot(int frameId, double latitude, double longitude, Context context) {
+        super(frameId, latitude, longitude, drawableId, markerId, false, context);
 
         setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,6 +36,11 @@ public class PacDot extends Marker implements Serializable {
                 setX(getX() + 50);
             }
         });
+    }
+
+    @Override
+    PacDot load(Context context) {
+        return new PacDot(frameId, latitude, longitude, context);
     }
 
 }

@@ -2,18 +2,21 @@ package com.example.pacmanapp.markers;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.location.LocationObserver;
 import com.example.pacmanapp.map.MapPosition;
+import com.google.android.gms.location.LocationResult;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
-public abstract class Character extends Marker implements Serializable {
+public abstract class Character extends Marker implements Serializable, LocationObserver {
     private static final long serialVersionUID = 1L;
     private final static String TAG = "Character";
 
@@ -28,11 +31,10 @@ public abstract class Character extends Marker implements Serializable {
      * @param drawable  Drawable used as display for the marker
      * @param markerId  MarkerId set to ImageView for potential reference
      * @param context   Context in which the marker is created
-     * @param activity  Activity in which the marker is placed
      */
     Character(int frameId, double latitude, double longitude, @NotNull Drawable drawable, int markerId,
-              @NotNull Context context, @NotNull AppCompatActivity activity) {
-        super(frameId, latitude, longitude, drawable, markerId, context, activity, true
+              @NotNull Context context) {
+        super(frameId, latitude, longitude, drawable, markerId, context, true
         );
     }
 
@@ -45,12 +47,11 @@ public abstract class Character extends Marker implements Serializable {
      * @param drawableId DrawableId used to get drawable to display for the marker
      * @param markerId   MarkerId set to ImageView for potential reference
      * @param context    Context in which the marker is created
-     * @param activity   Activity in which the marker is placed
      */
     Character(int frameId, double latitude, double longitude, int drawableId, int markerId,
-              @NotNull Context context, @NotNull AppCompatActivity activity) {
+              @NotNull Context context) {
         super(frameId, latitude, longitude, drawableId, markerId,
-                true, context, activity);
+                true, context);
     }
 
     /**
@@ -61,12 +62,11 @@ public abstract class Character extends Marker implements Serializable {
      * @param longitude Longitude used to position character on map area
      * @param markerId  MarkerId set to ImageView for potential reference
      * @param context   Context in which the marker is created
-     * @param activity  Activity in which the marker is placed
      */
     Character(int frameId, double latitude, double longitude, int markerId,
-              @NotNull Context context, @NotNull AppCompatActivity activity) {
+              @NotNull Context context) {
         super(frameId, latitude, longitude, markerId, true,
-                context, activity);
+                context);
     }
 
     //>>> Methods to control the character <<<//
@@ -133,4 +133,15 @@ public abstract class Character extends Marker implements Serializable {
      * @param direction Direction to rotate the character to
      */
     abstract void setRotation(Direction direction);
+
+    @Override
+    abstract Character load(Context context);
+
+    @Override
+    public void onLocationResult(LocationResult locationResult) {
+        Location location = locationResult.getLastLocation();
+        if (location != null) {
+            move(location.getLatitude(), location.getLongitude());
+        }
+    }
 }

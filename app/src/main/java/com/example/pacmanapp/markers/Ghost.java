@@ -10,16 +10,20 @@ import android.graphics.drawable.LayerDrawable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.location.LocationObserver;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 @SuppressLint("ViewConstructor")
-public class Ghost extends Character implements Serializable {
+public class Ghost extends Character implements Serializable, LocationObserver {
     private static final long serialVersionUID = 1L;
     private final static String TAG = "Ghost";
-    private final Map<Direction, AnimationDrawable> animationDrawableMap;
+    private transient Map<Direction, AnimationDrawable> animationDrawableMap;
     private final GhostType ghostType;
     private static final Direction startDirection = Direction.RIGHT;
 
@@ -31,15 +35,26 @@ public class Ghost extends Character implements Serializable {
      * @param latitude  latitude that the ghost starts at
      * @param longitude longitude that the ghost start at
      * @param context   Context that the ghost is created in
-     * @param activity  Activity that the ghost is placed in
      */
-    public Ghost(GhostType ghostType, int frameId, double latitude, double longitude, Context context,
-                 AppCompatActivity activity) {
-        super(frameId, latitude, longitude, ghostType.getId(), context, activity);
+    public Ghost(GhostType ghostType, int frameId, double latitude, double longitude,
+                 Context context) {
+        super(frameId, latitude, longitude, ghostType.getId(), context);
         this.ghostType = ghostType;
+
+        setColor(ghostType, context);
+
+        setDrawable(getAnimationDrawable(startDirection));
+    }
+
+    /**
+     * Set the color of the ghost.
+     *
+     * @param ghostType Type to set the ghost to
+     * @param context Context for the theme
+     */
+    private void setColor(GhostType ghostType, Context context) {
         int color = ghostType.getColor(context);
         animationDrawableMap = createAnimationDrawables(color, context);
-        setDrawable(getAnimationDrawable(startDirection));
     }
 
     /**
@@ -111,6 +126,35 @@ public class Ghost extends Character implements Serializable {
     void setRotation(Direction direction) {
         // Replace the imageView with the new direction.
         setDrawable(getAnimationDrawable(direction));
+    }
+
+    @Override
+    Ghost load(Context context) {
+        return new Ghost(ghostType, frameId, latitude, longitude, context);
+
+    }
+
+    /**
+     * Write the ghost object to the object output stream.
+     *
+     * @param objectOutputStream Object output stream to write to
+     * @throws IOException Thrown when exception occurs
+     */
+    private void writeObject(ObjectOutputStream objectOutputStream)
+            throws IOException {
+        objectOutputStream.defaultWriteObject();
+    }
+
+    /**
+     * Read the ghost object from the object input stream.
+     *
+     * @param objectInputStream Object input stream to read from
+     * @throws ClassNotFoundException Thrown when class was not found
+     * @throws IOException Thrown when exception occurs
+     */
+    private void readObject(ObjectInputStream objectInputStream)
+            throws ClassNotFoundException, IOException {
+        objectInputStream.defaultReadObject();
     }
 
 }

@@ -22,23 +22,27 @@ public class PowerPallet extends Marker implements Serializable {
      * @param latitude  latitude that the power pallet is placed at
      * @param longitude longitude that the power pallet is placed at
      * @param context   Context that the power pallet is created in
-     * @param activity  Activity that the power pallet is placed in
      */
-    public PowerPallet(int frameId, double latitude, double longitude, Context context, AppCompatActivity activity) {
-        super(frameId, latitude, longitude, drawableId, markerId, false, context, activity);
-    }
-
-    private static int getPowerPalletSize(AppCompatActivity activity) {
-        return (int) (activity.getResources().getDimension(R.dimen.powerPalletSize));
+    public PowerPallet(int frameId, double latitude, double longitude, Context context) {
+        super(frameId, latitude, longitude, drawableId, markerId, false, context);
     }
 
     @Override
-    int getPixelWidth(AppCompatActivity activity) {
-        return getPowerPalletSize(activity);
+    PowerPallet load(Context context) {
+        return new PowerPallet(frameId, latitude, longitude, context);
+    }
+
+    private int getPowerPalletSize() {
+        return (int) getResources().getDimension(R.dimen.powerPalletSize);
     }
 
     @Override
-    int getPixelHeight(AppCompatActivity activity) {
-        return getPowerPalletSize(activity);
+    int getPixelWidth() {
+        return getPowerPalletSize();
+    }
+
+    @Override
+    int getPixelHeight() {
+        return getPowerPalletSize();
     }
 }
