@@ -12,9 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.location.LocationObserver;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,8 +38,11 @@ public class Ghost extends Character implements Serializable, LocationObserver {
         super(frameId, latitude, longitude, ghostType.getId(), context);
         this.ghostType = ghostType;
 
-        setColor(ghostType, context);
+        instantiate(context);
+    }
 
+    private void instantiate(Context context) {
+        setColor(ghostType, context);
         setDrawable(getAnimationDrawable(startDirection));
     }
 
@@ -55,16 +55,6 @@ public class Ghost extends Character implements Serializable, LocationObserver {
     private void setColor(GhostType ghostType, Context context) {
         int color = ghostType.getColor(context);
         animationDrawableMap = createAnimationDrawables(color, context);
-    }
-
-    /**
-     * Get marker size in pixels.
-     *
-     * @param activity Activity to get resources from
-     * @return Marker size in pixels
-     */
-    private static int getMarkerSize(AppCompatActivity activity) {
-        return activity.getResources().getDimensionPixelSize(R.dimen.ghostMarkerSize);
     }
 
     /**
@@ -129,8 +119,10 @@ public class Ghost extends Character implements Serializable, LocationObserver {
     }
 
     @Override
-    Ghost load(Context context) {
-        return new Ghost(ghostType, frameId, latitude, longitude, context);
+    void load(Context context) {
+        super.load(context);
+
+        instantiate(context);
     }
 
 }

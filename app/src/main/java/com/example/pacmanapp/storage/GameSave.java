@@ -85,12 +85,9 @@ public class GameSave implements Serializable {
      * Load the all save objects that are part of this game save.
      */
     public void load(Context context) {
-        Collection<SaveObject> loadedSaveObjects = new HashSet<>();
         for (SaveObject saveObject: saveObjects) {
-            loadedSaveObjects.add(saveObject.load(context));
+            saveObject.load(context);
         }
-        saveObjects.clear();
-        saveObjects.addAll(loadedSaveObjects);
     }
 
     /**

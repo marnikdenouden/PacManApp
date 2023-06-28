@@ -52,8 +52,8 @@ public class Move {
      * @param marker Marker to center the map are on
      */
     public void moveToCenter(Marker marker) {
-        int targetX = mapArea.getWidth() / 2 - ((int) marker.getX() + marker.getWidth() / 2);
-        int targetY = mapArea.getHeight() / 2 - ((int) marker.getY() + marker.getHeight() / 2);
+        int targetX = mapArea.getWidth() / 2 - ((int) marker.getImageView().getX() + marker.getWidth() / 2);
+        int targetY = mapArea.getHeight() / 2 - ((int) marker.getImageView().getY() + marker.getHeight() / 2);
 
         move(targetX, targetY);
     }

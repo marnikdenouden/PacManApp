@@ -12,8 +12,8 @@ public class GameSettings extends SaveObject {
      * Load settings ... TODO implement
      */
     @Override
-    public GameSettings load(Context context) {
-        return new GameSettings(getSaveName(), context);
+    public void load(Context context) {
+
     }
 
 }

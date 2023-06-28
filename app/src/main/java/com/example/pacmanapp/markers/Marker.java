@@ -17,19 +17,17 @@ import com.example.pacmanapp.map.MapPosition;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 @SuppressLint("ViewConstructor")
-public class Marker extends androidx.appcompat.widget.AppCompatImageView implements Serializable {
+public class Marker implements Serializable {
     private static final long serialVersionUID = 1L;
     private final static String TAG = "Marker";
-    protected int frameId; // mapFrameId reference to the map area that marker is placed on
-    protected double latitude;
-    protected double longitude;
-    private int markerId;
+    private transient ImageView imageView;
+    private final int frameId; // mapFrameId reference to the map area that marker is placed on
+    private double latitude;
+    private double longitude;
+    private final int markerId;
     private int drawableId;
     protected boolean animate; // Determines if drawable gets animated
 
@@ -48,15 +46,14 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView impleme
      */
     Marker(int frameId, double latitude, double longitude, @NotNull Drawable drawable, int markerId,
            @NotNull Context context, boolean animate) {
-        super(context);
-
         // Set marker values
         this.animate = animate;
+        this.frameId = frameId;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.markerId = markerId;
 
-        // Set imageView values
-        addToMapArea(frameId);
-        setLayoutParams(latitude, longitude);
-        setId(markerId);
+        load(context);
         setDrawable(drawable);
     }
 
@@ -72,15 +69,14 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView impleme
      */
     Marker(int frameId, double latitude, double longitude, int markerId, boolean animate,
            @NotNull Context context) {
-        super(context);
-
         // Set marker values
         this.animate = animate;
+        this.frameId = frameId;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.markerId = markerId;
 
-        // Set imageView values
-        addToMapArea(frameId);
-        setLayoutParams(latitude, longitude);
-        setId(markerId);
+        load(context);
     }
 
     /**
@@ -96,26 +92,24 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView impleme
      */
     Marker(int frameId, double latitude, double longitude, int drawableId, int markerId, boolean animate,
            Context context) {
-        super(context);
-
         // Set marker values
         this.animate = animate;
+        this.frameId = frameId;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.drawableId = drawableId;
+        this.markerId = markerId;
 
-        // Set imageView values
-        addToMapArea(frameId);
-        setLayoutParams(latitude, longitude);
-        setMarkerId(markerId);
-        setDrawable(drawableId);
+        load(context);
     }
 
-    // TODO can not serialize this class as it does not have a no-arg constructor. Maybe a good oppurtinity to rewrite and include a good way to load and unload a set of markers?
-
+    // TODO can not serialize this class as it does not have a no-arg constructor. Maybe a good opportunity to rewrite and include a good way to load and unload a set of markers?
+    //  Maybe we can use visibility of GONE and visible to load and unload?
     /**
      * Add marker to map area from frame Id reference.
      */
     void addToMapArea(int frameId) {
-        this.frameId = frameId;
-        if (getParent() != null) {
+        if (imageView.getParent() != null) {
             return; // Marker already has a parent
         }
         if (!MapManager.hasMapArea(frameId)) {
@@ -132,7 +126,7 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView impleme
      * @return pixel width in int
      */
     int getPixelWidth() {
-        return (int) getResources().getDimension(R.dimen.defaultMarkerSize);
+        return (int) imageView.getResources().getDimension(R.dimen.defaultMarkerSize);
     }
 
     /**
@@ -141,7 +135,52 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView impleme
      * @return pixel height in int
      */
     int getPixelHeight() {
-        return (int) getResources().getDimension(R.dimen.defaultMarkerSize);
+        return (int) imageView.getResources().getDimension(R.dimen.defaultMarkerSize);
+    }
+
+    /**
+     * Get the width from the imageView.
+     *
+     * @return pixel width in int
+     */
+    public int getWidth() {
+        return imageView.getWidth();
+    }
+
+    /**
+     * Get the height from the imageView.
+     *
+     * @return pixel height in int
+     */
+    public int getHeight() {
+        return imageView.getHeight();
+    }
+
+    /**
+     * Get the frame id for the marker.
+     *
+     * @return Frame id of the map area that the marker is placed in
+     */
+    public int getFrameId() {
+        return frameId;
+    }
+
+    /**
+     * Get the latitude for the marker.
+     *
+     * @return Latitude of the marker location
+     */
+    public double getLatitude() {
+        return latitude;
+    }
+
+    /**
+     * Get the longitude for the marker.
+     *
+     * @return Longitude of the marker location
+     */
+    public double getLongitude() {
+        return longitude;
     }
 
     /**
@@ -150,7 +189,6 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView impleme
      * @param drawableId Id to set drawable with
      */
     void setDrawable(int drawableId) {
-        this.drawableId = drawableId;
         Drawable drawable = AppCompatResources.getDrawable(getContext(), drawableId);
         if (drawable == null) {
             Log.e(TAG, "Could not set drawable on marker for id: " + drawableId);
@@ -165,7 +203,7 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView impleme
      * @param drawable Drawable to set.
      */
     void setDrawable(@NotNull Drawable drawable) {
-        setImageDrawable(drawable);
+        imageView.setImageDrawable(drawable);
         tryAnimate(animate);
     }
 
@@ -179,7 +217,7 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView impleme
         if (animate) {
             try {
                 // Cast the drawable to animation drawable
-                AnimationDrawable animationDrawable = ((AnimationDrawable) getDrawable());
+                AnimationDrawable animationDrawable = ((AnimationDrawable) imageView.getDrawable());
 
                 // Start the animation drawable
                 animationDrawable.start();
@@ -197,20 +235,16 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView impleme
      * @param markerId marker id to set
      */
     private void setMarkerId(int markerId) {
-        this.markerId = markerId;
-        setId(markerId);
+        imageView.setId(markerId);
     }
 
     /**
      * Set layout params for marker in relative layout.
      */
     private void setLayoutParams(double latitude, double longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-
         // Set the marker clickable and focusable
-        setClickable(true);
-        setFocusable(true);
+        imageView.setClickable(true);
+        imageView.setFocusable(true);
 
         // Create the relative layout params with specified height and width
         RelativeLayout.LayoutParams layoutParams =
@@ -222,7 +256,25 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView impleme
 
         // set the margins of the layout params
         layoutParams.setMargins(mapPosition.getX(), mapPosition.getY(), 0, 0);
-        setLayoutParams(layoutParams);
+        imageView.setLayoutParams(layoutParams);
+    }
+
+    /**
+     * Get the image view of the marker.
+     *
+     * @return ImageView of the marker.
+     */
+    public ImageView getImageView() {
+        return imageView;
+    }
+
+    /**
+     * Context of the image view.
+     *
+     * @return Context of the image view
+     */
+    public Context getContext() {
+        return imageView.getContext();
     }
 
     //>>> place marker methods <<<//
@@ -256,8 +308,8 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView impleme
      * @param mapPosition the new map location.
      */
     private void place(MapPosition mapPosition) {
-        setX(mapPosition.getX());
-        setY(mapPosition.getY());
+        imageView.setX(mapPosition.getX());
+        imageView.setY(mapPosition.getY());
     }
 
     //>>> Public methods to use on marker <<<//
@@ -278,8 +330,8 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView impleme
      */
     @NotNull
     public MapPosition getMapPosition() {
-        int xPosition = (int) getX();
-        int yPosition = (int) getY();
+        int xPosition = (int) imageView.getX();
+        int yPosition = (int) imageView.getY();
         return new MapPosition(xPosition, yPosition);
     }
 
@@ -306,46 +358,22 @@ public class Marker extends androidx.appcompat.widget.AppCompatImageView impleme
         return results[0];
     }
 
-    Marker load(Context context) {
+    /**
+     * Load the marker for the given context.
+     *
+     * @param context Context to load marker in
+     */
+    void load(Context context) {
+        imageView = new ImageView(context);
+
+        // Instantiate marker and imageView values
+        addToMapArea(frameId);
+        setLayoutParams(latitude, longitude);
+        setMarkerId(markerId);
         if (drawableId != 0) {
-            return new Marker(frameId, latitude, longitude, drawableId, markerId, animate, context);
-        } else {
-            return new Marker(frameId, latitude, longitude, markerId, animate, context);
-        } // TODO will create a new class, while it should instantiate this class again with an image view.
-    }
-
-    // TODO while this custom serialization could be good, it doesn't get the instances, which need to be given to map markers.
-    /**
-     * Write the marker object to the object output stream.
-     *
-     * @param objectOutputStream Object output stream to write to
-     * @throws IOException Thrown when exception occurs
-     */
-    private void writeObject(ObjectOutputStream objectOutputStream)
-            throws IOException {
-        objectOutputStream.writeInt(frameId);
-        objectOutputStream.writeDouble(latitude);
-        objectOutputStream.writeDouble(longitude);
-        objectOutputStream.writeInt(markerId);
-        objectOutputStream.writeInt(drawableId);
-        objectOutputStream.writeBoolean(animate);
-    }
-
-    /**
-     * Read the marker object from the object input stream.
-     *
-     * @param objectInputStream Object input stream to read from
-     * @throws ClassNotFoundException Thrown when class was not found
-     * @throws IOException Thrown when exception occurs
-     */
-    private void readObject(ObjectInputStream objectInputStream)
-            throws ClassNotFoundException, IOException {
-        frameId = objectInputStream.readInt();
-        latitude = objectInputStream.readDouble();
-        longitude = objectInputStream.readDouble();
-        markerId= objectInputStream.readInt();
-        drawableId = objectInputStream.readInt();
-        animate = objectInputStream.readBoolean();
+            setDrawable(drawableId);
+        }
     }
 
 }
+

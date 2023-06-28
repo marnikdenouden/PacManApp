@@ -25,5 +25,5 @@ public abstract class SaveObject implements Serializable {
     /**
      * Load the objects that were stored.
      */
-    public abstract SaveObject load(Context context);
+    public abstract void load(Context context);
 }

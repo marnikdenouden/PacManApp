@@ -4,13 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.pacmanapp.R;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 @SuppressLint("ViewConstructor")
@@ -30,17 +25,25 @@ public class PacDot extends Marker implements Serializable {
     public PacDot(int frameId, double latitude, double longitude, Context context) {
         super(frameId, latitude, longitude, drawableId, markerId, false, context);
 
-        setOnClickListener(new View.OnClickListener() {
+        instantiate();
+    }
+
+    /**
+     * Instantiate values for the pac dot.
+     */
+    private void instantiate() {
+        getImageView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setX(getX() + 50);
+                getImageView().setX(getImageView().getX() + 50);
             }
         });
     }
 
     @Override
-    PacDot load(Context context) {
-        return new PacDot(frameId, latitude, longitude, context);
+    void load(Context context) {
+        super.load(context);
+        instantiate();
     }
 
 }

@@ -34,8 +34,7 @@ public abstract class Character extends Marker implements Serializable, Location
      */
     Character(int frameId, double latitude, double longitude, @NotNull Drawable drawable, int markerId,
               @NotNull Context context) {
-        super(frameId, latitude, longitude, drawable, markerId, context, true
-        );
+        super(frameId, latitude, longitude, drawable, markerId, context, true);
     }
 
     /**
@@ -80,7 +79,7 @@ public abstract class Character extends Marker implements Serializable, Location
     public void move(double latitude, double longitude) {
         // Get the map location for the specified values
         MapPosition mapPosition =
-                MapPosition.getPosition(frameId, latitude, longitude, getWidth(), getHeight());
+                MapPosition.getPosition(getFrameId(), latitude, longitude, getWidth(), getHeight());
 
         // Get target x and y value
         int targetX = mapPosition.getX();
@@ -94,7 +93,7 @@ public abstract class Character extends Marker implements Serializable, Location
             place(latitude, longitude);
             //updateDistances(); TODO Do game logic computation on character location change event.
         };
-        animate().x(targetX).y(targetY).withEndAction(relocate)
+        getImageView().animate().x(targetX).y(targetY).withEndAction(relocate)
                 .setDuration(getContext().getResources().getInteger(R.integer.moveAnimationTime))
                 .start();
 
@@ -109,8 +108,8 @@ public abstract class Character extends Marker implements Serializable, Location
      * @return Direction that the target is in relative to character location
      */
     private Direction getDirection(int targetX, int targetY) {
-        int xDirection = targetX - (int) getX();
-        int yDirection = targetY - (int) getY();
+        int xDirection = targetX - (int) getImageView().getX();
+        int yDirection = targetY - (int) getImageView().getY();
 
         if (Math.abs(xDirection) > Math.abs(yDirection)) {
             if (xDirection < 0) {
@@ -133,9 +132,6 @@ public abstract class Character extends Marker implements Serializable, Location
      * @param direction Direction to rotate the character to
      */
     abstract void setRotation(Direction direction);
-
-    @Override
-    abstract Character load(Context context);
 
     @Override
     public void onLocationResult(LocationResult locationResult) {

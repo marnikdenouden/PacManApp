@@ -30,11 +30,7 @@ public class PacMan extends Character implements Serializable, LocationObserver 
 
     @Override
     void setRotation(Direction direction) {
-        setRotation(direction.getDegrees());
+        getImageView().setRotation(direction.getDegrees());
     }
 
-    @Override
-    PacMan load(Context context) {
-        return new PacMan(frameId, latitude, longitude, context);
-    }
 }

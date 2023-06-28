@@ -67,7 +67,7 @@ public class MapArea extends ConstraintLayout {
      * @param marker Marker to add to the map
      */
     public void addMarker(Marker marker) {
-        markerLayout.addView(marker);
+        markerLayout.addView(marker.getImageView());
     }
 
     /**

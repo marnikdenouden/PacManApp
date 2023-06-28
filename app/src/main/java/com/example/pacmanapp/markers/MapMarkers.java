@@ -1,23 +1,14 @@
 package com.example.pacmanapp.markers;
 
 import android.content.Context;
-import android.location.Location;
 
 import com.example.pacmanapp.location.LocationObserver;
 import com.example.pacmanapp.location.LocationUpdater;
-import com.example.pacmanapp.storage.SaveManager;
 import com.example.pacmanapp.storage.SaveObject;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 public class MapMarkers extends SaveObject implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -66,12 +57,10 @@ public class MapMarkers extends SaveObject implements Serializable {
      *
      * @param context Context to load markers with
      */
-    public MapMarkers load(Context context) {
-        MapMarkers newMapMarkers = new MapMarkers(getSaveName(), context);
+    public void load(Context context) {
         for (Marker marker: mapMarkers) {
-            newMapMarkers.addMarker(marker.load(context));
+            marker.load(context);
         }
-        return newMapMarkers;
     }
 
     /**

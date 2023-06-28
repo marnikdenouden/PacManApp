@@ -27,13 +27,13 @@ public class PowerPallet extends Marker implements Serializable {
         super(frameId, latitude, longitude, drawableId, markerId, false, context);
     }
 
-    @Override
-    PowerPallet load(Context context) {
-        return new PowerPallet(frameId, latitude, longitude, context);
-    }
-
+    /**
+     * Get the power pallet size for width and height.
+     *
+     * @return Pixel size for the width and height of the power pallet
+     */
     private int getPowerPalletSize() {
-        return (int) getResources().getDimension(R.dimen.powerPalletSize);
+        return (int) getContext().getResources().getDimension(R.dimen.powerPalletSize);
     }
 
     @Override
