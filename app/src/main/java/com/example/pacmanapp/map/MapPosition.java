@@ -5,6 +5,12 @@ public class MapPosition {
     private final int xPosition;
     private final int yPosition;
 
+    /**
+     * Create a map position with a x and y position.
+     *
+     * @param x X position in pixels on the map
+     * @param y Y position in pixels on the map
+     */
     public MapPosition(int x, int y) {
         xPosition = x;
         yPosition = y;
