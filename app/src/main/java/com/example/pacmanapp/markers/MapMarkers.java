@@ -61,15 +61,6 @@ public class MapMarkers extends SaveObject implements Serializable, LocationPass
     }
 
     /**
-     * Updates all the markers.
-     */
-    public void update() {
-        for (Marker marker: mapMarkers) {
-            marker.update();
-        }
-    }
-
-    /**
      * Add child location observers to the location updater.
      *
      * @param locationUpdater Location updater to add child location observers to

@@ -65,15 +65,6 @@ public class GameSave implements Serializable, LocationPasser {
     }
 
     /**
-     * Update all the save objects that are part of this game save.
-     */
-    public void update() {
-        for (SaveObject saveObject: saveObjects) {
-            saveObject.update();
-        }
-    }
-
-    /**
      * Get the byte array data of the game save.
      *
      * @return Byte array data of the game save

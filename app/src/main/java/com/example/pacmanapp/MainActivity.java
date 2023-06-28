@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         loadGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveManager.getCurrentSave().update();
+                saveManager.loadCurrentSave(getApplicationContext());
                 //saveManager.loadSave("Test", getApplicationContext());
             }
         });

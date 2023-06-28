@@ -362,12 +362,5 @@ public class Marker implements Serializable {
         instantiate(context);
     }
 
-    /**
-     * Load the marker for the given context.
-     */
-    void update() {
-        updatePlacement();
-    }
-
 }
 
