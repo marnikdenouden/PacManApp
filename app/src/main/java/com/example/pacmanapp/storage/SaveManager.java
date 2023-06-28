@@ -2,17 +2,11 @@ package com.example.pacmanapp.storage;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.ViewGroup;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SaveManager {
     private static final String TAG = "SaveManager";
@@ -20,7 +14,12 @@ public class SaveManager {
     private final FileManager fileManager;
     private GameSave currentSave;
 
-    private SaveManager(Context context) {
+    /**
+     * Create a save manager for a specified context.
+     *
+     * @param context Context to load current save in
+     */
+    public SaveManager(Context context) {
         File saveDirectory = new File(context.getFilesDir(), "saves");
         fileManager = new FileManager(saveDirectory);
     }
@@ -38,9 +37,13 @@ public class SaveManager {
             currentSave = GameSave.getGameSaveFromData(data);
             loadCurrentSave(context);
         } catch (IOException ioException) {
-            // TODO
+            Log.w(TAG, "Could not load game save for save name \"" + saveName +
+                    "\" as IO exception occurred.");
+            ioException.printStackTrace();
         } catch (ClassNotFoundException classNotFoundException) {
-            // TODO
+            Log.w(TAG, "Could not load game save for save name \"" + saveName +
+                    "\" as class was not found.");
+            classNotFoundException.printStackTrace();
         }
     }
 
@@ -62,7 +65,9 @@ public class SaveManager {
             byte[] saveData = currentSave.getByteArray();
             FileManager.saveFileData(saveFile, saveData);
         } catch (IOException ioException) {
-            // TODO
+            Log.w(TAG, "Could not save current game save with save name \"" +
+                    currentSave.getSaveName() + "\" as IO exception occurred.");
+            ioException.printStackTrace();
         }
     }
 
@@ -127,26 +132,4 @@ public class SaveManager {
         return currentSave;
     }
 
-    /**
-     * Get the current save of the save manager.
-     *
-     * @param context Context to get save manager with
-     * @return Game save that is currently loaded in the save manager
-     */
-    public static GameSave getCurrentSave(Context context) {
-        return getSaveManager(context).getCurrentSave();
-    }
-
-    /**
-     * Get the save manager singleton instance.
-     *
-     * @param context Context to create save manger with, if not yet made
-     * @return Save manager
-     */
-    public static @NotNull SaveManager getSaveManager(Context context) {
-        if (saveManager == null) {
-            saveManager = new SaveManager(context);
-        }
-        return saveManager;
-    }
 }

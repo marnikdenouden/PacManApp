@@ -1,11 +1,14 @@
 package com.example.pacmanapp.storage;
 
-import android.content.Context;
-
 public class GameSettings extends SaveObject {
 
-    public GameSettings(String saveName, Context context) {
-        super(saveName, context);
+    /**
+     * Create a group of settings that can be serialized.
+     *
+     * @param saveManager SaveManager to add game settings to current save of.
+     */
+    public GameSettings(SaveManager saveManager) {
+        super(saveManager);
     }
 
 }

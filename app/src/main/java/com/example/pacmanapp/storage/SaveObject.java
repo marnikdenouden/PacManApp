@@ -10,10 +10,10 @@ public abstract class SaveObject implements Serializable {
     /**
      * Create a save object that is added to the save manager for the specified save name.
      *
-     * @param context Context to get save manager with
+     * @param saveManager SaveManager to add the save object to the current save of.
      */
-    public SaveObject(Context context) {
-        SaveManager.getCurrentSave(context).addSaveObject(this);
+    public SaveObject(SaveManager saveManager) {
+        saveManager.getCurrentSave().addSaveObject(this);
     }
 
     /**

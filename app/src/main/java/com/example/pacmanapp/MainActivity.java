@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         ViewGroup mapFrame = findViewById(R.id.pacManMapFrame);
         MapArea.addMap(MapType.PacMan, mapFrame);
-        saveManager = SaveManager.getSaveManager(getApplicationContext());
+        saveManager = new SaveManager(getApplicationContext());
 
         Clock clock = new Clock(MainActivity.this, MainActivity.this);
         clock.setTime(Duration.ofSeconds(2678));
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         saveGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveGame();
+                saveManager.saveCurrentSave();
             }
         });
     }
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createMarkers(int mapFrameId) {
-        MapMarkers mapMarkers = new MapMarkers("Test", getApplicationContext());
+        MapMarkers mapMarkers = new MapMarkers(saveManager);
 
         // Create markers
         mapMarkers.addMarker(new PacMan(mapFrameId, 51.4198767, 5.485905,
@@ -139,16 +139,6 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this));
 
         mapMarkers.setLocationUpdater(locationUpdater);
-    }
-
-    private void saveGame() {
-        saveManager.saveSaves();
-    }
-
-    private void loadGame() {
-        //saveManager.loadSaves();
-        //GameSave gameSave = saveManager.getGameSave("Test");
-        //gameSave.load(getApplicationContext());
     }
 
     // Location permission setup. //

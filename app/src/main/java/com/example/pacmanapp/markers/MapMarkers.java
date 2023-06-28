@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.pacmanapp.location.LocationObserver;
 import com.example.pacmanapp.location.LocationUpdater;
+import com.example.pacmanapp.storage.SaveManager;
 import com.example.pacmanapp.storage.SaveObject;
 
 import java.io.Serializable;
@@ -19,11 +20,10 @@ public class MapMarkers extends SaveObject implements Serializable {
     /**
      * Create a collection of markers that can be serialized.
      *
-     * @param saveName String name of the game save to add map marker to
-     * @param context Context to create save object with
+     * @param saveManager SaveManager to add map markers to current save of.
      */
-    public MapMarkers(String saveName, Context context) {
-        super(saveName, context);
+    public MapMarkers(SaveManager saveManager) {
+        super(saveManager);
         mapMarkers = new HashSet<>();
     }
 

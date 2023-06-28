@@ -3,8 +3,6 @@ package com.example.pacmanapp.storage;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.pacmanapp.location.LocationUpdater;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -12,9 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 public class GameSave implements Serializable {
     private static final long serialVersionUID = 1L;
