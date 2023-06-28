@@ -103,8 +103,6 @@ public class Marker implements Serializable {
         load(context);
     }
 
-    // TODO can not serialize this class as it does not have a no-arg constructor. Maybe a good opportunity to rewrite and include a good way to load and unload a set of markers?
-    //  Maybe we can use visibility of GONE and visible to load and unload?
     /**
      * Add marker to map area from frame Id reference.
      */
@@ -163,24 +161,6 @@ public class Marker implements Serializable {
      */
     public int getFrameId() {
         return frameId;
-    }
-
-    /**
-     * Get the latitude for the marker.
-     *
-     * @return Latitude of the marker location
-     */
-    public double getLatitude() {
-        return latitude;
-    }
-
-    /**
-     * Get the longitude for the marker.
-     *
-     * @return Longitude of the marker location
-     */
-    public double getLongitude() {
-        return longitude;
     }
 
     /**

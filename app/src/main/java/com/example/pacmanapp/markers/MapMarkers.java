@@ -12,12 +12,8 @@ import java.util.HashSet;
 
 public class MapMarkers extends SaveObject implements Serializable {
     private static final long serialVersionUID = 1L;
-// TODO add code to do updates on all of type x. For example move all characters.
 
-    // TODO currently being assumed is that the marker collection map has the key class equal to the class of the collection object.
-    //  Furthermore we assume that each class that extends Marker has a method load that returns an loaded instance of its own class.
     private transient LocationUpdater locationUpdater;
-
     private final Collection<Marker> mapMarkers;
 
     /**

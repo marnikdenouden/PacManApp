@@ -18,12 +18,14 @@ import java.util.Map;
 
 public class GameSave implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static final String TAG = "GameSave";
 
+    private final String saveName;
+
+    private static final String TAG = "GameSave";
     private final Collection<SaveObject> saveObjects;
 
-    GameSave() {
-        //objectReferences = new HashMap<>();
+    GameSave(String saveName) {
+        this.saveName = saveName;
         saveObjects = new HashSet<>();
     }
 
@@ -43,6 +45,15 @@ public class GameSave implements Serializable {
      */
     public void removeSaveObject(SaveObject saveObject) {
         saveObjects.remove(saveObject);
+    }
+
+    /**
+     * Get the save name of this game save.
+     *
+     * @return SaveName String of this game save
+     */
+    public String getSaveName() {
+        return saveName;
     }
 
     /**

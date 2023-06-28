@@ -59,7 +59,7 @@ public class LocationUpdater {
 
         locationCallback = new LocationCallback() {
             @Override
-            public void onLocationResult(LocationResult locationResult) {
+            public void onLocationResult(@NonNull LocationResult locationResult) {
                 notifyLocationResult(locationResult);
             }
         };
