@@ -2,6 +2,7 @@ package com.example.pacmanapp.map;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
@@ -67,7 +68,9 @@ public class MapArea extends ConstraintLayout {
      * @param marker Marker to add to the map
      */
     public void addMarker(Marker marker) {
-        markerLayout.addView(marker);
+        markerLayout.addView(marker.getImageView());
+        markerLayout.addOnLayoutChangeListener(
+                (view, i, i1, i2, i3, i4, i5, i6, i7) -> marker.updatePlacement());
     }
 
     /**

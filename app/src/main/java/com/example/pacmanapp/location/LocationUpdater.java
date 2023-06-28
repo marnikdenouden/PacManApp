@@ -26,15 +26,19 @@ import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 public class LocationUpdater {
-    private LocationRequest locationRequest;
+    private final LocationRequest locationRequest;
 
     private LocationManager locationManager;
-    private FusedLocationProviderClient fusedLocationClient;
-    private LocationCallback locationCallback;
+    private final FusedLocationProviderClient fusedLocationClient;
+    private final LocationCallback locationCallback;
     private boolean requestingLocationUpdates = true;
     private final Context context;
     private final AppCompatActivity activity;
+    private final Collection<LocationObserver> observers;
 
     /**
      * Location updater requests location and notifies of results to location observers.
@@ -45,6 +49,7 @@ public class LocationUpdater {
     public LocationUpdater(Context context, AppCompatActivity activity) {
         this.context = context;
         this.activity = activity;
+        observers = new HashSet<>();
 
         locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
                 .setWaitForAccurateLocation(false)
@@ -54,7 +59,7 @@ public class LocationUpdater {
 
         locationCallback = new LocationCallback() {
             @Override
-            public void onLocationResult(LocationResult locationResult) {
+            public void onLocationResult(@NonNull LocationResult locationResult) {
                 notifyLocationResult(locationResult);
             }
         };
@@ -63,15 +68,26 @@ public class LocationUpdater {
     }
 
     /**
-     * Notify location observer of location result.
+     * Notify location observers of location result.
      *
      * @param locationResult Location result received from update
      */
     private void notifyLocationResult(LocationResult locationResult) {
-        // TODO improve this to allow multiple listeners and one time requests for location.
-        if (activity instanceof locationObserver) {
-            ((locationObserver) activity).onLocationResult(locationResult);
+        for (LocationObserver locationObserver: observers) {
+            locationObserver.onLocationResult(locationResult);
         }
+    }
+
+    /**
+     * Add location observer to the location updater once.
+     *
+     * @param locationObserver Location observer to be notified of location results
+     */
+    public void addListener(LocationObserver locationObserver) {
+        if (observers.contains(locationObserver)) {
+            return; // locationObserver is already added to the observers list.
+        }
+        observers.add(locationObserver);
     }
 
     /**

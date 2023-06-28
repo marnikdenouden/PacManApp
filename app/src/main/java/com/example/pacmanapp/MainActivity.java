@@ -19,33 +19,35 @@ import android.widget.TextView;
 import com.example.pacmanapp.displays.Clock;
 import com.example.pacmanapp.displays.Score;
 import com.example.pacmanapp.location.LocationUpdater;
-import com.example.pacmanapp.location.locationObserver;
+import com.example.pacmanapp.location.LocationObserver;
 import com.example.pacmanapp.map.MapType;
 import com.example.pacmanapp.markers.Ghost;
 import com.example.pacmanapp.map.MapArea;
 import com.example.pacmanapp.markers.GhostType;
+import com.example.pacmanapp.markers.MapMarkers;
 import com.example.pacmanapp.markers.PacDot;
 import com.example.pacmanapp.markers.PacMan;
 import com.example.pacmanapp.markers.PowerPallet;
+import com.example.pacmanapp.storage.GameSave;
+import com.example.pacmanapp.storage.SaveManager;
 import com.google.android.gms.location.LocationResult;
 
 import java.time.Duration;
 
 
-public class MainActivity extends AppCompatActivity implements locationObserver {
+public class MainActivity extends AppCompatActivity {
 
     private LocationUpdater locationUpdater;
 
     private TextView AddressText;
     private Button LocationButton;
+    private Button createMarkerButton;
+    private Button loadGameButton;
+    private Button saveGameButton;
 
     private ViewGroup layout;
 
-    private PacMan pacman;
-    private Ghost ghost;
-    private PowerPallet powerPallet;
-    private PacDot pacDot;
-
+    private SaveManager saveManager;
     private final String TAG = "MainActivity";
 
     @Override
@@ -55,11 +57,20 @@ public class MainActivity extends AppCompatActivity implements locationObserver 
 
         AddressText = findViewById(R.id.addressText);
         LocationButton = findViewById(R.id.locationButton);
+        createMarkerButton = findViewById(R.id.createMarkersButton);
+        loadGameButton = findViewById(R.id.loadGameButton);
+        saveGameButton = findViewById(R.id.saveGameButton);
         layout = findViewById(R.id.layout);
 
         ViewGroup mapFrame = findViewById(R.id.pacManMapFrame);
         MapArea.addMap(MapType.PacMan, mapFrame);
-        createMarkers(R.id.pacManMapFrame);
+        saveManager = new SaveManager(getApplicationContext());
+        // Ensure that save test is loaded or created.
+        if (saveManager.hasSave("Test")) {
+            saveManager.loadSave("Test", getApplicationContext());
+        } else {
+            saveManager.createSave("Test");
+        }
 
         Clock clock = new Clock(MainActivity.this, MainActivity.this);
         clock.setTime(Duration.ofSeconds(2678));
@@ -68,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements locationObserver 
         score.setValue(4678);
 
         locationUpdater = new LocationUpdater(MainActivity.this, MainActivity.this);
+        saveManager.getCurrentSave().passLocationUpdater(locationUpdater);
 
         LocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +93,28 @@ public class MainActivity extends AppCompatActivity implements locationObserver 
                     Log.i(TAG, "Start location updates");
                     layout.setBackgroundColor(getResources().getColor(R.color.black, getTheme()));
                 }
+            }
+        });
+
+        createMarkerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createMarkers(R.id.pacManMapFrame);
+            }
+        });
+
+        loadGameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveManager.loadCurrentSave(getApplicationContext());
+                //saveManager.loadSave("Test", getApplicationContext());
+            }
+        });
+
+        saveGameButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveManager.saveCurrentSave();
             }
         });
     }
@@ -100,37 +134,19 @@ public class MainActivity extends AppCompatActivity implements locationObserver 
     }
 
     private void createMarkers(int mapFrameId) {
-        pacman = new PacMan(mapFrameId, 51.4198767, 5.485905, MainActivity.this, MainActivity.this);
-        ghost = new Ghost(GhostType.Blinky, mapFrameId, 0, 0, MainActivity.this, MainActivity.this);
-        powerPallet = new PowerPallet(mapFrameId,51.4191983, 5.492802, MainActivity.this, MainActivity.this);
-        pacDot = new PacDot(mapFrameId,51.419331, 5.48632, MainActivity.this, MainActivity.this);
-    }
+        MapMarkers mapMarkers = new MapMarkers(saveManager);
 
-    // Location result updating. //
+        // Create markers
+        mapMarkers.addMarker(new PacMan(mapFrameId, 51.4198767, 5.485905,
+                MainActivity.this));
+        mapMarkers.addMarker(new Ghost(GhostType.Blinky, mapFrameId, 51.4191783, 5.48632,
+                MainActivity.this));
+        mapMarkers.addMarker(new PowerPallet(mapFrameId,51.4191983, 5.492802,
+                MainActivity.this));
+        mapMarkers.addMarker(new PacDot(mapFrameId,51.419331, 5.48632,
+                MainActivity.this));
 
-    /**
-     * Update marker locations with a new location.
-     *
-     * @param location Location to update markers with
-     */
-    public void updateMarkerLocations(Location location) {
-        if (pacman != null) {
-            pacman.move(location.getLatitude(), location.getLongitude());
-            pacman.updatePlacement();
-        }
-        if (ghost != null) {
-            //ghost.move(location.getLatitude() - 0.002, location.getLongitude() + 0.002, MainActivity.this, MainActivity.this);
-        }
-
-        if (pacDot != null) {
-            pacDot.updatePlacement();
-        }
-
-    }
-
-    @Override
-    public void onLocationResult(LocationResult locationResult) {
-        updateMarkerLocations(locationResult.getLastLocation());
+        mapMarkers.passLocationUpdater(locationUpdater);
     }
 
     // Location permission setup. //

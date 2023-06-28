@@ -2,7 +2,7 @@ package com.example.pacmanapp.location;
 
 import com.google.android.gms.location.LocationResult;
 
-public interface locationObserver {
+public interface LocationObserver {
 
     /**
      * Utilize the new location result.

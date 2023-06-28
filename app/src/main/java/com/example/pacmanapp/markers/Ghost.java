@@ -10,16 +10,17 @@ import android.graphics.drawable.LayerDrawable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.location.LocationObserver;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 @SuppressLint("ViewConstructor")
-public class Ghost extends Character implements Serializable {
+public class Ghost extends Character implements Serializable, LocationObserver {
     private static final long serialVersionUID = 1L;
     private final static String TAG = "Ghost";
-    private final Map<Direction, AnimationDrawable> animationDrawableMap;
+    private transient Map<Direction, AnimationDrawable> animationDrawableMap;
     private final GhostType ghostType;
     private static final Direction startDirection = Direction.RIGHT;
 
@@ -31,25 +32,32 @@ public class Ghost extends Character implements Serializable {
      * @param latitude  latitude that the ghost starts at
      * @param longitude longitude that the ghost start at
      * @param context   Context that the ghost is created in
-     * @param activity  Activity that the ghost is placed in
      */
-    public Ghost(GhostType ghostType, int frameId, double latitude, double longitude, Context context,
-                 AppCompatActivity activity) {
-        super(frameId, latitude, longitude, ghostType.getId(), context, activity);
+    public Ghost(GhostType ghostType, int frameId, double latitude, double longitude,
+                 Context context) {
+        super(frameId, latitude, longitude, ghostType.getId(), context);
         this.ghostType = ghostType;
-        int color = ghostType.getColor(context);
-        animationDrawableMap = createAnimationDrawables(color, context);
+
+        instantiate(context);
+    }
+
+    /**
+     * Instantiate values for the ghost.
+     */
+    private void instantiate(Context context) {
+        setColor(ghostType, context);
         setDrawable(getAnimationDrawable(startDirection));
     }
 
     /**
-     * Get marker size in pixels.
+     * Set the color of the ghost.
      *
-     * @param activity Activity to get resources from
-     * @return Marker size in pixels
+     * @param ghostType Type to set the ghost to
+     * @param context Context for the theme
      */
-    private static int getMarkerSize(AppCompatActivity activity) {
-        return activity.getResources().getDimensionPixelSize(R.dimen.ghostMarkerSize);
+    private void setColor(GhostType ghostType, Context context) {
+        int color = ghostType.getColor(context);
+        animationDrawableMap = createAnimationDrawables(color, context);
     }
 
     /**
@@ -111,6 +119,13 @@ public class Ghost extends Character implements Serializable {
     void setRotation(Direction direction) {
         // Replace the imageView with the new direction.
         setDrawable(getAnimationDrawable(direction));
+    }
+
+    @Override
+    void load(Context context) {
+        super.load(context);
+
+        instantiate(context);
     }
 
 }

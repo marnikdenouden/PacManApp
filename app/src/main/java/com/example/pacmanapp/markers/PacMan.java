@@ -6,11 +6,12 @@ import android.content.Context;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.location.LocationObserver;
 
 import java.io.Serializable;
 
 @SuppressLint("ViewConstructor")
-public class PacMan extends Character implements Serializable {
+public class PacMan extends Character implements Serializable, LocationObserver {
     private static final long serialVersionUID = 1L;
     private final static int drawableId = R.drawable.pacman_marker_animation;
     private final static int markerId = R.id.pacman;
@@ -22,14 +23,14 @@ public class PacMan extends Character implements Serializable {
      * @param latitude  latitude that pacman starts at
      * @param longitude longitude that pacman start at
      * @param context   Context that pacman is created in
-     * @param activity  Activity that pacman is placed in
      */
-    public PacMan(int frameId, double latitude, double longitude, Context context, AppCompatActivity activity) {
-        super(frameId, latitude, longitude, drawableId, markerId, context, activity);
+    public PacMan(int frameId, double latitude, double longitude, Context context) {
+        super(frameId, latitude, longitude, drawableId, markerId, context);
     }
 
     @Override
     void setRotation(Direction direction) {
-        setRotation(direction.getDegrees());
+        getImageView().setRotation(direction.getDegrees());
     }
+
 }

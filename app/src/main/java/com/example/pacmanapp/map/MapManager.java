@@ -55,4 +55,14 @@ public class MapManager {
         return mapArea;
     }
 
+    /**
+     * Check if the frame id has a corresponding map area.
+     *
+     * @param frameId Frame id to check for
+     * @return Truth assignment, if map area is stored for frame id
+     */
+    public static boolean hasMapArea(int frameId) {
+        return MapManager.getMapManager().mapReference.containsKey(frameId);
+    }
+
 }
