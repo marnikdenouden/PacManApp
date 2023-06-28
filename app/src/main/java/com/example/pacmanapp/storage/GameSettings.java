@@ -8,12 +8,4 @@ public class GameSettings extends SaveObject {
         super(saveName, context);
     }
 
-    /**
-     * Load settings ... TODO implement
-     */
-    @Override
-    public void load(Context context) {
-
-    }
-
 }

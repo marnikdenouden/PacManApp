@@ -45,42 +45,6 @@ public class GameSave implements Serializable {
         saveObjects.remove(saveObject);
     }
 
-//    /**
-//     * Add save object to the game save collection.
-//     *
-//     * @param saveObject Save object to add to the game save collection
-//     * @param <Type> Type of the save object
-//     */
-//    public <Type extends SaveObject> void addSaveObject(Type saveObject) {
-//        Class<? extends SaveObject> saveClass = saveObject.getClass();
-//        if (objectReferences.containsKey(saveClass)) {
-//            @SuppressWarnings("unchecked")
-//            Collection<Type> collection = (Collection<Type>) objectReferences.get(saveClass);
-//            assert collection != null;
-//            collection.add(saveObject);
-//            return;
-//        }
-//        Collection<Type> collection = new HashSet<>();
-//        objectReferences.put(saveClass, collection);
-//        collection.add(saveObject);
-//    }
-//
-//    /**
-//     * Removes a save object from the game save collection.
-//     *
-//     * @param saveObject Save object to remove from the game save collection
-//     * @param <Type> Type of the FileObject
-//     */
-//    public <Type extends SaveObject> void removeSaveObject(Type saveObject) {
-//        Class<? extends SaveObject> saveClass = saveObject.getClass();
-//        if (objectReferences.containsKey(saveClass)) {
-//            @SuppressWarnings("unchecked")
-//            Collection<Type> collection = (Collection<Type>) objectReferences.get(saveClass);
-//            assert collection != null;
-//            collection.remove(saveObject);
-//        }
-//    }
-
     /**
      * Load the all save objects that are part of this game save.
      */

@@ -25,7 +25,6 @@ import java.util.Map;
 
 public class SaveManager {
     private static final String TAG = "SaveManager";
-    private static final String saveDir = "gameSaves"; // TODO update this or remove?
     private final File saveDirectory;
     private static SaveManager saveManager;
 
