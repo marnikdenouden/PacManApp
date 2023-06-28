@@ -104,8 +104,18 @@ public class SaveManager {
         fileManager.removeFile(saveFile);
     }
 
-    private void loadFiles() {
-
+    /**
+     * Get the save names currently stored in the save directory.
+     *
+     * @return Array of save names currently stored
+     */
+    private String[] getSaveNames() {
+        File[] files = fileManager.getFiles();
+        String[] saveNames = new String[files.length];
+        for (int i = 0; i < files.length; i++) {
+            saveNames[i] = files[i].getName();
+        }
+        return saveNames;
     }
 
     /**
