@@ -2,6 +2,7 @@ package com.example.pacmanapp.markers;
 
 import android.content.Context;
 
+import com.example.pacmanapp.R;
 import com.example.pacmanapp.location.LocationObserver;
 import com.example.pacmanapp.location.LocationPasser;
 import com.example.pacmanapp.location.LocationUpdater;
@@ -14,6 +15,7 @@ import java.util.HashSet;
 
 public class MapMarkers extends SaveObject implements Serializable, LocationPasser {
     private static final long serialVersionUID = 1L;
+    public static int mapMarkerId = R.id.mapMarkers;
 
     private transient LocationUpdater locationUpdater;
     private final Collection<Marker> mapMarkers;
@@ -24,7 +26,7 @@ public class MapMarkers extends SaveObject implements Serializable, LocationPass
      * @param saveManager SaveManager to add map markers to current save of.
      */
     public MapMarkers(SaveManager saveManager) {
-        super(saveManager);
+        super(mapMarkerId, saveManager);
         mapMarkers = new HashSet<>();
     }
 

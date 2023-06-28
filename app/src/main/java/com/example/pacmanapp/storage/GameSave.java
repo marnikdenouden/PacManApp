@@ -47,6 +47,21 @@ public class GameSave implements Serializable, LocationPasser {
     }
 
     /**
+     * Gets the first save object with matching save object id.
+     *
+     * @param saveObjectId Id of save object to get
+     * @return Save object with specified id or null if none exist in the current save
+     */
+    public SaveObject getSaveObject(int saveObjectId) {
+        for (SaveObject saveObject: saveObjects) {
+            if (saveObject.getSaveObjectId() == saveObjectId) {
+                return saveObject;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Get the save name of this game save.
      *
      * @return SaveName String of this game save

@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewGroup layout;
 
     private SaveManager saveManager;
+    private MapMarkers mapMarkers;
     private final String TAG = "MainActivity";
 
     @Override
@@ -64,18 +65,23 @@ public class MainActivity extends AppCompatActivity {
 
         ViewGroup mapFrame = findViewById(R.id.pacManMapFrame);
         MapArea.addMap(MapType.PacMan, mapFrame);
+
         saveManager = new SaveManager(getApplicationContext());
         // Ensure that save test is loaded or created.
         if (saveManager.hasSave("Test")) {
             saveManager.loadSave("Test", getApplicationContext());
+            mapMarkers = (MapMarkers) saveManager.getCurrentSave()
+                    .getSaveObject(MapMarkers.mapMarkerId);
         } else {
             saveManager.createSave("Test");
+            mapMarkers = new MapMarkers(saveManager);
         }
 
         Clock clock = new Clock(MainActivity.this, MainActivity.this);
         clock.setTime(Duration.ofSeconds(2678));
 
-        Score score = new Score(5, R.id.scoreLayout, MainActivity.this, MainActivity.this);
+        Score score = new Score(5, R.id.scoreLayout,
+                MainActivity.this, MainActivity.this);
         score.setValue(4678);
 
         locationUpdater = new LocationUpdater(MainActivity.this, MainActivity.this);
@@ -134,17 +140,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createMarkers(int mapFrameId) {
-        MapMarkers mapMarkers = new MapMarkers(saveManager);
-
         // Create markers
-        mapMarkers.addMarker(new PacMan(mapFrameId, 51.4198767, 5.485905,
-                MainActivity.this));
-        mapMarkers.addMarker(new Ghost(GhostType.Blinky, mapFrameId, 51.4191783, 5.48632,
-                MainActivity.this));
-        mapMarkers.addMarker(new PowerPallet(mapFrameId,51.4191983, 5.492802,
-                MainActivity.this));
-        mapMarkers.addMarker(new PacDot(mapFrameId,51.419331, 5.48632,
-                MainActivity.this));
+        mapMarkers.addMarker(new PacMan(mapFrameId,
+                51.4198767, 5.485905, MainActivity.this));
+        mapMarkers.addMarker(new Ghost(GhostType.Blinky, mapFrameId,
+                51.4191783, 5.48632, MainActivity.this));
+        mapMarkers.addMarker(new PowerPallet(mapFrameId,
+                51.4191983, 5.492802, MainActivity.this));
+        mapMarkers.addMarker(new PacDot(mapFrameId,
+                51.419331, 5.48632, MainActivity.this));
 
         mapMarkers.passLocationUpdater(locationUpdater);
     }
@@ -152,7 +156,8 @@ public class MainActivity extends AppCompatActivity {
     // Location permission setup. //
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (grantResults.length == 0) {

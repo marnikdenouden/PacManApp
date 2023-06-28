@@ -1,4 +1,4 @@
-package com.example.pacmanapp;
+package com.example.pacmanapp.activities;
 
 public class CreatePowerPalletActivity {
 }

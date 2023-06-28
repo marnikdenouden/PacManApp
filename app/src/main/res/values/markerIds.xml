@@ -4,6 +4,8 @@
     <item type="id" name="mapView" />
     <item type="id" name="markerLayout" />
     <item type="id" name="mapController" />
+    <item type="id" name="mapMarkers" />
+    <item type="id" name="gameSettings" />
     <item type="id" name="pacman" />
     <item type="id" name="blinky" />
     <item type="id" name="pinky" />
