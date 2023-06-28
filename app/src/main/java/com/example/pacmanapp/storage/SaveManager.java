@@ -3,14 +3,11 @@ package com.example.pacmanapp.storage;
 import android.content.Context;
 import android.util.Log;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.File;
 import java.io.IOException;
 
 public class SaveManager {
     private static final String TAG = "SaveManager";
-    private static SaveManager saveManager;
     private final FileManager fileManager;
     private GameSave currentSave;
 
@@ -87,6 +84,16 @@ public class SaveManager {
     }
 
     /**
+     * Checks if save name has a save stored.
+     *
+     * @param saveName Save name to check existence for
+     * @return Truth assignment, if save is stored under save name
+     */
+    public boolean hasSave(String saveName) {
+        return fileManager.hasFile(saveName);
+    }
+
+    /**
      * Clear all the files in the save directory.
      */
     public void clearSaves() {
@@ -126,9 +133,15 @@ public class SaveManager {
     /**
      * Get the current save of this save manager.
      *
+     * @pre Either a game save is successfully loaded or created for this save manager
      * @return Game save currently loaded
+     * @throws NullPointerException When pre condition is violated
      */
     public GameSave getCurrentSave() {
+        if (currentSave == null) {
+            throw new NullPointerException("Current save is null, before accessing " +
+                    "the current save please load or create a save for the save manager.");
+        }
         return currentSave;
     }
 

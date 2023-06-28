@@ -41,6 +41,9 @@ public class Ghost extends Character implements Serializable, LocationObserver {
         instantiate(context);
     }
 
+    /**
+     * Instantiate values for the ghost.
+     */
     private void instantiate(Context context) {
         setColor(ghostType, context);
         setDrawable(getAnimationDrawable(startDirection));

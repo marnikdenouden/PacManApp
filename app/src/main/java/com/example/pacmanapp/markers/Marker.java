@@ -53,7 +53,7 @@ public class Marker implements Serializable {
         this.longitude = longitude;
         this.markerId = markerId;
 
-        load(context);
+        instantiate(context);
         setDrawable(drawable);
     }
 
@@ -76,7 +76,7 @@ public class Marker implements Serializable {
         this.longitude = longitude;
         this.markerId = markerId;
 
-        load(context);
+        instantiate(context);
     }
 
     /**
@@ -100,7 +100,7 @@ public class Marker implements Serializable {
         this.drawableId = drawableId;
         this.markerId = markerId;
 
-        load(context);
+        instantiate(context);
     }
 
     /**
@@ -339,11 +339,9 @@ public class Marker implements Serializable {
     }
 
     /**
-     * Load the marker for the given context.
-     *
-     * @param context Context to load marker in
+     * Instantiate values for the marker.
      */
-    void load(Context context) {
+    private void instantiate(Context context) {
         imageView = new ImageView(context);
 
         // Instantiate marker and imageView values
@@ -353,6 +351,22 @@ public class Marker implements Serializable {
         if (drawableId != 0) {
             setDrawable(drawableId);
         }
+    }
+
+    /**
+     * Load the marker for the given context.
+     *
+     * @param context Context to load marker in
+     */
+    void load(Context context) {
+        instantiate(context);
+    }
+
+    /**
+     * Load the marker for the given context.
+     */
+    void update() {
+        updatePlacement();
     }
 
 }

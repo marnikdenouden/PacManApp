@@ -65,6 +65,12 @@ public class MainActivity extends AppCompatActivity {
         ViewGroup mapFrame = findViewById(R.id.pacManMapFrame);
         MapArea.addMap(MapType.PacMan, mapFrame);
         saveManager = new SaveManager(getApplicationContext());
+        // Ensure that save test is loaded or created.
+        if (saveManager.hasSave("Test")) {
+            saveManager.loadSave("Test", getApplicationContext());
+        } else {
+            saveManager.createSave("Test");
+        }
 
         Clock clock = new Clock(MainActivity.this, MainActivity.this);
         clock.setTime(Duration.ofSeconds(2678));
@@ -73,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         score.setValue(4678);
 
         locationUpdater = new LocationUpdater(MainActivity.this, MainActivity.this);
+        saveManager.getCurrentSave().passLocationUpdater(locationUpdater);
 
         LocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +106,8 @@ public class MainActivity extends AppCompatActivity {
         loadGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveManager.loadSave("Test", getApplicationContext());
+                saveManager.getCurrentSave().update();
+                //saveManager.loadSave("Test", getApplicationContext());
             }
         });
 
@@ -131,14 +139,14 @@ public class MainActivity extends AppCompatActivity {
         // Create markers
         mapMarkers.addMarker(new PacMan(mapFrameId, 51.4198767, 5.485905,
                 MainActivity.this));
-        //mapMarkers.addMarker(new Ghost(GhostType.Blinky, mapFrameId, 0, 0,
-        //        MainActivity.this));
+        mapMarkers.addMarker(new Ghost(GhostType.Blinky, mapFrameId, 51.4191783, 5.48632,
+                MainActivity.this));
         mapMarkers.addMarker(new PowerPallet(mapFrameId,51.4191983, 5.492802,
                 MainActivity.this));
         mapMarkers.addMarker(new PacDot(mapFrameId,51.419331, 5.48632,
                 MainActivity.this));
 
-        mapMarkers.setLocationUpdater(locationUpdater);
+        mapMarkers.passLocationUpdater(locationUpdater);
     }
 
     // Location permission setup. //

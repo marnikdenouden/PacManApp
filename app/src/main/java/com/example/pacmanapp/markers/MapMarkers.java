@@ -3,6 +3,7 @@ package com.example.pacmanapp.markers;
 import android.content.Context;
 
 import com.example.pacmanapp.location.LocationObserver;
+import com.example.pacmanapp.location.LocationPasser;
 import com.example.pacmanapp.location.LocationUpdater;
 import com.example.pacmanapp.storage.SaveManager;
 import com.example.pacmanapp.storage.SaveObject;
@@ -11,7 +12,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class MapMarkers extends SaveObject implements Serializable {
+public class MapMarkers extends SaveObject implements Serializable, LocationPasser {
     private static final long serialVersionUID = 1L;
 
     private transient LocationUpdater locationUpdater;
@@ -60,11 +61,20 @@ public class MapMarkers extends SaveObject implements Serializable {
     }
 
     /**
-     * Set the location updater for the map markers.
-     *
-     * @param locationUpdater Location updater to add markers to
+     * Updates all the markers.
      */
-    public void setLocationUpdater(LocationUpdater locationUpdater) {
+    public void update() {
+        for (Marker marker: mapMarkers) {
+            marker.update();
+        }
+    }
+
+    /**
+     * Add child location observers to the location updater.
+     *
+     * @param locationUpdater Location updater to add child location observers to
+     */
+    public void passLocationUpdater(LocationUpdater locationUpdater) {
         this.locationUpdater = locationUpdater;
         for (Marker marker: mapMarkers) {
             if (marker instanceof LocationObserver) {

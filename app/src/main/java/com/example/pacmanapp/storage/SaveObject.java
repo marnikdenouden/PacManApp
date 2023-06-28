@@ -17,9 +17,16 @@ public abstract class SaveObject implements Serializable {
     }
 
     /**
-     * Load the objects that were stored.
+     * Load the objects that are stored.
      */
     public void load(Context context) {
         // Default behavior does not require anything to be loaded.
+    }
+
+    /**
+     * Update the objects that are stored.
+     */
+    public void update() {
+        // Default behavior does not require anything to be updated.
     }
 }

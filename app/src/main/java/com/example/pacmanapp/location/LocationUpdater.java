@@ -78,7 +78,15 @@ public class LocationUpdater {
         }
     }
 
+    /**
+     * Add location observer to the location updater once.
+     *
+     * @param locationObserver Location observer to be notified of location results
+     */
     public void addListener(LocationObserver locationObserver) {
+        if (observers.contains(locationObserver)) {
+            return; // locationObserver is already added to the observers list.
+        }
         observers.add(locationObserver);
     }
 
