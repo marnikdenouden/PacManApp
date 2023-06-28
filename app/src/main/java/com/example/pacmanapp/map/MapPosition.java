@@ -133,6 +133,16 @@ public class MapPosition {
         return bound(mapPosition, leftBound, rightBound, topBound, bottomBound);
     }
 
+    /**
+     * Bound a map position between 4 bounds.
+     *
+     * @param mapPosition Map position to bound
+     * @param leftBound Left bound that x position will be greater or equal to
+     * @param rightBound Right bound that x position will be less or equal to
+     * @param topBound Top bound that y position will be greater or equal to
+     * @param bottomBound Bottom bound that y position will be less or equal to
+     * @return Map position that is bound
+     */
     private static MapPosition bound(MapPosition mapPosition, int leftBound, int rightBound,
                                      int topBound, int bottomBound) {
         int positionX = Math.max(leftBound, Math.min(mapPosition.getX(), rightBound));
