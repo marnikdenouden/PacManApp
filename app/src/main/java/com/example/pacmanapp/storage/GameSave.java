@@ -62,6 +62,21 @@ public class GameSave implements Serializable, LocationPasser {
     }
 
     /**
+     * Check if the game save has a save object with matching save object id.
+     *
+     * @param saveObjectId Id to check save object for
+     * @return Truth assignment, if game save has save object with matching id
+     */
+    public boolean hasSaveObject(int saveObjectId) {
+        for (SaveObject saveObject: saveObjects) {
+            if (saveObject.getSaveObjectId() == saveObjectId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Get the save name of this game save.
      *
      * @return SaveName String of this game save

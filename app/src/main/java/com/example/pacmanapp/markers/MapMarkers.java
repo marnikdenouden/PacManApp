@@ -6,6 +6,7 @@ import com.example.pacmanapp.R;
 import com.example.pacmanapp.location.LocationObserver;
 import com.example.pacmanapp.location.LocationPasser;
 import com.example.pacmanapp.location.LocationUpdater;
+import com.example.pacmanapp.storage.GameSave;
 import com.example.pacmanapp.storage.SaveManager;
 import com.example.pacmanapp.storage.SaveObject;
 
@@ -74,6 +75,22 @@ public class MapMarkers extends SaveObject implements Serializable, LocationPass
                 locationUpdater.addListener((LocationObserver) marker);
             }
         }
+    }
+
+    /**
+     * Gets or creates the map marker for the current save of the specified save manager.
+     *
+     * @param saveManager Save manager to get map marker from
+     * @return Map marker from current save of the specified save manager
+     */
+    public static MapMarkers getFromCurrentSave(SaveManager saveManager) {
+        GameSave currentSave = saveManager.getCurrentSave();
+        if (currentSave.hasSaveObject(mapMarkerId)) {
+            return (MapMarkers) currentSave.getSaveObject(mapMarkerId);
+        }
+        MapMarkers mapMarkers = new MapMarkers(saveManager);
+        currentSave.addSaveObject(mapMarkers);
+        return mapMarkers;
     }
 
 }

@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -19,7 +18,6 @@ import android.widget.TextView;
 import com.example.pacmanapp.displays.Clock;
 import com.example.pacmanapp.displays.Score;
 import com.example.pacmanapp.location.LocationUpdater;
-import com.example.pacmanapp.location.LocationObserver;
 import com.example.pacmanapp.map.MapType;
 import com.example.pacmanapp.markers.Ghost;
 import com.example.pacmanapp.map.MapArea;
@@ -30,7 +28,6 @@ import com.example.pacmanapp.markers.PacMan;
 import com.example.pacmanapp.markers.PowerPallet;
 import com.example.pacmanapp.storage.GameSave;
 import com.example.pacmanapp.storage.SaveManager;
-import com.google.android.gms.location.LocationResult;
 
 import java.time.Duration;
 
@@ -67,15 +64,8 @@ public class MainActivity extends AppCompatActivity {
         MapArea.addMap(MapType.PacMan, mapFrame);
 
         saveManager = new SaveManager(getApplicationContext());
-        // Ensure that save test is loaded or created.
-        if (saveManager.hasSave("Test")) {
-            saveManager.loadSave("Test", getApplicationContext());
-            mapMarkers = (MapMarkers) saveManager.getCurrentSave()
-                    .getSaveObject(MapMarkers.mapMarkerId);
-        } else {
-            saveManager.createSave("Test");
-            mapMarkers = new MapMarkers(saveManager);
-        }
+        saveManager.setCurrentSave("Test", getApplicationContext());
+        mapMarkers = MapMarkers.getFromCurrentSave(saveManager);
 
         Clock clock = new Clock(MainActivity.this, MainActivity.this);
         clock.setTime(Duration.ofSeconds(2678));

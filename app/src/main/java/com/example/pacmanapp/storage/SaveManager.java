@@ -94,6 +94,19 @@ public class SaveManager {
     }
 
     /**
+     * Load or create the current save to the specified save name.
+     *
+     * @param saveName Save name to load or create current save for
+     */
+    public void setCurrentSave(String saveName, Context context) {
+        if (hasSave(saveName)) {
+            loadSave(saveName, context);
+        } else {
+            createSave(saveName);
+        }
+    }
+
+    /**
      * Clear all the files in the save directory.
      */
     public void clearSaves() {
