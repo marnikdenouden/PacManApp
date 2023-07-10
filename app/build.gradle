@@ -26,12 +26,26 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    sourceSets {
+        main {
+            res {
+                srcDirs 'src\\main\\res',
+                        'src\\main\\res\\assets\\display_numbers',
+                        'src\\main\\res\\assets\\markers',
+                        'src\\main\\res\\assets\\characters\\ghosts',
+                        'src\\main\\res\\assets\\characters\\pacman',
+                        'src\\main\\res\\assets\\navigation',
+                        'src\\main\\res\\activities\\play_pages',
+                        'src\\main\\res\\activities\\admin_pages'
+            }
+        }
+    }
 }
 
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.android.gms:play-services-location:21.0.1' // Location services
     testImplementation 'junit:junit:4.13.2'

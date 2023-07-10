@@ -23,6 +23,34 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.edit.EditActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".activities.edit.EditPacDotActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".activities.edit.EditPowerPalletActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".activities.inspect.InspectActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".activities.inspect.InspectPacDotActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".activities.inspect.InspectPowerPalletActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".activities.InfoSelectableActivity"
+            android:exported="false">
+        </activity>
     </application>
 
 </manifest>

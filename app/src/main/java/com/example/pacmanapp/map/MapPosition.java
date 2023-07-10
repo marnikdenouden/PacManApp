@@ -68,9 +68,6 @@ public class MapPosition {
         return new MapPosition(xPosition, yPosition);
     }
 
-
-
-
     //>>> Code for position calculation <<<// TODO replace code with settings and automation of map movement.
 
     /**

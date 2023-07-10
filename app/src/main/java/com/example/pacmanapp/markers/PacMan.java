@@ -3,8 +3,6 @@ package com.example.pacmanapp.markers;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.location.LocationObserver;
 
@@ -32,5 +30,4 @@ public class PacMan extends Character implements Serializable, LocationObserver 
     void setRotation(Direction direction) {
         getImageView().setRotation(direction.getDegrees());
     }
-
 }

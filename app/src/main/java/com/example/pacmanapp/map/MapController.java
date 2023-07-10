@@ -36,74 +36,72 @@ public class MapController extends View {
 
     private VelocityTracker velocityTracker;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        int mapWidth = mapArea.getMapView().getWidth();
-        int mapHeight = mapArea.getMapView().getHeight();
-
-        int leftBound = 0;
-        int rightBound = mapWidth - mapArea.getWidth();
-        int topBound = 0;
-        int bottomBound = mapHeight - mapArea.getHeight();
-
-        int maxOvershootValue = getResources().getInteger(R.integer.mapOvershootValue);
-        int mapMaxVelocity = getResources().getInteger(R.integer.maxMapVelocity);
-
-        float scrollX;
-        float scrollY;
-
-        float moveX;
-        float moveY;
-
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                setLastTouchPosition(event);
-
                 // Stops scroll animation, which in a sense allows the user to catch the map
                 mapArea.scroller.abortAnimation();
 
                 // Obtain the velocity tracker to start tracking motion for the end fling
                 velocityTracker = VelocityTracker.obtain();
+
+                // Update velocity tracker and last touch position with event.
                 velocityTracker.addMovement(event);
+                setLastTouchPosition(event);
                 return true;
 
             case MotionEvent.ACTION_MOVE:
-                moveX = lastRawX - event.getRawX();
-                moveY = lastRawY - event.getRawY();
+                // Scroll the map area to the newly computed scroll x and y position
+                mapArea.scrollTo(getScrollX(event), getScrollY(event));
 
-                scrollX = Math.max(leftBound, Math.min(mapArea.getScrollX() + moveX, rightBound));
-                scrollY = Math.max(topBound, Math.min(mapArea.getScrollY() + moveY, bottomBound));
-
-                mapArea.scrollTo((int) scrollX, (int) scrollY);
-
+                // Update velocity tracker and last touch position with event.
                 velocityTracker.addMovement(event);
                 setLastTouchPosition(event);
                 return true;
 
             case MotionEvent.ACTION_UP:
-                moveX = lastRawX - event.getRawX();
-                moveY = lastRawY - event.getRawY();
-
-                scrollX = Math.max(leftBound, Math.min(mapArea.getScrollX() + moveX, rightBound));
-                scrollY = Math.max(topBound, Math.min(mapArea.getScrollY() + moveY, bottomBound));
-
+                // Add movement of motion event to velocity tracker
                 velocityTracker.addMovement(event);
+
+                // Compute velocity of past second with a max map velocity
+                int mapMaxVelocity = getResources().getInteger(R.integer.maxMapVelocity);
                 velocityTracker.computeCurrentVelocity(1000, mapMaxVelocity);
 
+                // Get the map overshoot value
+                int maxOvershootValue = getResources().getInteger(R.integer.mapOvershootValue);
+
+                // Get the velocity components from the velocity tracker
+                int xVelocity = (int) velocityTracker.getXVelocity();
+                int yVelocity = (int) velocityTracker.getYVelocity();
+
+                // Set the bound values of the map area
+                int leftBound = 0;
+                int rightBound = getRightBound();
+                int topBound = 0;
+                int bottomBound = getBottomBound();
+
+                // Fling the map area with the computed values
                 mapArea.scroller.fling(
-                        (int) scrollX, (int) scrollY,
-                        -getXVelocity(), -getYVelocity(),
+                        getScrollX(event), getScrollY(event),
+                        -xVelocity, -yVelocity,
                         leftBound, rightBound, topBound, bottomBound,
                         maxOvershootValue, maxOvershootValue);
 
+                // Invalidate the map area to ensure it gets updated
                 mapArea.invalidate();
                 return true;
 
             case MotionEvent.ACTION_CANCEL:
-                recycleVelocityTracker();
+                // Recycle the velocity tracker so it is ready to be reused later
+                velocityTracker.recycle();
+                velocityTracker = null;
                 return true;
+            default:
+                // Return super on touch event for those motion events that are not specified
+                return super.onTouchEvent(event);
         }
-        return super.onTouchEvent(event);
     }
 
     private float lastRawX = 0;
@@ -120,30 +118,48 @@ public class MapController extends View {
     }
 
     /**
-     * Recycle velocity tracker, so it can be reused.
+     * Compute the scroll x position after the motion event.
+     *
+     * @return scrollX that has been computed with the motion event for hte map area
      */
-    private void recycleVelocityTracker() {
-        velocityTracker.recycle();
-        velocityTracker = null;
+    private int getScrollX(MotionEvent event) {
+        int leftBound = 0;
+        int rightBound = getRightBound();
+
+        float moveX = lastRawX - event.getRawX();
+        return (int) Math.max(leftBound, Math.min(mapArea.getScrollX() + moveX, rightBound));
     }
 
     /**
-     * Get the X velocity of the velocity tracker.
+     * Compute the scroll y position after the motion event.
      *
-     * @pre compute the velocity on the velocity tracker
-     * @return X velocity of the velocity tracker
+     * @return scrollY that has been computed with the motion event for hte map area
      */
-    private int getXVelocity() {
-        return (int) velocityTracker.getXVelocity();
+    private int getScrollY(MotionEvent event) {
+        int topBound = 0;
+        int bottomBound = getBottomBound();
+
+        float moveY = lastRawY - event.getRawY();
+        return (int) Math.max(topBound, Math.min(mapArea.getScrollY() + moveY, bottomBound));
     }
 
     /**
-     * Get the Y velocity of the velocity tracker.
+     * Get the right bound for the current map area.
      *
-     * @pre compute the velocity on the velocity tracker
-     * @return Y velocity of the velocity tracker
+     * @return rightBound value for the map area.
      */
-    private int getYVelocity() {
-        return (int) velocityTracker.getYVelocity();
+    private int getRightBound() {
+        int mapWidth = mapArea.getMapView().getWidth();
+        return mapWidth - mapArea.getWidth();
+    }
+
+    /**
+     * Get the bottom bound for the current map area.
+     *
+     * @return bottomBound value for the map area.
+     */
+    private int getBottomBound() {
+        int mapHeight = mapArea.getMapView().getHeight();
+        return mapHeight - mapArea.getHeight();
     }
 }

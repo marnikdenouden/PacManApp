@@ -26,6 +26,8 @@ import com.example.pacmanapp.markers.MapMarkers;
 import com.example.pacmanapp.markers.PacDot;
 import com.example.pacmanapp.markers.PacMan;
 import com.example.pacmanapp.markers.PowerPallet;
+import com.example.pacmanapp.navigation.NavigationBar;
+import com.example.pacmanapp.navigation.PageType;
 import com.example.pacmanapp.storage.GameSave;
 import com.example.pacmanapp.storage.SaveManager;
 
@@ -59,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
         loadGameButton = findViewById(R.id.loadGameButton);
         saveGameButton = findViewById(R.id.saveGameButton);
         layout = findViewById(R.id.layout);
+
+        NavigationBar.configure(this, true, PageType.MAP);
 
         ViewGroup mapFrame = findViewById(R.id.pacManMapFrame);
         MapArea.addMap(MapType.PacMan, mapFrame);

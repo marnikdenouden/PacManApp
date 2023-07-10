@@ -6,11 +6,12 @@ import android.content.Context;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
-
-import java.io.Serializable;
+import com.example.pacmanapp.activities.edit.EditPowerPalletActivity;
+import com.example.pacmanapp.activities.inspect.InspectPowerPalletActivity;
+import com.example.pacmanapp.selection.Selectable;
 
 @SuppressLint("ViewConstructor")
-public class PowerPallet extends Marker implements Serializable {
+public class PowerPallet extends Marker implements Selectable {
     private static final long serialVersionUID = 1L;
     private final static int drawableId =  R.drawable.power_pallet_v1_1;
     private final static int markerId = R.id.powerpallet;
@@ -44,5 +45,15 @@ public class PowerPallet extends Marker implements Serializable {
     @Override
     int getPixelHeight() {
         return getPowerPalletSize();
+    }
+
+    @Override
+    public Class<? extends AppCompatActivity> getInspectPage() {
+        return InspectPowerPalletActivity.class;
+    }
+
+    @Override
+    public Class<? extends AppCompatActivity> getEditPage() {
+        return EditPowerPalletActivity.class;
     }
 }
