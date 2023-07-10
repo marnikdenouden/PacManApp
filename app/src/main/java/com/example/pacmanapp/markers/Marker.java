@@ -6,6 +6,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -14,6 +15,8 @@ import androidx.appcompat.content.res.AppCompatResources;
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.map.MapManager;
 import com.example.pacmanapp.map.MapPosition;
+import com.example.pacmanapp.selection.Selectable;
+import com.example.pacmanapp.selection.SelectionCrier;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -114,6 +117,49 @@ public class Marker implements Serializable {
             return; // Frame id does not have a map area attached
         }
         MapManager.getMapArea(frameId).addMarker(this);
+    }
+
+    //>>> Methods for marker creation <<<//
+
+    /**
+     * Instantiate values for the marker.
+     */
+    private void instantiate(Context context) {
+        imageView = new ImageView(context);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Marker.this.onClick(view);
+            }
+        });
+
+        // Instantiate marker and imageView values
+        addToMapArea(frameId);
+        setLayoutParams(latitude, longitude);
+        setMarkerId(markerId);
+        if (drawableId != 0) {
+            setDrawable(drawableId);
+        }
+    }
+
+    /**
+     * Load the marker for the given context.
+     *
+     * @param context Context to load marker in
+     */
+    void load(Context context) {
+        instantiate(context);
+    }
+
+    /**
+     * On click method called for the marker.
+     *
+     * @param view View from the click event
+     */
+    public void onClick(View view) {
+        if (this instanceof Selectable) {
+            SelectionCrier.getInstance().select((Selectable) this);
+        }
     }
 
     //>>> Methods to set marker values <<<//
@@ -336,30 +382,6 @@ public class Marker implements Serializable {
         float[] results = new float[3];
         Location.distanceBetween(this.latitude, this.longitude, latitude, longitude, results);
         return results[0];
-    }
-
-    /**
-     * Instantiate values for the marker.
-     */
-    private void instantiate(Context context) {
-        imageView = new ImageView(context);
-
-        // Instantiate marker and imageView values
-        addToMapArea(frameId);
-        setLayoutParams(latitude, longitude);
-        setMarkerId(markerId);
-        if (drawableId != 0) {
-            setDrawable(drawableId);
-        }
-    }
-
-    /**
-     * Load the marker for the given context.
-     *
-     * @param context Context to load marker in
-     */
-    void load(Context context) {
-        instantiate(context);
     }
 
 }

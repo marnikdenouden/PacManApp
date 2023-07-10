@@ -2,7 +2,6 @@ package com.example.pacmanapp.markers;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,12 +35,13 @@ public class PacDot extends Marker implements Selectable {
      * Instantiate values for the pac dot.
      */
     private void instantiate() {
-        getImageView().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getImageView().setX(getImageView().getX() + 50);
-            }
-        });
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        super.onClick(view);
+        getImageView().setX(getImageView().getX() + 50);
     }
 
     @Override

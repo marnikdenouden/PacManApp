@@ -28,6 +28,8 @@ import com.example.pacmanapp.markers.PacMan;
 import com.example.pacmanapp.markers.PowerPallet;
 import com.example.pacmanapp.navigation.NavigationBar;
 import com.example.pacmanapp.navigation.PageType;
+import com.example.pacmanapp.selection.AcceptAllSelector;
+import com.example.pacmanapp.selection.SelectionCrier;
 import com.example.pacmanapp.storage.GameSave;
 import com.example.pacmanapp.storage.SaveManager;
 
@@ -62,7 +64,8 @@ public class MainActivity extends AppCompatActivity {
         saveGameButton = findViewById(R.id.saveGameButton);
         layout = findViewById(R.id.layout);
 
-        NavigationBar.configure(this, true, PageType.MAP);
+        NavigationBar.configure(this, false, PageType.MAP);
+        new AcceptAllSelector(R.id.inspectAllSelector);
 
         ViewGroup mapFrame = findViewById(R.id.pacManMapFrame);
         MapArea.addMap(MapType.PacMan, mapFrame);

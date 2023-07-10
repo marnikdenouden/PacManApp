@@ -33,8 +33,8 @@ public class NavigationBar {
         for (PageType buttonPageType: PageType.values()) {
 
             // Get navigation button and navigation marker from button page type ids.
-            ImageButton navigationButton = (ImageButton) activity.findViewById(buttonPageType.getButtonId());
-            ImageView navigationMarker = (ImageView) activity.findViewById(buttonPageType.getMarkerId());
+            ImageButton navigationButton = activity.findViewById(buttonPageType.getButtonId());
+            ImageView navigationMarker = activity.findViewById(buttonPageType.getMarkerId());
 
             if (buttonPageType != pageType) {
                 // Set button to navigate to other activities, be clickable and make marker invisible.
