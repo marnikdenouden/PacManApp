@@ -17,6 +17,8 @@ public class PacDot extends Marker implements Selectable {
     private final static int drawableId = R.drawable.pac_dot;
     private final static int markerId = R.id.pacdot;
 
+    private String hint = "No hint is set to the location of this pac dot.";
+
     /**
      * Pac-dot marker to display on the map and use.
      *
@@ -74,5 +76,13 @@ public class PacDot extends Marker implements Selectable {
     public String getDescription() {
         return "Pac-Dot can be found using the hint they contain. " +
                 "When found they provide a hint to the location of a fruit.";
+    }
+
+    public void setHint(String hint) {
+        this.hint = hint;
+    }
+
+    public String getHint() {
+        return hint;
     }
 }

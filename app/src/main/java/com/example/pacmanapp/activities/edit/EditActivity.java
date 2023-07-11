@@ -20,6 +20,7 @@ public class EditActivity extends AppCompatActivity {
         Class<? extends AppCompatActivity> editPage = selector.getSelected().getEditPage();
         Intent intent = new Intent(this, editPage);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("selected", selector.getSelected());
         Navigate.navigate(intent, this, editPage);
         finish();
     }

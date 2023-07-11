@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/transparent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent">
+
+    <ImageView
+        android:id="@+id/navigationBackground"
+        android:layout_width="240dp"
+        android:layout_height="64dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/background"
+        app:tint="@color/black_base" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/navigationBackground"
+        app:layout_constraintStart_toStartOf="@+id/navigationBackground"
+        app:layout_constraintEnd_toEndOf="@+id/navigationBackground"
+        app:layout_constraintTop_toTopOf="@+id/navigationBackground">
+
+        <ImageView
+            android:id="@+id/pageMarkerInspect"
+            android:visibility="invisible"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleX="0.9"
+            android:scaleY="0.9"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/mapOption"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/icon_background"
+            app:tint="@color/orange_base" />
+
+        <ImageButton
+            android:id="@+id/inspectOption"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleX="1.3"
+            android:scaleY="1.3"
+            android:background="@color/transparent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/mapOption"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/icon_edit"
+            app:tint="@color/white_text" />
+
+        <ImageView
+            android:id="@+id/pageMarkerMap"
+            android:visibility="invisible"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleX="0.9"
+            android:scaleY="0.9"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/settingsOption"
+            app:layout_constraintStart_toEndOf="@id/inspectOption"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/icon_background"
+            app:tint="@color/cyan_base" />
+
+        <ImageButton
+            android:id="@+id/mapOption"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleX="1.3"
+            android:scaleY="1.3"
+            android:background="@color/transparent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/settingsOption"
+            app:layout_constraintStart_toEndOf="@id/inspectOption"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/icon_map"
+            app:tint="@color/white_text" />
+
+        <ImageView
+            android:id="@+id/pageMarkerSettings"
+            android:visibility="invisible"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleX="0.9"
+            android:scaleY="0.9"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/mapOption"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/icon_background"
+            app:tint="@color/gray_blue_base" />
+
+        <ImageButton
+            android:id="@+id/settingsOption"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleX="1.3"
+            android:scaleY="1.3"
+            android:background="@color/transparent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/mapOption"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/icon_settings"
+            app:tint="@color/white_text" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

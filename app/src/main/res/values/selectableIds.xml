@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="selectable_content" />
+    <item type="id" name="selectable_label" />
+    <item type="id" name="selectable_icon" />
+    <item type="id" name="selectable_description" />
+</resources>

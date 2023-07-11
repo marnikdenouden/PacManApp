@@ -10,10 +10,8 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.displays.Clock;
@@ -30,24 +28,18 @@ import com.example.pacmanapp.markers.PowerPallet;
 import com.example.pacmanapp.navigation.NavigationBar;
 import com.example.pacmanapp.navigation.PageType;
 import com.example.pacmanapp.selection.AcceptAllSelector;
+import com.example.pacmanapp.selection.Selectable;
+import com.example.pacmanapp.selection.SelectableContent;
+import com.example.pacmanapp.selection.Selector;
 import com.example.pacmanapp.storage.SaveManager;
 
 import java.time.Duration;
 
 public class PlayMapActivity extends AppCompatActivity {
-
     private LocationUpdater locationUpdater;
-
-    private TextView AddressText;
-    private Button LocationButton;
-    private Button createMarkerButton;
-    private Button loadGameButton;
-    private Button saveGameButton;
-
-    private ViewGroup layout;
-
-    private SaveManager saveManager;
     private MapMarkers mapMarkers;
+    private Selector selector;
+    private Selector.SelectionListener selectionListener;
     private final String TAG = "PlayMapActivity";
 
     @Override
@@ -55,20 +47,17 @@ public class PlayMapActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        AddressText = findViewById(R.id.addressText);
-        LocationButton = findViewById(R.id.locationButton);
-        createMarkerButton = findViewById(R.id.createMarkersButton);
-        loadGameButton = findViewById(R.id.loadGameButton);
-        saveGameButton = findViewById(R.id.saveGameButton);
-        layout = findViewById(R.id.layout);
+        Button createMarkerButton = findViewById(R.id.createMarkersButton);
 
         NavigationBar.configure(this, false, PageType.MAP);
-        new AcceptAllSelector(R.id.inspectAllSelector);
+
+        selector = new AcceptAllSelector(R.id.inspectAllSelector);
+        selectionListener = PlayMapActivity.this::onSelection;
 
         ViewGroup mapFrame = findViewById(R.id.pacManMapFrame);
         MapArea.addMap(MapType.PacMan, mapFrame);
 
-        saveManager = new SaveManager(getApplicationContext());
+        SaveManager saveManager = new SaveManager(getApplicationContext());
         saveManager.setCurrentSave("Test", getApplicationContext());
         mapMarkers = MapMarkers.getFromCurrentSave(saveManager);
 
@@ -82,42 +71,8 @@ public class PlayMapActivity extends AppCompatActivity {
         locationUpdater = new LocationUpdater(PlayMapActivity.this, PlayMapActivity.this);
         saveManager.getCurrentSave().passLocationUpdater(locationUpdater);
 
-        LocationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (locationUpdater.isRequestingLocationUpdates()) {
-                    locationUpdater.stopLocationUpdates();
-                    layout.setBackgroundColor(getResources().getColor(R.color.white, getTheme()));
-                    Log.i(TAG, "Stop location updates");
-                } else {
-                    locationUpdater.startLocationUpdates();
-                    Log.i(TAG, "Start location updates");
-                    layout.setBackgroundColor(getResources().getColor(R.color.black, getTheme()));
-                }
-            }
-        });
+        createMarkerButton.setOnClickListener(v -> createMarkers(R.id.pacManMapFrame));
 
-        createMarkerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createMarkers(R.id.pacManMapFrame);
-            }
-        });
-
-        loadGameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveManager.loadCurrentSave(getApplicationContext());
-                //saveManager.loadSave("Test", getApplicationContext());
-            }
-        });
-
-        saveGameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveManager.saveCurrentSave();
-            }
-        });
     }
 
     @Override
@@ -134,7 +89,26 @@ public class PlayMapActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        onSelection(selector.getSelected());
+        selector.addOnSelectionListener(selectionListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        selector.removeOnSelectionListener(selectionListener);
+    }
+
+    /**
+     * Create markers to add to the map.
+     *
+     * @param mapFrameId Map frame id to add markers to
+     */
     private void createMarkers(int mapFrameId) {
+        Log.i(TAG, "Created markers for the map");
         // Create markers
         mapMarkers.addMarker(new PacMan(mapFrameId,
                 51.4198767, 5.485905, PlayMapActivity.this));
@@ -173,5 +147,11 @@ public class PlayMapActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Update selectable content with new fetched selected.
+     */
+    private void onSelection(Selectable selectable) {
+        SelectableContent.setContent(this, selectable);
+    }
 
 }

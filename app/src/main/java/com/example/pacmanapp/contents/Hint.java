@@ -25,6 +25,7 @@ public class Hint {
      * @param viewGroup View group to insert hint view in
      */
     public void addView(AppCompatActivity currentActivity, ViewGroup viewGroup) {
+        currentActivity.findViewById(R.id.selectable_description);
         View view = currentActivity.getLayoutInflater().inflate(R.layout.pacman_marker, viewGroup);
         // Configure hint view with hint data values.
     }

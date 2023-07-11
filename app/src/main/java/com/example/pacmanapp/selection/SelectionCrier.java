@@ -1,10 +1,13 @@
 package com.example.pacmanapp.selection;
 
+import android.util.Log;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SelectionCrier {
+    private static final String TAG = "SelectionCrier";
     Map<Integer, Selector> selectors;
     private static SelectionCrier instance;
 
@@ -18,6 +21,7 @@ public class SelectionCrier {
      * @param selectable Selectable to notify selectors of
      */
     public void select(Selectable selectable) {
+        Log.i(TAG, "User made selection with label " + selectable.getLabel());
         for(Selector selector: selectors.values()) {
             selector.select(selectable);
         }

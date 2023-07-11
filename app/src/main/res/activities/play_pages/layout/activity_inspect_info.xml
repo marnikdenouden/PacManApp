@@ -15,4 +15,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <include
+        android:id="@+id/navigationBar"
+        layout="@layout/navigation_bar_play" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

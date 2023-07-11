@@ -20,6 +20,7 @@ public class InspectActivity extends AppCompatActivity {
         Class<? extends AppCompatActivity> inspectPage = selector.getSelected().getInspectPage();
         Intent intent = new Intent(this, inspectPage);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("selected", selector.getSelected());
         Navigate.navigate(intent, this, inspectPage);
         finish();
     }

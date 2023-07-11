@@ -11,4 +11,9 @@
         android:text="Inspect power pallet"
         tools:layout_editor_absoluteX="176dp"
         tools:layout_editor_absoluteY="128dp" />
+
+    <include
+        android:id="@+id/navigationBar"
+        layout="@layout/navigation_bar_play" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

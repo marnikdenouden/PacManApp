@@ -11,4 +11,8 @@
         android:text="Edit power pallet"
         tools:layout_editor_absoluteX="171dp"
         tools:layout_editor_absoluteY="113dp" />
+
+    <include
+        android:id="@+id/navigationBar"
+        layout="@layout/navigation_bar_admin" />
 </androidx.constraintlayout.widget.ConstraintLayout>
