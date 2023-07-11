@@ -14,7 +14,7 @@ import com.example.pacmanapp.selection.Selectable;
 @SuppressLint("ViewConstructor")
 public class PacDot extends Marker implements Selectable {
     private static final long serialVersionUID = 1L;
-    private final static int drawableId = R.drawable.pac_dot_v1_2;
+    private final static int drawableId = R.drawable.pac_dot;
     private final static int markerId = R.id.pacdot;
 
     /**
@@ -58,5 +58,21 @@ public class PacDot extends Marker implements Selectable {
     @Override
     public Class<? extends AppCompatActivity> getEditPage() {
         return EditPacDotActivity.class;
+    }
+
+    @Override
+    public String getLabel() {
+        return "Pac-Dot";
+    }
+
+    @Override
+    public int getIconId() {
+        return R.drawable.pac_dot;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Pac-Dot can be found using the hint they contain. " +
+                "When found they provide a hint to the location of a fruit.";
     }
 }

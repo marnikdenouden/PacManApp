@@ -58,7 +58,7 @@
             app:tint="@color/white_text" />
 
         <ImageView
-            android:id="@+id/pageMarkerHome"
+            android:id="@+id/pageMarkerMap"
             android:visibility="invisible"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -88,7 +88,7 @@
 
         <ImageView
             android:id="@+id/pageMarkerInspect"
-            android:visibility="visible"
+            android:visibility="invisible"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scaleX="0.9"

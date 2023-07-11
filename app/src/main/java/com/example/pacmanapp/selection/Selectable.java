@@ -10,4 +10,10 @@ public interface Selectable extends Serializable {
 
     Class<? extends AppCompatActivity> getEditPage();
 
+    public String getLabel();
+
+    public int getIconId();
+
+    public String getDescription();
+
 }

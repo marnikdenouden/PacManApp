@@ -13,7 +13,7 @@ import com.example.pacmanapp.selection.Selectable;
 @SuppressLint("ViewConstructor")
 public class PowerPallet extends Marker implements Selectable {
     private static final long serialVersionUID = 1L;
-    private final static int drawableId =  R.drawable.power_pallet_v1_1;
+    private final static int drawableId =  R.drawable.power_pallet;
     private final static int markerId = R.id.powerpallet;
 
     /**
@@ -55,5 +55,20 @@ public class PowerPallet extends Marker implements Selectable {
     @Override
     public Class<? extends AppCompatActivity> getEditPage() {
         return EditPowerPalletActivity.class;
+    }
+
+    @Override
+    public String getLabel() {
+        return "Power pallet";
+    }
+
+    @Override
+    public int getIconId() {
+        return R.drawable.power_pallet;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Power pallets allow pacman to eat ghosts for a short duration when collected.";
     }
 }

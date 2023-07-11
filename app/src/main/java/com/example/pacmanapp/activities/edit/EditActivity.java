@@ -17,7 +17,7 @@ public class EditActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Selector selector = SelectionCrier.getInstance().getSelector(R.id.editAllSelector);
-        Class<? extends AppCompatActivity> editPage = selector.getSelected().getInspectPage();
+        Class<? extends AppCompatActivity> editPage = selector.getSelected().getEditPage();
         Intent intent = new Intent(this, editPage);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         Navigate.navigate(intent, this, editPage);

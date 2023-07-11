@@ -24,4 +24,21 @@ public class InfoSelectableActivity extends AppCompatActivity implements Selecta
     public Class<? extends AppCompatActivity> getEditPage() {
         return InfoSelectableActivity.class;
     }
+
+    @Override
+    public String getLabel() {
+        return "Nothing selected";
+    }
+
+    @Override
+    public int getIconId() {
+        return R.drawable.icon_inspect;
+    }
+
+    @Override
+    public String getDescription() {
+        return "You can select things on the screen by clicking them." +
+                "The selected object can be inspected by clicking the navigation glass " +
+                "or by holding the selected object. ";
+    }
 }
