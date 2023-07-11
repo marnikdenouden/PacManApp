@@ -26,7 +26,7 @@ import com.example.pacmanapp.markers.GhostType;
 import com.example.pacmanapp.markers.MapMarkers;
 import com.example.pacmanapp.markers.PacDot;
 import com.example.pacmanapp.markers.PacMan;
-import com.example.pacmanapp.markers.PowerPallet;
+import com.example.pacmanapp.markers.PowerPellet;
 import com.example.pacmanapp.navigation.NavigationBar;
 import com.example.pacmanapp.navigation.PageType;
 import com.example.pacmanapp.selection.AcceptAllSelector;
@@ -140,7 +140,7 @@ public class AdminMapActivity extends AppCompatActivity {
                 51.4198767, 5.485905, AdminMapActivity.this));
         mapMarkers.addMarker(new Ghost(GhostType.Blinky, mapFrameId,
                 51.4191783, 5.48632, AdminMapActivity.this));
-        mapMarkers.addMarker(new PowerPallet(mapFrameId,
+        mapMarkers.addMarker(new PowerPellet(mapFrameId,
                 51.4191983, 5.492802, AdminMapActivity.this));
         mapMarkers.addMarker(new PacDot(mapFrameId,
                 51.419331, 5.48632, AdminMapActivity.this));
