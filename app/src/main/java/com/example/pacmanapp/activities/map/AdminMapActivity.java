@@ -31,6 +31,7 @@ import com.example.pacmanapp.navigation.NavigationBar;
 import com.example.pacmanapp.navigation.PageType;
 import com.example.pacmanapp.selection.AcceptAllSelector;
 import com.example.pacmanapp.storage.SaveManager;
+import com.example.pacmanapp.storage.SavePlatform;
 
 import java.time.Duration;
 
@@ -68,7 +69,7 @@ public class AdminMapActivity extends AppCompatActivity {
         ViewGroup mapFrame = findViewById(R.id.pacManMapFrame);
         MapArea.addMap(MapType.PacMan, mapFrame);
 
-        saveManager = new SaveManager(getApplicationContext());
+        saveManager = SaveManager.getInstance(getApplicationContext());
         saveManager.setCurrentSave("Test", getApplicationContext());
         mapMarkers = MapMarkers.getFromCurrentSave(saveManager);
 
@@ -80,7 +81,7 @@ public class AdminMapActivity extends AppCompatActivity {
         score.setValue(4678);
 
         locationUpdater = new LocationUpdater(AdminMapActivity.this, AdminMapActivity.this);
-        saveManager.getCurrentSave().passLocationUpdater(locationUpdater);
+        SavePlatform.getSave().passLocationUpdater(locationUpdater);
 
         LocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,7 +108,8 @@ public class AdminMapActivity extends AppCompatActivity {
         loadGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveManager.loadCurrentSave(getApplicationContext());
+                SavePlatform.load();
+                //saveManager.loadCurrentSave(getApplicationContext());
                 //saveManager.loadSave("Test", getApplicationContext());
             }
         });

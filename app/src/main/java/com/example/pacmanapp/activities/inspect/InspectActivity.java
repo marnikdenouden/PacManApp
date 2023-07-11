@@ -18,7 +18,7 @@ public class InspectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Selector selector = SelectionCrier.getInstance().getSelector(R.id.inspectAllSelector);
         Class<? extends AppCompatActivity> inspectPage = selector.getSelected().getInspectPage();
-        Intent intent = new Intent(this, inspectPage);
+        Intent intent = new Intent();
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("selected", selector.getSelected());
         Navigate.navigate(intent, this, inspectPage);

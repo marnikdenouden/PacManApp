@@ -10,11 +10,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.activities.inspect.InspectActivity;
 import com.example.pacmanapp.map.MapManager;
 import com.example.pacmanapp.map.MapPosition;
+import com.example.pacmanapp.navigation.Navigate;
 import com.example.pacmanapp.selection.Selectable;
 import com.example.pacmanapp.selection.SelectionCrier;
 
@@ -133,6 +136,14 @@ public class Marker implements Serializable {
             }
         });
 
+        imageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Marker.this.onLongClick(view);
+                return true;
+            }
+        });
+
         // Instantiate marker and imageView values
         addToMapArea(frameId);
         setLayoutParams(latitude, longitude);
@@ -159,6 +170,18 @@ public class Marker implements Serializable {
     public void onClick(View view) {
         if (this instanceof Selectable) {
             SelectionCrier.getInstance().select((Selectable) this);
+        }
+    }
+
+    /**
+     * On long click method called for the marker.
+     *
+     * @param view View from the long click event
+     */
+    public void onLongClick(View view) {
+        if (this instanceof Selectable) {
+            SelectionCrier.getInstance().select((Selectable) this);
+            Navigate.navigate((AppCompatActivity) view.getContext(), InspectActivity.class);
         }
     }
 

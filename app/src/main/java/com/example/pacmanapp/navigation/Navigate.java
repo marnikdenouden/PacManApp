@@ -19,6 +19,8 @@ public class Navigate {
     public static void navigate(Intent intent, AppCompatActivity currentActivity,
                                 Class<? extends AppCompatActivity> nextActivityClass) {
         Log.i(TAG, "User tries to navigate to " + nextActivityClass.getSimpleName());
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.setClass(currentActivity, nextActivityClass);
         currentActivity.startActivity(intent);
     }
 
@@ -45,8 +47,7 @@ public class Navigate {
      */
     public static void navigate(AppCompatActivity currentActivity,
                                 Class<? extends AppCompatActivity> nextActivityClass) {
-        Intent intent = new Intent(currentActivity, nextActivityClass);
-        navigate(intent, currentActivity, nextActivityClass);
+        navigate(new Intent(), currentActivity, nextActivityClass);
     }
 
     /**
@@ -58,8 +59,7 @@ public class Navigate {
      */
     public static void configure(View navigator, AppCompatActivity currentActivity,
                                  Class<? extends AppCompatActivity> nextActivityClass) {
-        Intent intent = new Intent(currentActivity, nextActivityClass);
-        configure(navigator, intent, currentActivity, nextActivityClass);
+        configure(navigator, new Intent(), currentActivity, nextActivityClass);
     }
 
     /**

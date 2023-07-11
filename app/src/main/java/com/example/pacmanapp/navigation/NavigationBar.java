@@ -36,11 +36,18 @@ public class NavigationBar {
             ImageButton navigationButton = activity.findViewById(buttonPageType.getButtonId());
             ImageView navigationMarker = activity.findViewById(buttonPageType.getMarkerId());
 
+            // Only set the navigation if both are found valid.
+            if (navigationButton == null || navigationMarker == null) {
+                Log.w(TAG, "Navigation button or navigation marker " +
+                        "was not found for page type " + pageType.toString());
+                continue;
+            }
+
             if (buttonPageType != pageType) {
                 // Set button to navigate to other activities, be clickable and make marker invisible.
                 navigationButton.setClickable(true);
-                navigationMarker.setVisibility(View.INVISIBLE);
                 Navigate.configure(navigationButton, activity, buttonPageType.getNextPage(admin));
+                navigationMarker.setVisibility(View.INVISIBLE);
             } else {
                 // Set navigation button of current page to not clickable and make marker visible.
                 navigationButton.setClickable(false);

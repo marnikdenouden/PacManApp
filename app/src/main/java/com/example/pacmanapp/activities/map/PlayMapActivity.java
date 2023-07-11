@@ -30,8 +30,10 @@ import com.example.pacmanapp.navigation.PageType;
 import com.example.pacmanapp.selection.AcceptAllSelector;
 import com.example.pacmanapp.selection.Selectable;
 import com.example.pacmanapp.selection.SelectableContent;
+import com.example.pacmanapp.selection.SelectionCrier;
 import com.example.pacmanapp.selection.Selector;
 import com.example.pacmanapp.storage.SaveManager;
+import com.example.pacmanapp.storage.SavePlatform;
 
 import java.time.Duration;
 
@@ -57,7 +59,7 @@ public class PlayMapActivity extends AppCompatActivity {
         ViewGroup mapFrame = findViewById(R.id.pacManMapFrame);
         MapArea.addMap(MapType.PacMan, mapFrame);
 
-        SaveManager saveManager = new SaveManager(getApplicationContext());
+        SaveManager saveManager = SaveManager.getInstance(getApplicationContext());
         saveManager.setCurrentSave("Test", getApplicationContext());
         mapMarkers = MapMarkers.getFromCurrentSave(saveManager);
 
@@ -69,7 +71,7 @@ public class PlayMapActivity extends AppCompatActivity {
         score.setValue(4678);
 
         locationUpdater = new LocationUpdater(PlayMapActivity.this, PlayMapActivity.this);
-        saveManager.getCurrentSave().passLocationUpdater(locationUpdater);
+        SavePlatform.getSave().passLocationUpdater(locationUpdater);
 
         createMarkerButton.setOnClickListener(v -> createMarkers(R.id.pacManMapFrame));
 
@@ -92,8 +94,14 @@ public class PlayMapActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        selector = SelectionCrier.getInstance().getSelector(R.id.inspectAllSelector);
         onSelection(selector.getSelected());
         selector.addOnSelectionListener(selectionListener);
+
+        SavePlatform.load();
+        //SaveManager saveManager = new SaveManager(getApplicationContext());
+        //saveManager.setCurrentSave("Test", getApplicationContext()); // TODO figure out save manager stuff
+        //saveManager.loadCurrentSave(this);
     }
 
     @Override

@@ -36,7 +36,8 @@ android {
                         'src\\main\\res\\assets\\characters\\pacman',
                         'src\\main\\res\\assets\\navigation',
                         'src\\main\\res\\activities\\play_pages',
-                        'src\\main\\res\\activities\\admin_pages'
+                        'src\\main\\res\\activities\\admin_pages',
+                        'src\\main\\res\\activities\\general_pages'
             }
         }
     }

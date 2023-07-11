@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="@+id/navigationBackground">
 
         <ImageView
-            android:id="@+id/pageMarkerInspect"
+            android:id="@+id/pageMarkerEdit"
             android:visibility="invisible"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -44,7 +44,7 @@
             app:tint="@color/orange_base" />
 
         <ImageButton
-            android:id="@+id/inspectOption"
+            android:id="@+id/editOption"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scaleX="1.3"
@@ -67,7 +67,7 @@
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/settingsOption"
-            app:layout_constraintStart_toEndOf="@id/inspectOption"
+            app:layout_constraintStart_toEndOf="@id/editOption"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/icon_background"
             app:tint="@color/cyan_base" />
@@ -81,7 +81,7 @@
             android:background="@color/transparent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/settingsOption"
-            app:layout_constraintStart_toEndOf="@id/inspectOption"
+            app:layout_constraintStart_toEndOf="@id/editOption"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/icon_map"
             app:tint="@color/white_text" />

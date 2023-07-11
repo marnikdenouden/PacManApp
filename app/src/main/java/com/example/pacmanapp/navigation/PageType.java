@@ -12,11 +12,13 @@ import com.example.pacmanapp.activities.settings.PlaySettingsActivity;
 
 public enum PageType {
     INSPECT(R.id.inspectOption, R.id.pageMarkerInspect,
-            InspectActivity.class, EditActivity.class),
+            InspectActivity.class, InspectActivity.class),
     MAP(R.id.mapOption, R.id.pageMarkerMap,
             PlayMapActivity.class, AdminMapActivity.class),
     SETTINGS(R.id.settingsOption, R.id.pageMarkerSettings,
-            PlaySettingsActivity.class, AdminSettingsActivity.class);
+            PlaySettingsActivity.class, AdminSettingsActivity.class),
+    EDIT(R.id.editOption, R.id.pageMarkerEdit,
+            InspectActivity.class, EditActivity.class);
 
     private final int buttonId;
     private final int markerId;

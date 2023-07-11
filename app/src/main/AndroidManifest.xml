@@ -15,7 +15,7 @@
         android:theme="@style/Theme.PacManApp"
         tools:targetApi="31">
         <activity
-            android:name=".activities.map.PlayMapActivity"
+            android:name=".activities.general.StartActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,15 +24,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.map.AdminMapActivity"
+            android:name=".activities.create.CreatePacDotActivity"
             android:exported="false">
         </activity>
         <activity
-            android:name=".activities.settings.AdminSettingsActivity"
-            android:exported="false">
-        </activity>
-        <activity
-            android:name=".activities.settings.PlaySettingsActivity"
+            android:name=".activities.create.CreatePowerPalletActivity"
             android:exported="false">
         </activity>
         <activity
@@ -57,6 +53,42 @@
         </activity>
         <activity
             android:name=".activities.inspect.InspectPowerPelletActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".activities.map.PlayMapActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".activities.map.AdminMapActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".activities.popup.PopUpActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".activities.save.ClearSavesPopupActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".activities.save.CreateSavePopUpActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".activities.save.SaveActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".activities.save.SavePopUpActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".activities.settings.AdminSettingsActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".activities.settings.PlaySettingsActivity"
             android:exported="false">
         </activity>
         <activity

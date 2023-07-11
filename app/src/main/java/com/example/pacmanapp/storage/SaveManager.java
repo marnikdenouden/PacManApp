@@ -3,11 +3,14 @@ package com.example.pacmanapp.storage;
 import android.content.Context;
 import android.util.Log;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.IOException;
 
 public class SaveManager {
     private static final String TAG = "SaveManager";
+    private static SaveManager instance;
     private final FileManager fileManager;
     private GameSave currentSave;
 
@@ -16,7 +19,7 @@ public class SaveManager {
      *
      * @param context Context to load current save in
      */
-    public SaveManager(Context context) {
+    private SaveManager(Context context) {
         File saveDirectory = new File(context.getFilesDir(), "saves");
         fileManager = new FileManager(saveDirectory);
     }
@@ -27,7 +30,7 @@ public class SaveManager {
      * @param saveName Save name to load game save for
      * @param context Context to load game save with
      */
-    public void loadSave(String saveName, Context context) {
+    public void loadSave(@NotNull String saveName, Context context) {
         File file = fileManager.getFile(saveName);
         byte[] data = FileManager.loadFileData(file);
         try {
@@ -42,6 +45,7 @@ public class SaveManager {
                     "\" as class was not found.");
             classNotFoundException.printStackTrace();
         }
+        Log.i(TAG, "Loaded save with save name " + saveName);
     }
 
     /**
@@ -49,7 +53,7 @@ public class SaveManager {
      *
      * @param context Context to load the save with
      */
-    public void loadCurrentSave(Context context) {
+    private void loadCurrentSave(Context context) {
         currentSave.load(context);
     }
 
@@ -66,6 +70,7 @@ public class SaveManager {
                     currentSave.getSaveName() + "\" as IO exception occurred.");
             ioException.printStackTrace();
         }
+        Log.i(TAG, "Saved current save.");
     }
 
     /**
@@ -74,13 +79,14 @@ public class SaveManager {
      * @param saveName New save name to name the created save
      * @pre !hasSave(saveName)
      */
-    public void createSave(String saveName) {
+    private void createSave(@NotNull String saveName) {
         if (fileManager.hasFile(saveName)) {
             Log.w(TAG, "Could not create save with name \"" + saveName +
                     "\" as a save with this name already exists.");
             return;
         }
         currentSave = new GameSave(saveName);
+        Log.i(TAG, "Created save with save name " + saveName);
     }
 
     /**
@@ -89,7 +95,7 @@ public class SaveManager {
      * @param saveName Save name to check existence for
      * @return Truth assignment, if save is stored under save name
      */
-    public boolean hasSave(String saveName) {
+    public boolean hasSave(@NotNull String saveName) {
         return fileManager.hasFile(saveName);
     }
 
@@ -98,12 +104,14 @@ public class SaveManager {
      *
      * @param saveName Save name to load or create current save for
      */
-    public void setCurrentSave(String saveName, Context context) {
+    public void setCurrentSave(@NotNull String saveName, Context context) {
         if (hasSave(saveName)) {
             loadSave(saveName, context);
         } else {
             createSave(saveName);
         }
+        saveCurrentSave();
+        Log.i(TAG, "Set current save to be " + saveName);
     }
 
     /**
@@ -117,6 +125,7 @@ public class SaveManager {
         for (File saveFile : files) {
             fileManager.removeFile(saveFile);
         }
+        Log.i(TAG, "Removed all saves");
     }
 
     /**
@@ -124,9 +133,10 @@ public class SaveManager {
      *
      * @param saveName Save name to remove from the save directory
      */
-    public void removeSave(String saveName) {
+    public void removeSave(@NotNull String saveName) {
         File saveFile = fileManager.getFile(saveName);
         fileManager.removeFile(saveFile);
+        Log.i(TAG, "Removed save with save name " + saveName);
     }
 
     /**
@@ -134,7 +144,7 @@ public class SaveManager {
      *
      * @return Array of save names currently stored
      */
-    private String[] getSaveNames() {
+    public String[] getSaveNames() {
         File[] files = fileManager.getFiles();
         String[] saveNames = new String[files.length];
         for (int i = 0; i < files.length; i++) {
@@ -156,6 +166,19 @@ public class SaveManager {
                     "the current save please load or create a save for the save manager.");
         }
         return currentSave;
+    }
+
+    /**
+     * Get the save manager instance.
+     *
+     * @param context Context to get instance with
+     * @return Save manager instance
+     */
+    public static SaveManager getInstance(Context context) {
+        if (instance == null) {
+            instance = new SaveManager(context);
+        }
+        return instance;
     }
 
 }
