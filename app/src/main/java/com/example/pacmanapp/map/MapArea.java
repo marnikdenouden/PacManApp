@@ -75,6 +75,13 @@ public class MapArea extends ConstraintLayout {
     }
 
     /**
+     * Remove all markers added to this map area.
+     */
+    public void removeMarkers() {
+        markerLayout.removeAllViews();
+    }
+
+    /**
      * Creates a map on the given view.
      *
      * @param view View to create map on

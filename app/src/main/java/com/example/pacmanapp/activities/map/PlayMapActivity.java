@@ -110,8 +110,7 @@ public class PlayMapActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         selector.removeOnSelectionListener(selectionListener);
-        MapArea mapArea = MapArea.getMapArea(this, R.id.pacManMapFrame);
-        mapArea.removeAllViews();
+        MapArea.getMapArea(this, R.id.pacManMapFrame).removeMarkers();
     }
 
     /**
