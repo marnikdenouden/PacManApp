@@ -29,27 +29,12 @@ public class PacDot extends Marker implements Selectable {
      */
     public PacDot(int frameId, double latitude, double longitude, Context context) {
         super(frameId, latitude, longitude, drawableId, markerId, false, context);
-
-        instantiate();
-    }
-
-    /**
-     * Instantiate values for the pac dot.
-     */
-    private void instantiate() {
-
     }
 
     @Override
     public void onClick(View view) {
         super.onClick(view);
         getImageView().setX(getImageView().getX() + 50);
-    }
-
-    @Override
-    void load(Context context) {
-        super.load(context);
-        instantiate();
     }
 
     @Override

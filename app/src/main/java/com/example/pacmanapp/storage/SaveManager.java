@@ -3,6 +3,8 @@ package com.example.pacmanapp.storage;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.pacmanapp.markers.MapMarkers;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -28,14 +30,12 @@ public class SaveManager {
      * Load a game save with the specified save name and load it in the given context.
      *
      * @param saveName Save name to load game save for
-     * @param context Context to load game save with
      */
-    public void loadSave(@NotNull String saveName, Context context) {
+    public void loadSave(@NotNull String saveName) {
         File file = fileManager.getFile(saveName);
         byte[] data = FileManager.loadFileData(file);
         try {
             currentSave = GameSave.getGameSaveFromData(data);
-            loadCurrentSave(context);
         } catch (IOException ioException) {
             Log.w(TAG, "Could not load game save for save name \"" + saveName +
                     "\" as IO exception occurred.");
@@ -49,18 +49,15 @@ public class SaveManager {
     }
 
     /**
-     * Load the current save with the specified context.
-     *
-     * @param context Context to load the save with
-     */
-    private void loadCurrentSave(Context context) {
-        currentSave.load(context);
-    }
-
-    /**
      * Save the current save to its save file.
+     *
+     * @pre save manager has a current save set
      */
     public void saveCurrentSave() {
+        if (!hasCurrentSave()) {
+            Log.e(TAG, "Could not save current save, because current save was not yet set.");
+            return;
+        }
         File saveFile = fileManager.getFile(currentSave.getSaveName());
         try {
             byte[] saveData = currentSave.getByteArray();
@@ -70,7 +67,7 @@ public class SaveManager {
                     currentSave.getSaveName() + "\" as IO exception occurred.");
             ioException.printStackTrace();
         }
-        Log.i(TAG, "Saved current save.");
+        Log.i(TAG, "Saved current save with name " + currentSave.getSaveName());
     }
 
     /**
@@ -106,7 +103,7 @@ public class SaveManager {
      */
     public void setCurrentSave(@NotNull String saveName, Context context) {
         if (hasSave(saveName)) {
-            loadSave(saveName, context);
+            loadSave(saveName);
         } else {
             createSave(saveName);
         }
@@ -154,14 +151,24 @@ public class SaveManager {
     }
 
     /**
+     * Check if a current save is set.
+     *
+     * @return Truth assignment, if current save is set
+     * A save can be set by either loading or creating a game save successfully
+     */
+    public boolean hasCurrentSave() {
+        return currentSave != null;
+    }
+
+    /**
      * Get the current save of this save manager.
      *
-     * @pre Either a game save is successfully loaded or created for this save manager
+     * @pre save manager has a current save
      * @return Game save currently loaded
      * @throws NullPointerException When pre condition is violated
      */
     public GameSave getCurrentSave() {
-        if (currentSave == null) {
+        if (!hasCurrentSave()) {
             throw new NullPointerException("Current save is null, before accessing " +
                     "the current save please load or create a save for the save manager.");
         }

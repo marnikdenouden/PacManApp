@@ -1,10 +1,6 @@
 package com.example.pacmanapp.storage;
 
-import android.content.Context;
 import android.util.Log;
-
-import com.example.pacmanapp.location.LocationPasser;
-import com.example.pacmanapp.location.LocationUpdater;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -15,7 +11,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class GameSave implements Serializable, LocationPasser {
+public class GameSave implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final String saveName;
@@ -86,15 +82,6 @@ public class GameSave implements Serializable, LocationPasser {
     }
 
     /**
-     * Load the all save objects that are part of this game save.
-     */
-    public void load(Context context) {
-        for (SaveObject saveObject: saveObjects) {
-            saveObject.load(context);
-        }
-    }
-
-    /**
      * Get the byte array data of the game save.
      *
      * @return Byte array data of the game save
@@ -122,19 +109,6 @@ public class GameSave implements Serializable, LocationPasser {
             GameSave gameSave = (GameSave) objectInputStream.readObject();
             Log.d(TAG, "Game save read from object input stream: \n" + gameSave);
             return gameSave;
-        }
-    }
-
-    /**
-     * Pass the location updater to the child(s).
-     *
-     * @param locationUpdater Location updater to pass
-     */
-    public void passLocationUpdater(LocationUpdater locationUpdater) {
-        for (SaveObject saveObject: saveObjects) {
-            if (saveObject instanceof LocationPasser) {
-                ((LocationPasser) saveObject).passLocationUpdater(locationUpdater);
-            }
         }
     }
 

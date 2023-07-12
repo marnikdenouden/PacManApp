@@ -38,6 +38,8 @@ public class MapPosition {
      * Gets the top left map position of a square with specified width and height,
      * which has at the center the specified latitude and longitude location on the map area.
      *
+     * @pre Map area exists for frame id in current context.
+     *
      * @param frameId FrameId reference to map from which to get the location
      * @param latitude Latitude to convert to y location
      * @param longitude Longitude to convert to x location
@@ -46,6 +48,9 @@ public class MapPosition {
      */
     public static MapPosition getPosition(int frameId, double latitude, double longitude,
                                           int width, int height) {
+        if (!MapManager.hasMapArea(frameId)) {
+            return null; // Frame id does not have a map area attached
+        }
         return getPosition(MapManager.getMapArea(frameId), latitude, longitude, width, height);
     }
 

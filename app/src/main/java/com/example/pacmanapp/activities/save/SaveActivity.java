@@ -10,14 +10,22 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.storage.SaveManager;
+import com.example.pacmanapp.storage.SavePlatform;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SaveActivity extends AppCompatActivity {
     private final static String TAG = "SaveActivity";
+    private SaveManager saveManager;
+    private Map<String, SaveButton> saveButtonMap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saves);
+
+        saveManager = SaveManager.getInstance(getApplicationContext());
 
         Button createButton = findViewById(R.id.createButton);
         createButton.setOnClickListener(view -> new CreateSaveDialog(this)
@@ -34,18 +42,40 @@ public class SaveActivity extends AppCompatActivity {
         updateSaveList();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SavePlatform.setSaveManager(saveManager);
+    }
+
     private SaveManager getSaveManager() {
-        return SaveManager.getInstance(getApplicationContext());
+        return saveManager;
     }
 
     /**
      * Update saves list.
      */
     private void updateSaveList() {
+        saveButtonMap = new HashMap<>();
         LinearLayout savesList = findViewById(R.id.savesList);
         savesList.removeAllViews();
         for (String saveName: getSaveManager().getSaveNames()) {
-            addSaveButton(saveName, savesList);
+            saveButtonMap.put(saveName, addSaveButton(saveName, savesList));
+        }
+        markSelectedSaveButton(true);
+    }
+
+    /**
+     * Mark the save button that is selected by calling set loaded.
+     */
+    private void markSelectedSaveButton(boolean loaded) {
+        if (!getSaveManager().hasCurrentSave()) {
+            return;
+        }
+        String loadedSaveName = getSaveManager().getCurrentSave().getSaveName();
+        SaveButton saveButton = saveButtonMap.get(loadedSaveName);
+        if (saveButton != null) {
+            saveButton.setLoaded(loaded);
         }
     }
 
@@ -55,11 +85,12 @@ public class SaveActivity extends AppCompatActivity {
      * @param saveName Save name of save button
      * @param savesList Save list to add new button to
      */
-    void addSaveButton(String saveName, LinearLayout savesList) {
-        Button saveButton = new SaveButton(saveName, this);
+    SaveButton addSaveButton(String saveName, LinearLayout savesList) {
+        SaveButton saveButton = new SaveButton(saveName, this);
         saveButton.setOnClickListener(view -> new SaveDialog(saveName, this)
                 .show(getSupportFragmentManager(), "SaveDialog"));
         savesList.addView(saveButton);
+        return saveButton;
     }
 
     void createSave(String saveName) {
@@ -68,7 +99,12 @@ public class SaveActivity extends AppCompatActivity {
     }
 
     void loadSave(String saveName) {
-        getSaveManager().loadSave(saveName, getApplicationContext());
+        // Mark currently selected to not be loaded
+        markSelectedSaveButton(false);
+        // Load the save name to be the new selected
+        getSaveManager().loadSave(saveName);
+        // Mark new selected to be loaded
+        markSelectedSaveButton(true);
     }
 
     void removeSave(String saveName) {
@@ -86,7 +122,18 @@ public class SaveActivity extends AppCompatActivity {
 
         public SaveButton(String saveName, AppCompatActivity currentActivity) {
             super(currentActivity.getApplicationContext());
+            setLoaded(false);
             setText(saveName);
+        }
+
+        public void setLoaded(boolean loaded) {
+            if (loaded) {
+                setBackgroundColor(getResources().getColor(R.color.cyan_base,
+                        getContext().getTheme()));
+            } else {
+                setBackgroundColor(getResources().getColor(R.color.white_base,
+                        getContext().getTheme()));
+            }
         }
 
     }

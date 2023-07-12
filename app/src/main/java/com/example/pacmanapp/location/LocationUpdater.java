@@ -29,7 +29,7 @@ import com.google.android.gms.tasks.Task;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class LocationUpdater {
+public class LocationUpdater implements DynamicLocation {
     private final LocationRequest locationRequest;
 
     private LocationManager locationManager;
@@ -43,11 +43,10 @@ public class LocationUpdater {
     /**
      * Location updater requests location and notifies of results to location observers.
      *
-     * @param context Context of the location updater
-     * @param activity Activity that the location updater is in
+     * @param activity Activity that the location updater utilizes
      */
-    public LocationUpdater(Context context, AppCompatActivity activity) {
-        this.context = context;
+    public LocationUpdater(AppCompatActivity activity) {
+        this.context = activity.getApplicationContext();
         this.activity = activity;
         observers = new HashSet<>();
 
@@ -83,7 +82,7 @@ public class LocationUpdater {
      *
      * @param locationObserver Location observer to be notified of location results
      */
-    public void addListener(LocationObserver locationObserver) {
+    public void addObserver(LocationObserver locationObserver) {
         if (observers.contains(locationObserver)) {
             return; // locationObserver is already added to the observers list.
         }

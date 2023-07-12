@@ -8,16 +8,16 @@ import java.io.Serializable;
 
 public abstract class SaveObject implements Serializable {
     private static final long serialVersionUID = 1L;
-    private transient final int saveObjectId;
+    private final int saveObjectId;
 
     /**
      * Create a save object that is added to the save manager for the specified save name.
      *
-     * @param saveManager SaveManager to add the save object to the current save of.
+     * @param gameSave Save to add the save object to the current save of.
      */
-    public SaveObject(int saveObjectId, SaveManager saveManager) {
+    public SaveObject(int saveObjectId, GameSave gameSave) {
         this.saveObjectId = saveObjectId;
-        saveManager.getCurrentSave().addSaveObject(this);
+        gameSave.addSaveObject(this);
     }
 
     /**
@@ -27,13 +27,6 @@ public abstract class SaveObject implements Serializable {
      */
     public int getSaveObjectId() {
         return saveObjectId;
-    }
-
-    /**
-     * Load the objects that are stored.
-     */
-    public void load(Context context) {
-        // Default behavior does not require anything to be loaded.
     }
 
 }

@@ -1,7 +1,10 @@
 package com.example.pacmanapp.activities.save;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,6 +14,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.pacmanapp.R;
 
 public class SaveDialog extends DialogFragment {
+    private static final String TAG = "SaveDialog";
     private final SaveActivity activity;
     private final String saveName;
 
@@ -31,6 +35,23 @@ public class SaveDialog extends DialogFragment {
                     activity.removeSave(saveName);
                     dismiss();
                 }).setNeutralButton("Cancel", (dialogInterface, i) -> dismiss());
-        return builder.create();
+
+        Dialog dialog = builder.create();
+        dialog.setOnShowListener(dialogInterface -> setSaveName());
+        return dialog;
+    }
+
+    public void setSaveName() {
+        Dialog dialog = getDialog();
+        if (dialog == null) {
+            Log.e(TAG, "Could not get dialog when trying to open dialog");
+            return;
+        }
+        TextView textView = dialog.findViewById(R.id.saveNameTitle);
+        if (textView == null) {
+            Log.e(TAG, "Could not get saveNameTitle text view from dialog save layout");
+            return;
+        }
+        textView.setText(saveName);
     }
 }

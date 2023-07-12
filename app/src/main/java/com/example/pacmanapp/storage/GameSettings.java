@@ -8,10 +8,10 @@ public class GameSettings extends SaveObject {
     /**
      * Create a group of settings that can be serialized.
      *
-     * @param saveManager SaveManager to add game settings to current save of.
+     * @param gameSave Save to add game settings to
      */
-    public GameSettings(SaveManager saveManager) {
-        super(gameSettingsId, saveManager);
+    public GameSettings(GameSave gameSave) {
+        super(gameSettingsId, gameSave);
     }
 
 }

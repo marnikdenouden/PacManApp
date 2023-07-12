@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -36,32 +37,10 @@ public class Marker implements Serializable {
     private final int markerId;
     private int drawableId;
     protected boolean animate; // Determines if drawable gets animated
+    private transient Drawable drawable;
+    private transient Context context;
 
     //>>> Constructors for marker <<<//
-
-    /**
-     * Create a marker for specified context, activity and alike.
-     *
-     * @param frameId   FrameId reference to map area that the marker is placed on
-     * @param latitude  Latitude used to position marker on map area
-     * @param longitude Longitude used to position marker on map area
-     * @param drawable  Drawable used as display for the marker
-     * @param markerId  MarkerId set to ImageView for potential reference
-     * @param context   Context in which the marker is created
-     * @param animate   Boolean animate to state if drawable should animate
-     */
-    Marker(int frameId, double latitude, double longitude, @NotNull Drawable drawable, int markerId,
-           @NotNull Context context, boolean animate) {
-        // Set marker values
-        this.animate = animate;
-        this.frameId = frameId;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.markerId = markerId;
-
-        instantiate(context);
-        setDrawable(drawable);
-    }
 
     /**
      * Create a marker for specified context, activity and alike.
@@ -81,8 +60,7 @@ public class Marker implements Serializable {
         this.latitude = latitude;
         this.longitude = longitude;
         this.markerId = markerId;
-
-        instantiate(context);
+        this.context = context;
     }
 
     /**
@@ -105,47 +83,49 @@ public class Marker implements Serializable {
         this.longitude = longitude;
         this.drawableId = drawableId;
         this.markerId = markerId;
-
-        instantiate(context);
-    }
-
-    /**
-     * Add marker to map area from frame Id reference.
-     */
-    void addToMapArea(int frameId) {
-        if (imageView.getParent() != null) {
-            return; // Marker already has a parent
-        }
-        if (!MapManager.hasMapArea(frameId)) {
-            return; // Frame id does not have a map area attached
-        }
-        MapManager.getMapArea(frameId).addMarker(this);
+        this.context = context;
     }
 
     //>>> Methods for marker creation <<<//
 
     /**
-     * Instantiate values for the marker.
+     * Add the image view of the marker to a given map area.
+     *
+     * @pre Map manager has map are for markers frame id
+     * @param context to load marker in
      */
-    private void instantiate(Context context) {
+    void loadOnMapArea(Context context) {
+        this.context = context;
+        // TODO I need to check in the context if there is a map area with the frame id,
+        //  if so then the marker needs to be created. Then it is up to the activity themselves to load when they create the map.
+        //  Only treat then is that calling load can keep creating multiple markers, but
+        if (!MapManager.hasMapArea(frameId)) {
+            return; // No map area available for the frame id
+        }
+
+        createImageView(context);
+
+        // Remove image view from the parent before adding marker to the map
+        if (!(imageView == null || imageView.getParent() == null)) {
+            ViewGroup viewGroup = (ViewGroup) imageView.getParent();
+            viewGroup.removeView(imageView);
+        }
+
+
+        tryAnimate(animate);
+        MapManager.getMapArea(frameId).addMarker(this);
+    }
+
+    protected void createImageView(Context context) {
+        // Create imageView for on the map area
         imageView = new ImageView(context);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Marker.this.onClick(view);
-            }
+        imageView.setOnClickListener(Marker.this::onClick);
+
+        imageView.setOnLongClickListener(view -> {
+            Marker.this.onLongClick(view);
+            return true;
         });
 
-        imageView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                Marker.this.onLongClick(view);
-                return true;
-            }
-        });
-
-        // Instantiate marker and imageView values
-        addToMapArea(frameId);
         setLayoutParams(latitude, longitude);
         setMarkerId(markerId);
         if (drawableId != 0) {
@@ -154,12 +134,80 @@ public class Marker implements Serializable {
     }
 
     /**
-     * Load the marker for the given context.
+     * Set drawable for given drawable Id.
      *
-     * @param context Context to load marker in
+     * @param drawableId Id to set drawable with
      */
-    void load(Context context) {
-        instantiate(context);
+    protected void setDrawable(int drawableId) {
+        Drawable drawable = AppCompatResources.getDrawable(getContext(), drawableId);
+        if (drawable == null) {
+            Log.e(TAG, "Could not set drawable on marker for id: " + drawableId);
+        }
+        setDrawable(drawable);
+    }
+
+    /**
+     * Set the imageView drawable on the imageView
+     *
+     * @param drawable Drawable to set on imageView
+     */
+    protected void setDrawable(Drawable drawable) {
+        if (imageView == null) {
+            Log.e(TAG, "Could not set drawable, image view is null");
+            return;
+        }
+        imageView.setImageDrawable(drawable);
+    }
+
+    /**
+     * Try to animate the animation drawable.
+     *
+     * @param animate Boolean if the marker is set to animate
+     */
+    void tryAnimate(boolean animate) {
+        // If animate is true, cast and start to animate the drawable.
+        if (animate) {
+            try {
+                // Cast the drawable to animation drawable
+                AnimationDrawable animationDrawable = ((AnimationDrawable) imageView.getDrawable());
+
+                // Start the animation drawable
+                animationDrawable.start();
+            } catch(ClassCastException classCastException) {
+                Log.e(TAG, "Could not cast drawable to animationDrawable," +
+                        " while animate is set to true");
+            }
+        }
+    }
+
+    /**
+     * Set the id for this marker.
+     *
+     * @param markerId marker id to set
+     */
+    private void setMarkerId(int markerId) {
+        imageView.setId(markerId);
+    }
+
+    /**
+     * Set layout params for marker in relative layout.
+     */
+    private void setLayoutParams(double latitude, double longitude) {
+        // Set the marker clickable and focusable
+        imageView.setClickable(true);
+        imageView.setFocusable(true);
+
+        // Create the relative layout params with specified height and width
+        RelativeLayout.LayoutParams layoutParams =
+                new RelativeLayout.LayoutParams(getPixelWidth(), getPixelHeight());
+
+        // Create map location from latitude and longitude
+        MapPosition mapPosition = MapPosition.getPosition(frameId, latitude, longitude,
+                getPixelWidth(), getPixelHeight());
+
+        // set the margins of the layout params
+        layoutParams.setMargins(mapPosition.getX(), mapPosition.getY(), 0, 0);
+        imageView.setLayoutParams(layoutParams);
     }
 
     /**
@@ -233,79 +281,13 @@ public class Marker implements Serializable {
     }
 
     /**
-     * Set drawable for given drawable Id.
+     * Checks if marker belongs on map with frame id.
      *
-     * @param drawableId Id to set drawable with
+     * @param frameId Frame id to check for
+     * @return Truth assignment, if marker belongs on map with specified frame id
      */
-    void setDrawable(int drawableId) {
-        Drawable drawable = AppCompatResources.getDrawable(getContext(), drawableId);
-        if (drawable == null) {
-            Log.e(TAG, "Could not set drawable on marker for id: " + drawableId);
-            return;
-        }
-        setDrawable(drawable);
-    }
-
-    /**
-     * Set drawable for given drawable
-     *
-     * @param drawable Drawable to set.
-     */
-    void setDrawable(@NotNull Drawable drawable) {
-        imageView.setImageDrawable(drawable);
-        tryAnimate(animate);
-    }
-
-    /**
-     * Try to animate the animation drawable.
-     *
-     * @param animate Boolean if the marker is set to animate
-     */
-    void tryAnimate(boolean animate) {
-        // If animate is true, cast and start to animate the drawable.
-        if (animate) {
-            try {
-                // Cast the drawable to animation drawable
-                AnimationDrawable animationDrawable = ((AnimationDrawable) imageView.getDrawable());
-
-                // Start the animation drawable
-                animationDrawable.start();
-            } catch(ClassCastException classCastException) {
-                Log.e(TAG, "Could not cast drawable to animationDrawable," +
-                        " while animate is set to true");
-            }
-        }
-
-    }
-
-    /**
-     * Set the id for this marker.
-     *
-     * @param markerId marker id to set
-     */
-    private void setMarkerId(int markerId) {
-        imageView.setId(markerId);
-    }
-
-    /**
-     * Set layout params for marker in relative layout.
-     */
-    private void setLayoutParams(double latitude, double longitude) {
-        // Set the marker clickable and focusable
-        imageView.setClickable(true);
-        imageView.setFocusable(true);
-
-        // Create the relative layout params with specified height and width
-        RelativeLayout.LayoutParams layoutParams =
-                new RelativeLayout.LayoutParams(getPixelWidth(), getPixelHeight());
-
-        // Create map location from latitude and longitude
-        MapPosition mapPosition = MapPosition.getPosition(frameId, latitude, longitude,
-                getPixelWidth(), getPixelHeight());
-
-        // set the margins of the layout params
-        layoutParams.setMargins(mapPosition.getX(), mapPosition.getY(), 0, 0);
-        imageView.setLayoutParams(layoutParams);
+    public boolean belongsOnMap(int frameId) {
+        return this.frameId == frameId;
     }
 
     /**
@@ -322,8 +304,8 @@ public class Marker implements Serializable {
      *
      * @return Context of the image view
      */
-    public Context getContext() {
-        return imageView.getContext();
+    protected Context getContext() {
+        return context;
     }
 
     //>>> place marker methods <<<//

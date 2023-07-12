@@ -2,12 +2,13 @@ package com.example.pacmanapp.map;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.view.View;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.OverScroller;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.pacmanapp.R;
@@ -74,17 +75,32 @@ public class MapArea extends ConstraintLayout {
     }
 
     /**
-     * Adds a map to the given view.
+     * Creates a map on the given view.
      *
-     * @param view View to add map to
+     * @param view View to create map on
      * @return MapArea map area added to the view
      */
-    public static MapArea addMap(MapType mapType, ViewGroup view) {
+    public static void createMap(MapType mapType, ViewGroup view) {
         MapArea mapArea = new MapArea(mapType, view.getContext());
+        if (view.findViewById(mapAreaId) != null) {
+            Log.w(TAG, "A map area was already added to this view group");
+        }
         view.addView(mapArea);
         view.addView(new MapController(mapArea), 0);
-        MapManager.getMapManager().addMapArea(view.getId(), mapArea);
-        return mapArea;
+        MapManager.getMapManager().setMapArea(view.getId(), mapArea);
+    }
+
+    /**
+     * Get the map area from the specified frame id.
+     *
+     * @param appCompatActivity Activity to get map from
+     * @param frameId Frame id to get map for
+     * @return Map area on the frame id and in the specified activity
+     */
+    public static MapArea getMapArea(AppCompatActivity appCompatActivity, int frameId) {
+        // Get the map area from the frame id.
+        FrameLayout frameLayout = appCompatActivity.findViewById(frameId);
+        return frameLayout.findViewById(mapAreaId);
     }
 
     /**

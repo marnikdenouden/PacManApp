@@ -25,21 +25,6 @@ public abstract class Character extends Marker implements Serializable, Location
     /**
      * Create a character marker for specified context, activity and alike.
      *
-     * @param frameId   FrameId reference to map area that the character is placed on
-     * @param latitude  Latitude used to position character on map area
-     * @param longitude Longitude used to position character on map area
-     * @param drawable  Drawable used as display for the marker
-     * @param markerId  MarkerId set to ImageView for potential reference
-     * @param context   Context in which the marker is created
-     */
-    Character(int frameId, double latitude, double longitude, @NotNull Drawable drawable, int markerId,
-              @NotNull Context context) {
-        super(frameId, latitude, longitude, drawable, markerId, context, true);
-    }
-
-    /**
-     * Create a character marker for specified context, activity and alike.
-     *
      * @param frameId    FrameId reference to map area that the marker is placed on
      * @param latitude   Latitude used to position character on map area
      * @param longitude  Longitude used to position character on map area
@@ -140,4 +125,5 @@ public abstract class Character extends Marker implements Serializable, Location
             move(location.getLatitude(), location.getLongitude());
         }
     }
+
 }

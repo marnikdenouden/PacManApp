@@ -1,8 +1,9 @@
 package com.example.pacmanapp.storage;
 
-import android.content.Context;
+import android.util.Log;
 
 public class SavePlatform {
+    private final static String TAG = "SavePlatform";
     private static SaveManager saveManager;
 
     /**
@@ -10,7 +11,7 @@ public class SavePlatform {
      *
      * @param saveManager Save manager to set
      */
-    static void setSaveManager(SaveManager saveManager) {
+    public static void setSaveManager(SaveManager saveManager) {
         SavePlatform.saveManager = saveManager;
     }
 
@@ -20,7 +21,7 @@ public class SavePlatform {
      * @return
      */
     public static boolean hasSave() {
-        return saveManager != null && saveManager.getCurrentSave() != null;
+        return saveManager != null && saveManager.hasCurrentSave();
     }
 
     /**
@@ -32,24 +33,17 @@ public class SavePlatform {
         saveManager.saveCurrentSave();
     }
 
-
-    /**
-     * Load the current save.
-     *
-     * @pre save manager was set
-     * @param context Context to load current save with
-     */
-    public static void load(Context context) {
-        saveManager.getCurrentSave().load(context);
-    }
-
     /**
      * Get the current save.
      *
-     * @pre save manager was set
+     * @pre has a save to give
      * @return gameSave Game save currently active
      */
     public static GameSave getSave() {
+        if (!hasSave()) {
+            Log.e(TAG, "There is no save set on the save platform");
+            return null;
+        }
         return saveManager.getCurrentSave();
     }
 }

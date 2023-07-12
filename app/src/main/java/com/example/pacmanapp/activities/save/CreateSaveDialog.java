@@ -40,7 +40,7 @@ public class CreateSaveDialog extends DialogFragment {
             Log.e(TAG, "Could not get dialog when trying to create new save");
             return;
         }
-        EditText editText = getDialog().findViewById(R.id.createSaveName);
+        EditText editText = dialog.findViewById(R.id.createSaveName);
         if (editText == null) {
             Log.e(TAG, "Could not get edit text view from create save layout");
             return;

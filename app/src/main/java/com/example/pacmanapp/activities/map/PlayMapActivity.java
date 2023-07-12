@@ -10,10 +10,12 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.activities.save.SaveActivity;
 import com.example.pacmanapp.displays.Clock;
 import com.example.pacmanapp.displays.Score;
 import com.example.pacmanapp.location.LocationUpdater;
@@ -25,6 +27,7 @@ import com.example.pacmanapp.markers.MapMarkers;
 import com.example.pacmanapp.markers.PacDot;
 import com.example.pacmanapp.markers.PacMan;
 import com.example.pacmanapp.markers.PowerPellet;
+import com.example.pacmanapp.navigation.Navigate;
 import com.example.pacmanapp.navigation.NavigationBar;
 import com.example.pacmanapp.navigation.PageType;
 import com.example.pacmanapp.selection.AcceptAllSelector;
@@ -32,7 +35,6 @@ import com.example.pacmanapp.selection.Selectable;
 import com.example.pacmanapp.selection.SelectableContent;
 import com.example.pacmanapp.selection.SelectionCrier;
 import com.example.pacmanapp.selection.Selector;
-import com.example.pacmanapp.storage.SaveManager;
 import com.example.pacmanapp.storage.SavePlatform;
 
 import java.time.Duration;
@@ -56,12 +58,17 @@ public class PlayMapActivity extends AppCompatActivity {
         selector = new AcceptAllSelector(R.id.inspectAllSelector);
         selectionListener = PlayMapActivity.this::onSelection;
 
-        ViewGroup mapFrame = findViewById(R.id.pacManMapFrame);
-        MapArea.addMap(MapType.PacMan, mapFrame);
+        if (!SavePlatform.hasSave()) {
+            Navigate.navigate(this, SaveActivity.class);
+            finish();
+            return;
+        }
 
-        SaveManager saveManager = SaveManager.getInstance(getApplicationContext());
-        saveManager.setCurrentSave("Test", getApplicationContext());
-        mapMarkers = MapMarkers.getFromCurrentSave(saveManager);
+        mapMarkers = MapMarkers.getFromSave(SavePlatform.getSave());
+
+        ViewGroup mapFrame = findViewById(R.id.pacManMapFrame);
+        MapArea.createMap(MapType.PacMan, mapFrame);
+
 
         Clock clock = new Clock(PlayMapActivity.this, PlayMapActivity.this);
         clock.setTime(Duration.ofSeconds(2678));
@@ -70,8 +77,7 @@ public class PlayMapActivity extends AppCompatActivity {
                 PlayMapActivity.this, PlayMapActivity.this);
         score.setValue(4678);
 
-        locationUpdater = new LocationUpdater(PlayMapActivity.this, PlayMapActivity.this);
-        SavePlatform.getSave().passLocationUpdater(locationUpdater);
+        locationUpdater = new LocationUpdater(PlayMapActivity.this);
 
         createMarkerButton.setOnClickListener(v -> createMarkers(R.id.pacManMapFrame));
 
@@ -86,6 +92,7 @@ public class PlayMapActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        mapMarkers.loadMap(this, R.id.pacManMapFrame);
         if (locationUpdater.isRequestingLocationUpdates()) {
             locationUpdater.startLocationUpdates();
         }
@@ -97,17 +104,14 @@ public class PlayMapActivity extends AppCompatActivity {
         selector = SelectionCrier.getInstance().getSelector(R.id.inspectAllSelector);
         onSelection(selector.getSelected());
         selector.addOnSelectionListener(selectionListener);
-
-        SavePlatform.load(getApplicationContext());
-        //SaveManager saveManager = new SaveManager(getApplicationContext());
-        //saveManager.setCurrentSave("Test", getApplicationContext()); // TODO figure out save manager stuff
-        //saveManager.loadCurrentSave(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         selector.removeOnSelectionListener(selectionListener);
+        MapArea mapArea = MapArea.getMapArea(this, R.id.pacManMapFrame);
+        mapArea.removeAllViews();
     }
 
     /**
@@ -126,8 +130,7 @@ public class PlayMapActivity extends AppCompatActivity {
                 51.4191983, 5.492802, PlayMapActivity.this));
         mapMarkers.addMarker(new PacDot(mapFrameId,
                 51.419331, 5.48632, PlayMapActivity.this));
-
-        mapMarkers.passLocationUpdater(locationUpdater);
+        mapMarkers.loadMap(this, mapFrameId);
     }
 
     // Location permission setup. //

@@ -7,8 +7,6 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.location.LocationObserver;
 
@@ -37,16 +35,6 @@ public class Ghost extends Character implements Serializable, LocationObserver {
                  Context context) {
         super(frameId, latitude, longitude, ghostType.getId(), context);
         this.ghostType = ghostType;
-
-        instantiate(context);
-    }
-
-    /**
-     * Instantiate values for the ghost.
-     */
-    private void instantiate(Context context) {
-        setColor(ghostType, context);
-        setDrawable(getAnimationDrawable(startDirection));
     }
 
     /**
@@ -122,10 +110,10 @@ public class Ghost extends Character implements Serializable, LocationObserver {
     }
 
     @Override
-    void load(Context context) {
-        super.load(context);
-
-        instantiate(context);
+    protected void createImageView(Context context) {
+        super.createImageView(context);
+        setColor(ghostType, context);
+        setDrawable(getAnimationDrawable(startDirection));
     }
 
 }

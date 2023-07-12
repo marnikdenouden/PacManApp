@@ -1,11 +1,13 @@
 package com.example.pacmanapp.map;
 
+import android.util.Log;
 import android.view.ViewGroup;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class MapManager {
+    private final static String TAG = "MapManager";
     private final Map<Integer, MapArea> mapReference;
     private static MapManager mapManager;
 
@@ -14,11 +16,12 @@ public class MapManager {
     }
 
     /**
-     * Add map area to map reference
+     * Set the map area to control the frame id.
      *
-     * @param mapArea to add for mapType
+     * @param mapArea to control the frame id
      */
-    public void addMapArea(int frameId, MapArea mapArea) {
+    public void setMapArea(int frameId, MapArea mapArea) {
+        Log.i(TAG, "Set map area to control frame id " + frameId);
         mapReference.put(frameId, mapArea);
     }
 
