@@ -68,19 +68,7 @@
             android:exported="false">
         </activity>
         <activity
-            android:name=".activities.save.ClearSavesPopupActivity"
-            android:exported="false">
-        </activity>
-        <activity
-            android:name=".activities.save.CreateSavePopUpActivity"
-            android:exported="false">
-        </activity>
-        <activity
             android:name=".activities.save.SaveActivity"
-            android:exported="false">
-        </activity>
-        <activity
-            android:name=".activities.save.SavePopUpActivity"
             android:exported="false">
         </activity>
         <activity

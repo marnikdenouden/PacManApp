@@ -108,7 +108,7 @@ public class AdminMapActivity extends AppCompatActivity {
         loadGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SavePlatform.load();
+                //SavePlatform.load();
                 //saveManager.loadCurrentSave(getApplicationContext());
                 //saveManager.loadSave("Test", getApplicationContext());
             }

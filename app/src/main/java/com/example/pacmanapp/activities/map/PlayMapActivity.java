@@ -98,7 +98,7 @@ public class PlayMapActivity extends AppCompatActivity {
         onSelection(selector.getSelected());
         selector.addOnSelectionListener(selectionListener);
 
-        SavePlatform.load();
+        SavePlatform.load(getApplicationContext());
         //SaveManager saveManager = new SaveManager(getApplicationContext());
         //saveManager.setCurrentSave("Test", getApplicationContext()); // TODO figure out save manager stuff
         //saveManager.loadCurrentSave(this);

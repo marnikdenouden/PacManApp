@@ -1,8 +1,9 @@
 package com.example.pacmanapp.storage;
 
+import android.content.Context;
+
 public class SavePlatform {
     private static SaveManager saveManager;
-    private static GameSave gameSave;
 
     /**
      * Set the save manager of the save platform.
@@ -14,6 +15,15 @@ public class SavePlatform {
     }
 
     /**
+     * Check if the save platform has a save.
+     *
+     * @return
+     */
+    public static boolean hasSave() {
+        return saveManager != null && saveManager.getCurrentSave() != null;
+    }
+
+    /**
      * Save the current save.
      *
      * @pre save manager was set
@@ -22,13 +32,15 @@ public class SavePlatform {
         saveManager.saveCurrentSave();
     }
 
+
     /**
      * Load the current save.
      *
      * @pre save manager was set
+     * @param context Context to load current save with
      */
-    public static void load() {
-        gameSave = saveManager.getCurrentSave();
+    public static void load(Context context) {
+        saveManager.getCurrentSave().load(context);
     }
 
     /**
@@ -38,6 +50,6 @@ public class SavePlatform {
      * @return gameSave Game save currently active
      */
     public static GameSave getSave() {
-        return gameSave;
+        return saveManager.getCurrentSave();
     }
 }
