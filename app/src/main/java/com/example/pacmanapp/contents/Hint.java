@@ -26,7 +26,7 @@ public class Hint {
      */
     public void addView(AppCompatActivity currentActivity, ViewGroup viewGroup) {
         currentActivity.findViewById(R.id.selectable_description);
-        View view = currentActivity.getLayoutInflater().inflate(R.layout.pacman_marker, viewGroup);
+        View view = currentActivity.getLayoutInflater().inflate(R.layout.clock, viewGroup);
         // Configure hint view with hint data values.
     }
 }
