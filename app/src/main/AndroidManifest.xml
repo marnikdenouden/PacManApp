@@ -64,10 +64,6 @@
             android:exported="false">
         </activity>
         <activity
-            android:name=".activities.popup.PopUpActivity"
-            android:exported="false">
-        </activity>
-        <activity
             android:name=".activities.save.SaveActivity"
             android:exported="false">
         </activity>

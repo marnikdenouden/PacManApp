@@ -86,8 +86,6 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
         Score score = new Score(5, R.id.scoreLayout,
                 AdminMapActivity.this, AdminMapActivity.this);
         score.setValue(4678);
-// TODO add interface that signifies that the activity updates locations, so when the map is loaded the markers can request to be added to the location updater.
-        // TODO also passing the same thing twice in a method does not make sense.
         locationUpdater = new LocationUpdater(AdminMapActivity.this);
 
         createMarkerButton.setOnClickListener(view -> createMarkers(R.id.pacManMapFrame));

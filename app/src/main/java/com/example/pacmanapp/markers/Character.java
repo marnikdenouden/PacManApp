@@ -76,13 +76,12 @@ public abstract class Character extends Marker implements Serializable, Location
         // Animate the character to the target position
         Runnable relocate = () -> {
             place(latitude, longitude);
-            //updateDistances(); TODO Do game logic computation on character location change event.
         };
         getImageView().animate().x(targetX).y(targetY).withEndAction(relocate)
                 .setDuration(getContext().getResources().getInteger(R.integer.moveAnimationTime))
                 .start();
 
-        Log.d(TAG, "Moving character"); // TODO remove line
+        Log.d(TAG, "Moving character to x: " + targetX + " and y:" + targetY);
     }
 
     /**

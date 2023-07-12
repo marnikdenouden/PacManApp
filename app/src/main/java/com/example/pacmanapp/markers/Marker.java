@@ -96,9 +96,6 @@ public class Marker implements Serializable {
      */
     void loadOnMapArea(Context context) {
         this.context = context;
-        // TODO I need to check in the context if there is a map area with the frame id,
-        //  if so then the marker needs to be created. Then it is up to the activity themselves to load when they create the map.
-        //  Only treat then is that calling load can keep creating multiple markers, but
         if (!MapManager.hasMapArea(frameId)) {
             return; // No map area available for the frame id
         }
