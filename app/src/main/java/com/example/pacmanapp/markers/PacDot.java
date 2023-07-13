@@ -72,7 +72,6 @@ public class PacDot extends Marker implements Selectable {
 
     public void setHint(String hint) {
         this.hint = hint;
-        SavePlatform.save(); // TODO remove debug line
     }
 
     public String getHint() {

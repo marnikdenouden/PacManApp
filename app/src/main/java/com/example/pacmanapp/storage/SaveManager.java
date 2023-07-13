@@ -101,7 +101,7 @@ public class SaveManager {
      *
      * @param saveName Save name to load or create current save for
      */
-    public void setCurrentSave(@NotNull String saveName, Context context) {
+    public void setCurrentSave(@NotNull String saveName) {
         if (hasSave(saveName)) {
             loadSave(saveName);
         } else {

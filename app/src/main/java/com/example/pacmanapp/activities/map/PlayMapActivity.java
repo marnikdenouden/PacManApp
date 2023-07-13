@@ -54,7 +54,7 @@ public class PlayMapActivity extends AppCompatActivity {
 
         NavigationBar.configure(this, PageType.MAP);
 
-        selector = new AcceptAllSelector(R.id.inspectAllSelector);
+        selector = AcceptAllSelector.getAcceptAllSelector(R.id.inspectAllSelector);
         selectionListener = PlayMapActivity.this::onSelection;
 
         if (!SavePlatform.hasSave()) {
@@ -85,21 +85,20 @@ public class PlayMapActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        locationUpdater.stopLocationUpdates();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mapMarkers.loadMap(this, R.id.pacManMapFrame);
-        if (locationUpdater.isRequestingLocationUpdates()) {
-            locationUpdater.startLocationUpdates();
-        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        mapMarkers.loadMap(this, R.id.pacManMapFrame); // TODO figure out where to load and remove markers.
+        if (locationUpdater.isRequestingLocationUpdates()) {
+            locationUpdater.startLocationUpdates(); // TODO figure out where this should go
+        }
         selector = SelectionCrier.getInstance().getSelector(R.id.inspectAllSelector);
         onSelection(selector.getSelected());
         selector.addOnSelectionListener(selectionListener);
@@ -108,8 +107,9 @@ public class PlayMapActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        selector.removeOnSelectionListener(selectionListener);
         MapArea.getMapArea(this, R.id.pacManMapFrame).removeMarkers();
+        locationUpdater.stopLocationUpdates();
+        selector.removeOnSelectionListener(selectionListener);
     }
 
     /**

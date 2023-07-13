@@ -94,7 +94,7 @@ public class SaveActivity extends AppCompatActivity {
     }
 
     void createSave(String saveName) {
-        getSaveManager().setCurrentSave(saveName, getApplicationContext());
+        getSaveManager().setCurrentSave(saveName);
         updateSaveList();
     }
 

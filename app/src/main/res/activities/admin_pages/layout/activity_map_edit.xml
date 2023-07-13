@@ -70,7 +70,7 @@
         android:text="Save Game"
         android:textAllCaps="false"
         android:textSize="19sp"
-        app:layout_constraintBottom_toTopOf="@id/navigation_bar"
+        app:layout_constraintBottom_toTopOf="@id/bottom_bar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/createMarkersButton" />
 
@@ -83,12 +83,13 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="24dp"
-        app:layout_constraintBottom_toTopOf="@id/navigation_bar"
+        app:layout_constraintBottom_toTopOf="@id/bottom_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/createMarkersButton"
         app:layout_constraintTop_toBottomOf="@id/pacManMapFrame" />
 
     <include
+        android:id="@+id/bottom_bar"
         layout="@layout/navigation_bar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -72,10 +72,9 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
             return;
         }
 
-        SavePlatform.load();
         mapMarkers = MapMarkers.getFromSave(SavePlatform.getSave());
 
-        selector = new AcceptAllSelector(R.id.editAllSelector);
+        selector = AcceptAllSelector.getAcceptAllSelector(R.id.editAllSelector);
         selectionListener = AdminMapActivity.this::onSelection;
 
         Clock clock = new Clock(AdminMapActivity.this, AdminMapActivity.this);
@@ -94,14 +93,19 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
     @Override
     protected void onStart() {
         super.onStart();
+        mapMarkers.loadMap(this, R.id.pacManMapFrame);
+        if (locationUpdater.isRequestingLocationUpdates()) {
+            locationUpdater.startLocationUpdates();
+        }
         selector = SelectionCrier.getInstance().getSelector(R.id.editAllSelector);
-        onSelection(selector.getSelected());
+        onSelection(selector.getSelected()); // TODO figure out what the right place is for this selection code and how to simplify selection code.
         selector.addOnSelectionListener(selectionListener);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        locationUpdater.stopLocationUpdates();
         selector.removeOnSelectionListener(selectionListener);
         MapArea.getMapArea(this, R.id.pacManMapFrame).removeMarkers();
     }
@@ -109,16 +113,11 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
     @Override
     protected void onPause() {
         super.onPause();
-        locationUpdater.stopLocationUpdates();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mapMarkers.loadMap(this, R.id.pacManMapFrame);
-        if (locationUpdater.isRequestingLocationUpdates()) {
-            locationUpdater.startLocationUpdates();
-        }
     }
 
     private void createMarkers(int mapFrameId) {

@@ -18,7 +18,7 @@ public class SavePlatform {
     /**
      * Check if the save platform has a save.
      *
-     * @return
+     * @return Truth assignment, if save platform has a save loaded
      */
     public static boolean hasSave() {
         return saveManager != null && saveManager.hasCurrentSave();
@@ -31,15 +31,6 @@ public class SavePlatform {
      */
     public static void save() {
         saveManager.saveCurrentSave();
-    }
-
-    /**
-     * Load the current save.
-     *
-     * @pre save manager was set
-     */
-    public static void load() {
-        saveManager.loadSave(getSave().getSaveName()); // TODO make more robust
     }
 
     /**

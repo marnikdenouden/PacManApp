@@ -47,6 +47,16 @@ public class SelectionCrier {
     }
 
     /**
+     * Check if the selector with the specified id is stored.
+     *
+     * @param id Id of the selector to check
+     * @return Truth assignment, if selector with id is stored
+     */
+    public boolean hasSelector(int id) {
+        return selectors.containsKey(id);
+    }
+
+    /**
      * Get selection crier instance.
      *
      * @return instance of the selection crier

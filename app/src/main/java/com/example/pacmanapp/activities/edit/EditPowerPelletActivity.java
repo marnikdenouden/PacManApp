@@ -11,6 +11,7 @@ import com.example.pacmanapp.markers.PowerPellet;
 import com.example.pacmanapp.navigation.NavigationBar;
 import com.example.pacmanapp.navigation.PageType;
 import com.example.pacmanapp.selection.Selectable;
+import com.example.pacmanapp.storage.SavePlatform;
 
 public class EditPowerPelletActivity extends AppCompatActivity {
     private final static String TAG = "EditPowerPalletActivity";
@@ -29,5 +30,11 @@ public class EditPowerPelletActivity extends AppCompatActivity {
         //setContent(powerPallet);
 
         NavigationBar.configure(this, PageType.EDIT);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SavePlatform.save();
     }
 }

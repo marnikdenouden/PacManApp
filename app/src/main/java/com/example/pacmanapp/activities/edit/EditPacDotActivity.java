@@ -37,8 +37,8 @@ public class EditPacDotActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
         SavePlatform.save();
     }
 
