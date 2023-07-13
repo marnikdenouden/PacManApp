@@ -144,7 +144,7 @@ public class LocationUpdater implements DynamicLocation {
 
                 try {
                     LocationSettingsResponse response = task.getResult(ApiException.class);
-                    Toast.makeText(context, "GPS is already tured on", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "GPS is already turned on", Toast.LENGTH_SHORT).show();
                 } catch (ApiException e) {
 
                     switch (e.getStatusCode()) {

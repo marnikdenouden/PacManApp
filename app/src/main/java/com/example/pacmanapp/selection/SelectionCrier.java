@@ -2,7 +2,6 @@ package com.example.pacmanapp.selection;
 
 import android.util.Log;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 

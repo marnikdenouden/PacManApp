@@ -3,8 +3,6 @@ package com.example.pacmanapp.storage;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.pacmanapp.markers.MapMarkers;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;

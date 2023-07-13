@@ -40,26 +40,20 @@ import com.example.pacmanapp.storage.SavePlatform;
 import java.time.Duration;
 
 public class AdminMapActivity extends AppCompatActivity implements DynamicLocation {
+    private final static String TAG = "AdminMapActivity";
 
     private LocationUpdater locationUpdater;
-
-    private Button createMarkerButton;
-    private Button saveGameButton;
-
-    private ViewGroup layout;
     private MapMarkers mapMarkers;
     private Selector selector;
     private Selector.SelectionListener selectionListener;
-    private final String TAG = "AdminMapActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_edit);
 
-        createMarkerButton = findViewById(R.id.createMarkersButton);
-        saveGameButton = findViewById(R.id.saveGameButton);
-        layout = findViewById(R.id.layout);
+        Button createMarkerButton = findViewById(R.id.createMarkersButton);
+        Button saveGameButton = findViewById(R.id.saveGameButton);
 
         NavigationBar.configure(this, PageType.ADMIN_MAP);
 

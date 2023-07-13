@@ -42,7 +42,7 @@ public class SavePlatform {
     public static GameSave getSave() {
         if (!hasSave()) {
             Log.e(TAG, "There is no save set on the save platform");
-            return null;
+            throw new NullPointerException("No save found");
         }
         return saveManager.getCurrentSave();
     }

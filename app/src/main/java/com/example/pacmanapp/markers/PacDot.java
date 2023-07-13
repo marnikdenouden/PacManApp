@@ -11,7 +11,6 @@ import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.edit.EditPacDotActivity;
 import com.example.pacmanapp.activities.inspect.InspectPacDotActivity;
 import com.example.pacmanapp.selection.Selectable;
-import com.example.pacmanapp.storage.SavePlatform;
 
 @SuppressLint("ViewConstructor")
 public class PacDot extends Marker implements Selectable {

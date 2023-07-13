@@ -1,11 +1,8 @@
 package com.example.pacmanapp.markers;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.util.Log;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.location.LocationObserver;
@@ -74,9 +71,8 @@ public abstract class Character extends Marker implements Serializable, Location
         setRotation(getDirection(targetX, targetY));
 
         // Animate the character to the target position
-        Runnable relocate = () -> {
-            place(latitude, longitude);
-        };
+        Runnable relocate = () -> place(latitude, longitude);
+
         getImageView().animate().x(targetX).y(targetY).withEndAction(relocate)
                 .setDuration(getContext().getResources().getInteger(R.integer.moveAnimationTime))
                 .start();

@@ -25,9 +25,8 @@ public class CreateSaveDialog extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setView(R.layout.dialog_create_save)
-                .setPositiveButton("Confirm", (dialogInterface, i) -> {
-                    createSave();
-                }).setNegativeButton("Cancel", (dialogInterface, i) -> dismiss());
+                .setPositiveButton("Confirm", (dialogInterface, i) -> createSave())
+                .setNegativeButton("Cancel", (dialogInterface, i) -> dismiss());
         return builder.create();
     }
 

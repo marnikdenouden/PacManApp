@@ -39,11 +39,11 @@ import com.example.pacmanapp.storage.SavePlatform;
 import java.time.Duration;
 
 public class PlayMapActivity extends AppCompatActivity {
+    private final static String TAG = "PlayMapActivity";
     private LocationUpdater locationUpdater;
     private MapMarkers mapMarkers;
     private Selector selector;
     private Selector.SelectionListener selectionListener;
-    private final String TAG = "PlayMapActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

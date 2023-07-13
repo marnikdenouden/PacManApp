@@ -1,5 +1,9 @@
 package com.example.pacmanapp.map;
 
+import android.util.Log;
+
+import org.jetbrains.annotations.NotNull;
+
 public class MapPosition {
     private final static String TAG = "MapPosition";
     private final int xPosition;
@@ -46,10 +50,12 @@ public class MapPosition {
      * @param width Width of square to align longitude center of
      * @param height Height of square to align latitude center of
      */
+    @NotNull
     public static MapPosition getPosition(int frameId, double latitude, double longitude,
                                           int width, int height) {
         if (!MapManager.hasMapArea(frameId)) {
-            return null; // Frame id does not have a map area attached
+            Log.e(TAG, "Could not get map position without map area.");
+            throw new NullPointerException("No map area found for frame id " + frameId);
         }
         return getPosition(MapManager.getMapArea(frameId), latitude, longitude, width, height);
     }
@@ -64,7 +70,8 @@ public class MapPosition {
      * @param width Width of square to align longitude center of
      * @param height Height of square to align latitude center of
      */
-    public static MapPosition getPosition(MapArea mapArea, double latitude, double longitude,
+    @NotNull
+    public static MapPosition getPosition(@NotNull MapArea mapArea, double latitude, double longitude,
                                           int width, int height) {
         MapPosition mapPosition = mapArea.getMapLocation(latitude, longitude);
         int xPosition = mapPosition.getX() - (width / 2);

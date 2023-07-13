@@ -1,7 +1,6 @@
 package com.example.pacmanapp.displays;
 
 import android.content.Context;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 

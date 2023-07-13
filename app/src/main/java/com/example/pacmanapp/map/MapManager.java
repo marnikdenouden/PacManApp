@@ -50,7 +50,7 @@ public class MapManager {
             throw new NullPointerException("Map manager could not find map frame with id " + frameId);
         }
 
-        MapArea mapArea = mapFrame.findViewById(MapArea.mapAreaId);
+        MapArea mapArea = mapFrame.findViewById(MapArea.getMapAreaId());
         if (mapArea == null) {
             throw new NullPointerException("Map manager could not find a map area added to the frame with id " + frameId);
         }

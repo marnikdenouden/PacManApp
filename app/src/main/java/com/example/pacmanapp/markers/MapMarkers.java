@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.location.DynamicLocation;
 import com.example.pacmanapp.location.LocationObserver;
-import com.example.pacmanapp.location.LocationUpdater;
 import com.example.pacmanapp.map.MapArea;
 import com.example.pacmanapp.map.MapManager;
 import com.example.pacmanapp.storage.GameSave;

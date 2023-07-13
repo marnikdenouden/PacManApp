@@ -17,7 +17,7 @@ import com.example.pacmanapp.markers.Marker;
 @SuppressLint("ViewConstructor")
 public class MapArea extends ConstraintLayout {
     private final static String TAG = "MapArea";
-    final static int mapAreaId = R.id.mapArea;
+    private final static int mapAreaId = R.id.mapArea;
     private final MapType mapType; // Map type that specifies map specific values
     private final MapView mapView; // Map view that determines the area of the map
     private final MarkerLayout markerLayout; // Relative layout to contain markers on top of the map
@@ -84,8 +84,8 @@ public class MapArea extends ConstraintLayout {
     /**
      * Creates a map on the given view.
      *
+     * @param mapType MapType to use for map
      * @param view View to create map on
-     * @return MapArea map area added to the view
      */
     public static void createMap(MapType mapType, ViewGroup view) {
         MapArea mapArea = new MapArea(mapType, view.getContext());
@@ -134,7 +134,7 @@ public class MapArea extends ConstraintLayout {
      *
      * @return Id of the map area
      */
-    public int getMapAreaId() {
+    public static int getMapAreaId() {
         return mapAreaId;
     }
 

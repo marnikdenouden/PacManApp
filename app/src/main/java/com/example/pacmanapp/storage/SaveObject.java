@@ -1,9 +1,5 @@
 package com.example.pacmanapp.storage;
 
-import android.content.Context;
-
-import com.example.pacmanapp.markers.MapMarkers;
-
 import java.io.Serializable;
 
 public abstract class SaveObject implements Serializable {

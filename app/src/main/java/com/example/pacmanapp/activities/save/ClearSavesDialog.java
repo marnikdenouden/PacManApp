@@ -8,8 +8,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-import com.example.pacmanapp.R;
-
 public class ClearSavesDialog extends DialogFragment {
     private final SaveActivity activity;
 

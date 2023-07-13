@@ -7,5 +7,5 @@ public interface DynamicLocation {
      *
      * @param locationObserver Location observer to add to listeners
      */
-    public void addObserver(LocationObserver locationObserver);
+    void addObserver(LocationObserver locationObserver);
 }
