@@ -11,33 +11,24 @@ import com.example.pacmanapp.activities.settings.AdminSettingsActivity;
 import com.example.pacmanapp.activities.settings.PlaySettingsActivity;
 
 public enum PageType {
-    INSPECT(R.id.inspectOption, R.id.pageMarkerInspect,
-            InspectActivity.class, InspectActivity.class),
-    MAP(R.id.mapOption, R.id.pageMarkerMap,
-            PlayMapActivity.class, AdminMapActivity.class),
-    SETTINGS(R.id.settingsOption, R.id.pageMarkerSettings,
-            PlaySettingsActivity.class, AdminSettingsActivity.class),
-    EDIT(R.id.editOption, R.id.pageMarkerEdit,
-            InspectActivity.class, EditActivity.class);
+    INSPECT(R.id.inspectOption, R.id.pageMarkerInspect, InspectActivity.class),
+    MAP(R.id.mapOption, R.id.pageMarkerMap, PlayMapActivity.class),
+    SETTINGS(R.id.settingsOption, R.id.pageMarkerSettings, PlaySettingsActivity.class),
+    EDIT(R.id.editOption, R.id.pageMarkerEdit, EditActivity.class),
+    ADMIN_MAP(R.id.mapOption, R.id.pageMarkerMap, AdminMapActivity.class),
+    ADMIN_SETTINGS(R.id.settingsOption, R.id.pageMarkerSettings, AdminSettingsActivity.class);
 
     private final int buttonId;
     private final int markerId;
-    private final Class<? extends AppCompatActivity> playPage;
-    private final Class<? extends AppCompatActivity> adminPage;
-    PageType(int buttonId, int markerId, Class<? extends AppCompatActivity> playPage,
-             Class<? extends AppCompatActivity> adminPage) {
+    private final Class<? extends AppCompatActivity> page;
+    PageType(int buttonId, int markerId, Class<? extends AppCompatActivity> page) {
         this.buttonId = buttonId;
         this.markerId = markerId;
-        this.playPage = playPage;
-        this.adminPage = adminPage;
+        this.page = page;
     }
 
-    Class<? extends AppCompatActivity> getNextPage(boolean admin) {
-        if (admin) {
-            return adminPage;
-        } else {
-            return playPage;
-        }
+    Class<? extends AppCompatActivity> getPage() {
+        return page;
     }
 
     int getButtonId() {

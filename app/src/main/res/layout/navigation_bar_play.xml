@@ -21,6 +21,7 @@
         app:tint="@color/black_base" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@id/play_navigation_bar"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/navigationBackground"

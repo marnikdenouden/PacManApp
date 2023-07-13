@@ -9,11 +9,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
-import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.save.SaveActivity;
@@ -53,7 +50,7 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
     private MapMarkers mapMarkers;
     private Selector selector;
     private Selector.SelectionListener selectionListener;
-    private final String TAG = "PlayMapActivity";
+    private final String TAG = "AdminMapActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +61,7 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
         saveGameButton = findViewById(R.id.saveGameButton);
         layout = findViewById(R.id.layout);
 
-        NavigationBar.configure(this, true, PageType.MAP);
+        NavigationBar.configure(this, PageType.ADMIN_MAP);
 
         ViewGroup mapFrame = findViewById(R.id.pacManMapFrame);
         MapArea.createMap(MapType.PacMan, mapFrame);
@@ -75,6 +72,7 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
             return;
         }
 
+        SavePlatform.load();
         mapMarkers = MapMarkers.getFromSave(SavePlatform.getSave());
 
         selector = new AcceptAllSelector(R.id.editAllSelector);

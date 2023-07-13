@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="navigation_bar" />
+    <item type="id" name="admin_navigation_bar" />
+    <item type="id" name="play_navigation_bar" />
+</resources>

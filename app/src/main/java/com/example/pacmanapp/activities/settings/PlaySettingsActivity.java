@@ -15,6 +15,6 @@ public class PlaySettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_play);
 
-        NavigationBar.configure(this, false, PageType.SETTINGS);
+        NavigationBar.configure(this, PageType.SETTINGS);
     }
 }

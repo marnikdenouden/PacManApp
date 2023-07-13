@@ -34,6 +34,15 @@ public class SavePlatform {
     }
 
     /**
+     * Load the current save.
+     *
+     * @pre save manager was set
+     */
+    public static void load() {
+        saveManager.loadSave(getSave().getSaveName()); // TODO make more robust
+    }
+
+    /**
      * Get the current save.
      *
      * @pre has a save to give

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.navigation.NavigationBar;
+import com.example.pacmanapp.navigation.PageType;
 import com.example.pacmanapp.selection.Selectable;
 
 public class InfoSelectableActivity extends AppCompatActivity implements Selectable {
@@ -12,7 +14,9 @@ public class InfoSelectableActivity extends AppCompatActivity implements Selecta
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_inspect_info);
+        setContentView(R.layout.activity_inspect_info); // This sets the navigation bar to play. TODO how to include navigation bar to all activities without specifying which one.
+
+        NavigationBar.configure(this, PageType.INSPECT);
     }
 
     @Override

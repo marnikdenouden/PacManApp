@@ -2,6 +2,7 @@ package com.example.pacmanapp.markers;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,12 +11,15 @@ import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.edit.EditPacDotActivity;
 import com.example.pacmanapp.activities.inspect.InspectPacDotActivity;
 import com.example.pacmanapp.selection.Selectable;
+import com.example.pacmanapp.storage.SavePlatform;
 
 @SuppressLint("ViewConstructor")
 public class PacDot extends Marker implements Selectable {
+    private final static String TAG = "PacDot";
     private static final long serialVersionUID = 1L;
     private final static int drawableId = R.drawable.pac_dot;
     private final static int markerId = R.id.pacdot;
+    private int debugOffset = 0;
 
     private String hint = "No hint is set to the location of this pac dot.";
 
@@ -35,6 +39,9 @@ public class PacDot extends Marker implements Selectable {
     public void onClick(View view) {
         super.onClick(view);
         getImageView().setX(getImageView().getX() + 50);
+        debugOffset+= 40;  // TODO remove debugOffset
+        getImageView().setX(100 + debugOffset);
+        Log.d(TAG, hint);
     }
 
     @Override
@@ -65,6 +72,7 @@ public class PacDot extends Marker implements Selectable {
 
     public void setHint(String hint) {
         this.hint = hint;
+        SavePlatform.save(); // TODO remove debug line
     }
 
     public String getHint() {

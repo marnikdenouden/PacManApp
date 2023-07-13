@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
@@ -53,7 +52,7 @@ public class PlayMapActivity extends AppCompatActivity {
 
         Button createMarkerButton = findViewById(R.id.createMarkersButton);
 
-        NavigationBar.configure(this, false, PageType.MAP);
+        NavigationBar.configure(this, PageType.MAP);
 
         selector = new AcceptAllSelector(R.id.inspectAllSelector);
         selectionListener = PlayMapActivity.this::onSelection;

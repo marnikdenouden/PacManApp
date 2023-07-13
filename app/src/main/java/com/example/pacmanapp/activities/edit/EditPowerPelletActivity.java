@@ -10,8 +10,7 @@ import com.example.pacmanapp.R;
 import com.example.pacmanapp.markers.PowerPellet;
 import com.example.pacmanapp.navigation.NavigationBar;
 import com.example.pacmanapp.navigation.PageType;
-
-import java.io.Serializable;
+import com.example.pacmanapp.selection.Selectable;
 
 public class EditPowerPelletActivity extends AppCompatActivity {
     private final static String TAG = "EditPowerPalletActivity";
@@ -20,7 +19,7 @@ public class EditPowerPelletActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_powerpellet);
-        Serializable selected =  getIntent().getSerializableExtra("selected");
+        Selectable selected = EditActivity.getSelected();
         if (!(selected instanceof PowerPellet)) {
             Log.e(TAG, "Did not get selected that is an instance of power pallet.");
             finish();
@@ -29,6 +28,6 @@ public class EditPowerPelletActivity extends AppCompatActivity {
         PowerPellet powerPellet = (PowerPellet) selected;
         //setContent(powerPallet);
 
-        NavigationBar.configure(this, true, PageType.INSPECT);
+        NavigationBar.configure(this, PageType.EDIT);
     }
 }

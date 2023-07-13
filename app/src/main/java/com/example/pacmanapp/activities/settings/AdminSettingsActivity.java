@@ -15,6 +15,6 @@ public class AdminSettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_admin);
 
-        NavigationBar.configure(this, true, PageType.SETTINGS);
+        NavigationBar.configure(this, PageType.ADMIN_SETTINGS);
     }
 }

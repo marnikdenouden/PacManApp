@@ -60,7 +60,6 @@
         app:layout_constraintTop_toBottomOf="@+id/selectable_description" />
 
     <include
-        android:id="@+id/navigationBar"
-        layout="@layout/navigation_bar_admin" />
+        layout="@layout/navigation_bar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

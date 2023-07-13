@@ -1,10 +1,7 @@
 package com.example.pacmanapp.activities.inspect;
 
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -14,7 +11,6 @@ import com.example.pacmanapp.R;
 import com.example.pacmanapp.markers.PacDot;
 import com.example.pacmanapp.navigation.NavigationBar;
 import com.example.pacmanapp.navigation.PageType;
-import com.example.pacmanapp.selection.Selectable;
 import com.example.pacmanapp.selection.SelectableContent;
 
 import java.io.Serializable;
@@ -35,7 +31,7 @@ public class InspectPacDotActivity extends AppCompatActivity {
         PacDot pacDot = (PacDot) selected;
         setContent(pacDot);
 
-        NavigationBar.configure(this, false, PageType.INSPECT);
+        NavigationBar.configure(this, PageType.INSPECT);
     }
 
     /**

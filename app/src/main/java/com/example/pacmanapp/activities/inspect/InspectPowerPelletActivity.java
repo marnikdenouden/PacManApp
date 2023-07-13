@@ -29,6 +29,6 @@ public class InspectPowerPelletActivity extends AppCompatActivity {
         PowerPellet powerPellet = (PowerPellet) selected;
         //setContent(powerPallet);
 
-        NavigationBar.configure(this, false, PageType.INSPECT);
+        NavigationBar.configure(this, PageType.INSPECT);
     }
 }

@@ -13,9 +13,9 @@ import com.example.pacmanapp.R;
 import com.example.pacmanapp.markers.PacDot;
 import com.example.pacmanapp.navigation.NavigationBar;
 import com.example.pacmanapp.navigation.PageType;
+import com.example.pacmanapp.selection.Selectable;
 import com.example.pacmanapp.selection.SelectableContent;
-
-import java.io.Serializable;
+import com.example.pacmanapp.storage.SavePlatform;
 
 public class EditPacDotActivity extends AppCompatActivity {
     private static final String TAG = "InspectPacDotActivity";
@@ -24,7 +24,7 @@ public class EditPacDotActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_pacdot);
-        Serializable selected =  getIntent().getSerializableExtra("selected");
+        Selectable selected = EditActivity.getSelected();
         if (!(selected instanceof PacDot)) {
             Log.e(TAG, "Did not get selected that is an instance of pac dot.");
             finish();
@@ -33,7 +33,13 @@ public class EditPacDotActivity extends AppCompatActivity {
         PacDot pacDot = (PacDot) selected;
         setContent(pacDot);
 
-        NavigationBar.configure(this, true, PageType.INSPECT);
+        NavigationBar.configure(this, PageType.EDIT);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SavePlatform.save();
     }
 
     /**
