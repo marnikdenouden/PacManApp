@@ -7,10 +7,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.save.SaveActivity;
@@ -20,10 +23,12 @@ import com.example.pacmanapp.location.DynamicLocation;
 import com.example.pacmanapp.location.LocationObserver;
 import com.example.pacmanapp.location.LocationUpdater;
 import com.example.pacmanapp.map.MapArea;
+import com.example.pacmanapp.map.MapPosition;
 import com.example.pacmanapp.map.MapType;
 import com.example.pacmanapp.markers.Ghost;
 import com.example.pacmanapp.markers.GhostType;
 import com.example.pacmanapp.markers.MapMarkers;
+import com.example.pacmanapp.markers.Marker;
 import com.example.pacmanapp.markers.PacDot;
 import com.example.pacmanapp.markers.PacMan;
 import com.example.pacmanapp.markers.PowerPellet;
@@ -52,9 +57,6 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_edit);
 
-        Button createMarkerButton = findViewById(R.id.createMarkersButton);
-        Button saveGameButton = findViewById(R.id.saveGameButton);
-
         NavigationBar.configure(this, PageType.ADMIN_MAP);
 
         ViewGroup mapFrame = findViewById(R.id.pacManMapFrame);
@@ -78,10 +80,6 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
                 AdminMapActivity.this, AdminMapActivity.this);
         score.setValue(4678);
         locationUpdater = new LocationUpdater(AdminMapActivity.this);
-
-        createMarkerButton.setOnClickListener(view -> createMarkers(R.id.pacManMapFrame));
-
-        saveGameButton.setOnClickListener(view -> SavePlatform.save());
     }
 
     @Override
@@ -99,6 +97,7 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
     @Override
     protected void onStop() {
         super.onStop();
+        SavePlatform.save();
         locationUpdater.stopLocationUpdates();
         selector.removeOnSelectionListener(selectionListener);
         MapArea.getMapArea(this, R.id.pacManMapFrame).removeMarkers();
@@ -124,7 +123,6 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
                 51.4191983, 5.492802, AdminMapActivity.this));
         mapMarkers.addMarker(new PacDot(mapFrameId,
                 51.419331, 5.48632, AdminMapActivity.this));
-        mapMarkers.loadMap(this, mapFrameId);
     }
 
     // Location permission setup. //
@@ -163,4 +161,28 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
     private void onSelection(Selectable selectable) {
         SelectableContent.setContent(this, selectable);
     }
+
+    public void createPacDot(View view) {
+        if (!locationUpdater.hasLocation()) {
+            Toast.makeText(getApplicationContext(),
+                    "No location received yet, try again later", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Location location = locationUpdater.getLastLocation();
+        mapMarkers.addMarker(new PacDot(R.id.pacManMapFrame,
+                location.getLatitude(), location.getLongitude(), this));
+    }
+
+    public void createPowerPellet(View view) {
+        if (!locationUpdater.hasLocation()) {
+            Toast.makeText(getApplicationContext(),
+                    "No location received yet, try again later", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Location location = locationUpdater.getLastLocation();
+        mapMarkers.addMarker(new PowerPellet(R.id.pacManMapFrame,
+                location.getLatitude(), location.getLongitude(), this));
+
+    }
+
 }

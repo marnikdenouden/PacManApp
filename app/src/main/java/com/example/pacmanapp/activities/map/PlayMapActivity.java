@@ -50,7 +50,7 @@ public class PlayMapActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        Button createMarkerButton = findViewById(R.id.createMarkersButton);
+        Button createMarkerButton = findViewById(R.id.createPacDotButton);
 
         NavigationBar.configure(this, PageType.MAP);
 
@@ -118,7 +118,7 @@ public class PlayMapActivity extends AppCompatActivity {
      * @param mapFrameId Map frame id to add markers to
      */
     private void createMarkers(int mapFrameId) {
-        Log.i(TAG, "Created markers for the map");
+        Log.i(TAG, "Created markers for the map"); // TODO remove this for play activity, add character marker adding. When should a save be loaded again? Also characters shouldn't be added to map markers.
         // Create markers
         mapMarkers.addMarker(new PacMan(mapFrameId,
                 51.4198767, 5.485905, PlayMapActivity.this));
@@ -128,7 +128,6 @@ public class PlayMapActivity extends AppCompatActivity {
                 51.4191983, 5.492802, PlayMapActivity.this));
         mapMarkers.addMarker(new PacDot(mapFrameId,
                 51.419331, 5.48632, PlayMapActivity.this));
-        mapMarkers.loadMap(this, mapFrameId);
     }
 
     // Location permission setup. //

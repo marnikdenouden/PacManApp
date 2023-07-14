@@ -46,7 +46,7 @@
         app:layout_constraintTop_toBottomOf="@id/score" />
 
     <Button
-        android:id="@+id/createMarkersButton"
+        android:id="@+id/createPacDotButton"
         android:layout_width="128dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -71,7 +71,7 @@
         android:layout_marginEnd="24dp"
         app:layout_constraintBottom_toTopOf="@id/bottom_bar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/createMarkersButton"
+        app:layout_constraintStart_toEndOf="@id/createPacDotButton"
         app:layout_constraintTop_toBottomOf="@id/pacManMapFrame" />
 
     <include

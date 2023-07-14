@@ -4,8 +4,10 @@ import android.Manifest;
 import android.content.Context;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,6 +32,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 public class LocationUpdater implements DynamicLocation {
+    private static final String TAG = "LocationUpdater";
     private final LocationRequest locationRequest;
 
     private LocationManager locationManager;
@@ -39,6 +42,7 @@ public class LocationUpdater implements DynamicLocation {
     private final Context context;
     private final AppCompatActivity activity;
     private final Collection<LocationObserver> observers;
+    private Location lastLocation;
 
     /**
      * Location updater requests location and notifies of results to location observers.
@@ -60,6 +64,7 @@ public class LocationUpdater implements DynamicLocation {
             @Override
             public void onLocationResult(@NonNull LocationResult locationResult) {
                 notifyLocationResult(locationResult);
+                lastLocation = locationResult.getLastLocation();
             }
         };
 
@@ -75,6 +80,29 @@ public class LocationUpdater implements DynamicLocation {
         for (LocationObserver locationObserver: observers) {
             locationObserver.onLocationResult(locationResult);
         }
+    }
+
+    /**
+     * Checks if location updater has a location set.
+     *
+     * @return Truth assignment, if a location is set
+     */
+    public boolean hasLocation() {
+        return lastLocation != null;
+    }
+
+    /**
+     * Get the last location of the location updater.
+     *
+     * @pre location updater has a location
+     * @return Location last location
+     */
+    public Location getLastLocation() {
+        if (!hasLocation()) {
+            Log.e(TAG, "Could not get last location");
+            throw new NullPointerException("Last location was not set");
+        }
+        return lastLocation;
     }
 
     /**

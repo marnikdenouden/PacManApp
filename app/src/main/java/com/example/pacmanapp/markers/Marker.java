@@ -61,6 +61,8 @@ public class Marker implements Serializable {
         this.longitude = longitude;
         this.markerId = markerId;
         this.context = context;
+
+        loadOnMapArea(context);
     }
 
     /**
@@ -84,6 +86,8 @@ public class Marker implements Serializable {
         this.drawableId = drawableId;
         this.markerId = markerId;
         this.context = context;
+
+        loadOnMapArea(context);
     }
 
     //>>> Methods for marker creation <<<//
