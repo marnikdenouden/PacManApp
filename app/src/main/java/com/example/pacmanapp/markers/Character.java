@@ -114,11 +114,8 @@ public abstract class Character extends Marker implements Serializable, Location
     abstract void setRotation(Direction direction);
 
     @Override
-    public void onLocationResult(LocationResult locationResult) {
-        Location location = locationResult.getLastLocation();
-        if (location != null) {
-            move(location.getLatitude(), location.getLongitude());
-        }
+    public void onLocationUpdate(@NotNull Location location) {
+        move(location.getLatitude(), location.getLongitude());
     }
 
 }

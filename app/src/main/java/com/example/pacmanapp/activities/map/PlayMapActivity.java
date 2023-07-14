@@ -9,9 +9,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.save.SaveActivity;
@@ -20,12 +20,8 @@ import com.example.pacmanapp.displays.Score;
 import com.example.pacmanapp.location.LocationUpdater;
 import com.example.pacmanapp.map.MapArea;
 import com.example.pacmanapp.map.MapType;
-import com.example.pacmanapp.markers.Ghost;
-import com.example.pacmanapp.markers.GhostType;
 import com.example.pacmanapp.markers.MapMarkers;
-import com.example.pacmanapp.markers.PacDot;
 import com.example.pacmanapp.markers.PacMan;
-import com.example.pacmanapp.markers.PowerPellet;
 import com.example.pacmanapp.navigation.Navigate;
 import com.example.pacmanapp.navigation.NavigationBar;
 import com.example.pacmanapp.navigation.PageType;
@@ -50,7 +46,7 @@ public class PlayMapActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        Button createMarkerButton = findViewById(R.id.createPacDotButton);
+        Button ghostInteractionButton = findViewById(R.id.ghostInteractionButton);
 
         NavigationBar.configure(this, PageType.MAP);
 
@@ -78,7 +74,10 @@ public class PlayMapActivity extends AppCompatActivity {
 
         locationUpdater = new LocationUpdater(PlayMapActivity.this);
 
-        createMarkerButton.setOnClickListener(v -> createMarkers(R.id.pacManMapFrame));
+        ghostInteractionButton.setOnClickListener(view -> {
+            Toast.makeText(PlayMapActivity.this,
+                    "Get captured by ghost or eat a ghost.", Toast.LENGTH_SHORT).show(); // TODO implement the button
+        });
 
     }
 
@@ -96,9 +95,17 @@ public class PlayMapActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         mapMarkers.loadMap(this, R.id.pacManMapFrame); // TODO figure out where to load and remove markers.
+
+        locationUpdater.observeNextLocation(location -> {
+            PacMan pacMan = new PacMan(R.id.pacManMapFrame,
+                    location.getLatitude(), location.getLongitude(), PlayMapActivity.this);
+            pacMan.loadOnMapArea(getApplicationContext());
+        });
+
         if (locationUpdater.isRequestingLocationUpdates()) {
             locationUpdater.startLocationUpdates(); // TODO figure out where this should go
         }
+
         selector = SelectionCrier.getInstance().getSelector(R.id.inspectAllSelector);
         onSelection(selector.getSelected());
         selector.addOnSelectionListener(selectionListener);
@@ -110,24 +117,6 @@ public class PlayMapActivity extends AppCompatActivity {
         MapArea.getMapArea(this, R.id.pacManMapFrame).removeMarkers();
         locationUpdater.stopLocationUpdates();
         selector.removeOnSelectionListener(selectionListener);
-    }
-
-    /**
-     * Create markers to add to the map.
-     *
-     * @param mapFrameId Map frame id to add markers to
-     */
-    private void createMarkers(int mapFrameId) {
-        Log.i(TAG, "Created markers for the map"); // TODO remove this for play activity, add character marker adding. When should a save be loaded again? Also characters shouldn't be added to map markers.
-        // Create markers
-        mapMarkers.addMarker(new PacMan(mapFrameId,
-                51.4198767, 5.485905, PlayMapActivity.this));
-        mapMarkers.addMarker(new Ghost(GhostType.Blinky, mapFrameId,
-                51.4191783, 5.48632, PlayMapActivity.this));
-        mapMarkers.addMarker(new PowerPellet(mapFrameId,
-                51.4191983, 5.492802, PlayMapActivity.this));
-        mapMarkers.addMarker(new PacDot(mapFrameId,
-                51.419331, 5.48632, PlayMapActivity.this));
     }
 
     // Location permission setup. //

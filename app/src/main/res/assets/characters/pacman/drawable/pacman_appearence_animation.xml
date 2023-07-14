@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pacman_marker"
+    android:oneshot="true"
+    android:layout_width="@dimen/pacmanMarkerSize"
+    android:layout_height="@dimen/pacmanMarkerSize"
+    android:contentDescription="Pac-Man appearance animation">
+    <item android:drawable="@drawable/pacman_death_frame_10" android:duration="300" />
+    <item android:drawable="@drawable/pacman_marker_frame_0" android:duration="100" />
+</animation-list>

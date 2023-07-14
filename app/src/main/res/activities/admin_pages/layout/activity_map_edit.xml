@@ -41,13 +41,13 @@
         android:layout_height="400dp"
         android:layout_marginTop="32dp"
         android:layout_marginBottom="32dp"
-        app:layout_constraintBottom_toTopOf="@id/createPacDotButton"
+        app:layout_constraintBottom_toTopOf="@id/ghostInteractionButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/score"/>
 
     <Button
-        android:id="@+id/createPacDotButton"
+        android:id="@+id/ghostInteractionButton"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:text="Create pac-dot"
@@ -74,7 +74,7 @@
         android:onClick="createPowerPellet"
         app:layout_constraintBottom_toTopOf="@id/bottom_bar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/createPacDotButton" />
+        app:layout_constraintTop_toBottomOf="@id/ghostInteractionButton" />
 
     <include
         android:id="@id/selectable_content"
@@ -87,7 +87,7 @@
         android:layout_marginEnd="24dp"
         app:layout_constraintBottom_toTopOf="@id/bottom_bar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/createPacDotButton"
+        app:layout_constraintStart_toEndOf="@id/ghostInteractionButton"
         app:layout_constraintTop_toBottomOf="@id/pacManMapFrame" />
 
     <include

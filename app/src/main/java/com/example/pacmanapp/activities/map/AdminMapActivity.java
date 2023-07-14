@@ -10,9 +10,9 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.pacmanapp.R;
@@ -23,14 +23,11 @@ import com.example.pacmanapp.location.DynamicLocation;
 import com.example.pacmanapp.location.LocationObserver;
 import com.example.pacmanapp.location.LocationUpdater;
 import com.example.pacmanapp.map.MapArea;
-import com.example.pacmanapp.map.MapPosition;
 import com.example.pacmanapp.map.MapType;
 import com.example.pacmanapp.markers.Ghost;
 import com.example.pacmanapp.markers.GhostType;
 import com.example.pacmanapp.markers.MapMarkers;
-import com.example.pacmanapp.markers.Marker;
 import com.example.pacmanapp.markers.PacDot;
-import com.example.pacmanapp.markers.PacMan;
 import com.example.pacmanapp.markers.PowerPellet;
 import com.example.pacmanapp.navigation.Navigate;
 import com.example.pacmanapp.navigation.NavigationBar;
@@ -43,6 +40,7 @@ import com.example.pacmanapp.selection.Selector;
 import com.example.pacmanapp.storage.SavePlatform;
 
 import java.time.Duration;
+import java.util.Random;
 
 public class AdminMapActivity extends AppCompatActivity implements DynamicLocation {
     private final static String TAG = "AdminMapActivity";
@@ -85,10 +83,15 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
     @Override
     protected void onStart() {
         super.onStart();
+
         mapMarkers.loadMap(this, R.id.pacManMapFrame);
+
+        addGhost();
+
         if (locationUpdater.isRequestingLocationUpdates()) {
             locationUpdater.startLocationUpdates();
         }
+
         selector = SelectionCrier.getInstance().getSelector(R.id.editAllSelector);
         onSelection(selector.getSelected()); // TODO figure out what the right place is for this selection code and how to simplify selection code.
         selector.addOnSelectionListener(selectionListener);
@@ -113,17 +116,17 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
         super.onResume();
     }
 
-    private void createMarkers(int mapFrameId) {
-        // Create markers
-        mapMarkers.addMarker(new PacMan(mapFrameId,
-                51.4198767, 5.485905, AdminMapActivity.this));
-        mapMarkers.addMarker(new Ghost(GhostType.Blinky, mapFrameId,
-                51.4191783, 5.48632, AdminMapActivity.this));
-        mapMarkers.addMarker(new PowerPellet(mapFrameId,
-                51.4191983, 5.492802, AdminMapActivity.this));
-        mapMarkers.addMarker(new PacDot(mapFrameId,
-                51.419331, 5.48632, AdminMapActivity.this));
-    }
+//    private void createMarkers(int mapFrameId) {
+//        // Create markers
+//        mapMarkers.addMarker(new PacMan(mapFrameId,
+//                51.4198767, 5.485905, AdminMapActivity.this));
+//        mapMarkers.addMarker(new Ghost(GhostType.Blinky, mapFrameId,
+//                51.4191783, 5.48632, AdminMapActivity.this));
+//        mapMarkers.addMarker(new PowerPellet(mapFrameId,
+//                51.4191983, 5.492802, AdminMapActivity.this));
+//        mapMarkers.addMarker(new PacDot(mapFrameId,
+//                51.419331, 5.48632, AdminMapActivity.this));
+//    }
 
     // Location permission setup. //
 
@@ -183,6 +186,23 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
         mapMarkers.addMarker(new PowerPellet(R.id.pacManMapFrame,
                 location.getLatitude(), location.getLongitude(), this));
 
+    }
+
+    public void addGhost() {
+        // Get a random ghost type
+        Random random = new Random();
+        GhostType ghostType = GhostType.values()[random.nextInt(GhostType.values().length)];
+
+        // Create a new ghost on the next location result
+        locationUpdater.observeNextLocation(location -> {
+            if (location == null) {
+                Log.e(TAG, "Could not add ghost without valid location");
+                throw new NullPointerException("Location could not be observed");
+            }
+            Ghost ghost = new Ghost(ghostType, R.id.pacManMapFrame,
+                    location.getLatitude(), location.getLongitude(), AdminMapActivity.this);
+            ghost.loadOnMapArea(getApplicationContext());
+        });
     }
 
 }

@@ -61,8 +61,6 @@ public class Marker implements Serializable {
         this.longitude = longitude;
         this.markerId = markerId;
         this.context = context;
-
-        loadOnMapArea(context);
     }
 
     /**
@@ -86,8 +84,6 @@ public class Marker implements Serializable {
         this.drawableId = drawableId;
         this.markerId = markerId;
         this.context = context;
-
-        loadOnMapArea(context);
     }
 
     //>>> Methods for marker creation <<<//
@@ -98,7 +94,7 @@ public class Marker implements Serializable {
      * @pre Map manager has map are for markers frame id
      * @param context to load marker in
      */
-    void loadOnMapArea(Context context) {
+    public void loadOnMapArea(Context context) {
         this.context = context;
         if (!MapManager.hasMapArea(frameId)) {
             return; // No map area available for the frame id

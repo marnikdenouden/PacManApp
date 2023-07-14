@@ -1,13 +1,13 @@
 package com.example.pacmanapp.location;
 
-import com.google.android.gms.location.LocationResult;
+import android.location.Location;
 
 public interface LocationObserver {
 
     /**
      * Utilize the new location result.
      *
-     * @param locationResult Location result received
+     * @param location Location update received
      */
-    void onLocationResult(LocationResult locationResult);
+    void onLocationUpdate(Location location);
 }

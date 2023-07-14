@@ -28,13 +28,15 @@ import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.HashSet;
 
 public class LocationUpdater implements DynamicLocation {
     private static final String TAG = "LocationUpdater";
-    private final LocationRequest locationRequest;
 
+    private final LocationRequest locationRequest;
     private LocationManager locationManager;
     private final FusedLocationProviderClient fusedLocationClient;
     private final LocationCallback locationCallback;
@@ -42,6 +44,8 @@ public class LocationUpdater implements DynamicLocation {
     private final Context context;
     private final AppCompatActivity activity;
     private final Collection<LocationObserver> observers;
+    private final Collection<LocationObserver> singleObservers;
+    private LocationResult locationResult;
     private Location lastLocation;
 
     /**
@@ -53,6 +57,7 @@ public class LocationUpdater implements DynamicLocation {
         this.context = activity.getApplicationContext();
         this.activity = activity;
         observers = new HashSet<>();
+        singleObservers = new HashSet<>();
 
         locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
                 .setWaitForAccurateLocation(false)
@@ -63,8 +68,10 @@ public class LocationUpdater implements DynamicLocation {
         locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(@NonNull LocationResult locationResult) {
-                notifyLocationResult(locationResult);
-                lastLocation = locationResult.getLastLocation();
+                LocationUpdater.this.locationResult = locationResult;
+                if (hasLocation()) {
+                    notifyLocationUpdate(getLastLocation());
+                }
             }
         };
 
@@ -74,12 +81,16 @@ public class LocationUpdater implements DynamicLocation {
     /**
      * Notify location observers of location result.
      *
-     * @param locationResult Location result received from update
+     * @param location Location received from update
      */
-    private void notifyLocationResult(LocationResult locationResult) {
+    private void notifyLocationUpdate(@NotNull Location location) {
         for (LocationObserver locationObserver: observers) {
-            locationObserver.onLocationResult(locationResult);
+            locationObserver.onLocationUpdate(location);
         }
+        for (LocationObserver locationObserver: singleObservers) {
+            locationObserver.onLocationUpdate(location);
+        }
+        singleObservers.clear();
     }
 
     /**
@@ -88,7 +99,16 @@ public class LocationUpdater implements DynamicLocation {
      * @return Truth assignment, if a location is set
      */
     public boolean hasLocation() {
-        return lastLocation != null;
+        return hasLocationResult() && locationResult.getLastLocation() != null;
+    }
+
+    /**
+     * Checks if location updater has location result set.
+     *
+     * @return Truth assignment, if location result is set
+     */
+    private boolean hasLocationResult() {
+        return locationResult != null;
     }
 
     /**
@@ -98,11 +118,25 @@ public class LocationUpdater implements DynamicLocation {
      * @return Location last location
      */
     public Location getLastLocation() {
-        if (!hasLocation()) {
+        if (!hasLocationResult()) {
             Log.e(TAG, "Could not get last location");
-            throw new NullPointerException("Last location was not set");
+            throw new NullPointerException("No location result was not set");
+        }
+        Location lastLocation = locationResult.getLastLocation();
+        if (lastLocation == null) {
+            Log.e(TAG, "Could not get last location");
+            throw new NullPointerException("No location result was not set");
         }
         return lastLocation;
+    }
+
+    /**
+     * Add location observer that receives only the next location result.
+     *
+     * @param locationObserver Location observer to receive only the next location result
+     */
+    public void observeNextLocation(LocationObserver locationObserver) {
+        singleObservers.add(locationObserver);
     }
 
     /**
@@ -115,6 +149,15 @@ public class LocationUpdater implements DynamicLocation {
             return; // locationObserver is already added to the observers list.
         }
         observers.add(locationObserver);
+    }
+
+    /**
+     * Get the location results currently stored.
+     *
+     * @return locationResults currently captured
+     */
+    public LocationResult getLocationResult() {
+        return locationResult;
     }
 
     /**

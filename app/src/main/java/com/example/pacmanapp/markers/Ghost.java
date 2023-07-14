@@ -10,6 +10,8 @@ import android.graphics.drawable.LayerDrawable;
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.location.LocationObserver;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +33,7 @@ public class Ghost extends Character implements Serializable, LocationObserver {
      * @param longitude longitude that the ghost start at
      * @param context   Context that the ghost is created in
      */
-    public Ghost(GhostType ghostType, int frameId, double latitude, double longitude,
+    public Ghost(@NotNull GhostType ghostType, int frameId, double latitude, double longitude,
                  Context context) {
         super(frameId, latitude, longitude, ghostType.getId(), context);
         this.ghostType = ghostType;
@@ -43,7 +45,7 @@ public class Ghost extends Character implements Serializable, LocationObserver {
      * @param ghostType Type to set the ghost to
      * @param context Context for the theme
      */
-    private void setColor(GhostType ghostType, Context context) {
+    private void setColor(@NotNull GhostType ghostType, Context context) {
         int color = ghostType.getColor(context);
         animationDrawableMap = createAnimationDrawables(color, context);
     }
