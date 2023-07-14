@@ -135,7 +135,7 @@ public class Marker implements Serializable {
      *
      * @param drawableId Id to set drawable with
      */
-    protected void setDrawable(int drawableId) {
+    private void setDrawable(int drawableId) {
         Drawable drawable = AppCompatResources.getDrawable(getContext(), drawableId);
         if (drawable == null) {
             Log.e(TAG, "Could not set drawable on marker for id: " + drawableId);
@@ -144,7 +144,9 @@ public class Marker implements Serializable {
     }
 
     /**
-     * Set the imageView drawable on the imageView
+     * Set the current imageView appearance for this marker.
+     *
+     * @pre imageView has been created for this marker
      *
      * @param drawable Drawable to set on imageView
      */

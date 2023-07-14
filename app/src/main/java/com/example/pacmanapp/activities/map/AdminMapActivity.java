@@ -165,6 +165,11 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
         SelectableContent.setContent(this, selectable);
     }
 
+    /**
+     * Create pac dot on last location.
+     *
+     * @param view View that method can be called from.
+     */
     public void createPacDot(View view) {
         if (!locationUpdater.hasLocation()) {
             Toast.makeText(getApplicationContext(),
@@ -176,6 +181,11 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
                 location.getLatitude(), location.getLongitude(), this));
     }
 
+    /**
+     * Create power pellet on last location.
+     *
+     * @param view View that method can be called from.
+     */
     public void createPowerPellet(View view) {
         if (!locationUpdater.hasLocation()) {
             Toast.makeText(getApplicationContext(),
@@ -188,7 +198,10 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
 
     }
 
-    public void addGhost() {
+    /**
+     * Add ghost character on next location update.
+     */
+    private void addGhost() {
         // Get a random ghost type
         Random random = new Random();
         GhostType ghostType = GhostType.values()[random.nextInt(GhostType.values().length)];

@@ -96,11 +96,7 @@ public class PlayMapActivity extends AppCompatActivity {
         super.onStart();
         mapMarkers.loadMap(this, R.id.pacManMapFrame); // TODO figure out where to load and remove markers.
 
-        locationUpdater.observeNextLocation(location -> {
-            PacMan pacMan = new PacMan(R.id.pacManMapFrame,
-                    location.getLatitude(), location.getLongitude(), PlayMapActivity.this);
-            pacMan.loadOnMapArea(getApplicationContext());
-        });
+        addPacMan();
 
         if (locationUpdater.isRequestingLocationUpdates()) {
             locationUpdater.startLocationUpdates(); // TODO figure out where this should go
@@ -149,6 +145,18 @@ public class PlayMapActivity extends AppCompatActivity {
      */
     private void onSelection(Selectable selectable) {
         SelectableContent.setContent(this, selectable);
+    }
+
+    /**
+     * Add pacman character on next location update.
+     */
+    private void addPacMan() {
+        locationUpdater.observeNextLocation(location -> {
+            PacMan pacMan = new PacMan(R.id.pacManMapFrame,
+                    location.getLatitude(), location.getLongitude(), PlayMapActivity.this);
+            pacMan.loadOnMapArea(getApplicationContext());
+        });
+
     }
 
 }

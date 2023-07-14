@@ -24,6 +24,8 @@ public class PacMan extends Character implements Serializable, LocationObserver 
      */
     public PacMan(int frameId, double latitude, double longitude, Context context) {
         super(frameId, latitude, longitude, drawableId, markerId, context);
+
+        loadOnMapArea(context);
     }
 
     @Override
