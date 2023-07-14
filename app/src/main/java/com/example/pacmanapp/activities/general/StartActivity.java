@@ -1,15 +1,18 @@
 package com.example.pacmanapp.activities.general;
 
 import android.os.Bundle;
+import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.map.AdminMapActivity;
 import com.example.pacmanapp.activities.map.PlayMapActivity;
 import com.example.pacmanapp.activities.save.SaveActivity;
+import com.example.pacmanapp.displays.NumberSmall;
 import com.example.pacmanapp.navigation.Navigate;
 import com.example.pacmanapp.navigation.NavigationBar;
 import com.example.pacmanapp.navigation.NavigationBarType;
@@ -33,5 +36,8 @@ public class StartActivity extends AppCompatActivity {
 
         Button savesButton = findViewById(R.id.savesButton);
         Navigate.configure(savesButton, this, SaveActivity.class);
+
+        ViewGroup viewGroup = findViewById(R.id.TestSmallNumber);
+        NumberSmall.AddSmallNumberView(viewGroup, 123456789, getColor(R.color.Pinky));
     }
 }
