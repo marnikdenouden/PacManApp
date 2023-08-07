@@ -52,6 +52,7 @@ public enum NumberSmall {
         }
 
         LinearLayout smallNumber = new LinearLayout(context);
+        smallNumber.setId(R.id.small_number);
         for (int i = views.size() - 1; i >= 0; i--) {
             smallNumber.addView(views.get(i));
         }
@@ -64,6 +65,7 @@ public enum NumberSmall {
         drawable.setTint(color);
         ImageView smallNumber = new ImageView(context);
         smallNumber.setImageDrawable(drawable);
+        smallNumber.setId(R.id.small_digit);
         return smallNumber;
     }
 
