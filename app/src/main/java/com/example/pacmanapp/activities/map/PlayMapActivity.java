@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
@@ -17,10 +18,15 @@ import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.save.SaveActivity;
 import com.example.pacmanapp.displays.Clock;
 import com.example.pacmanapp.displays.Score;
+import com.example.pacmanapp.location.DynamicLocation;
+import com.example.pacmanapp.location.LocationObserver;
 import com.example.pacmanapp.location.LocationUpdater;
 import com.example.pacmanapp.map.MapArea;
 import com.example.pacmanapp.map.MapType;
+import com.example.pacmanapp.markers.Character;
+import com.example.pacmanapp.markers.Ghost;
 import com.example.pacmanapp.markers.MapMarkers;
+import com.example.pacmanapp.markers.Marker;
 import com.example.pacmanapp.markers.PacMan;
 import com.example.pacmanapp.navigation.Navigate;
 import com.example.pacmanapp.navigation.NavigationBar;
@@ -33,8 +39,9 @@ import com.example.pacmanapp.selection.Selector;
 import com.example.pacmanapp.storage.SavePlatform;
 
 import java.time.Duration;
+import java.util.Collection;
 
-public class PlayMapActivity extends AppCompatActivity {
+public class PlayMapActivity extends AppCompatActivity implements DynamicLocation {
     private final static String TAG = "PlayMapActivity";
     private LocationUpdater locationUpdater;
     private MapMarkers mapMarkers;
@@ -94,12 +101,14 @@ public class PlayMapActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        mapMarkers.loadMap(this, R.id.pacManMapFrame); // TODO figure out where to load and remove markers.
 
-        addPacMan();
+        // Load ghost and then load map to have old characters removed
+        // and new one created on next location update.
+        loadPacMan();
+        mapMarkers.loadMap(this, R.id.pacManMapFrame);
 
         if (locationUpdater.isRequestingLocationUpdates()) {
-            locationUpdater.startLocationUpdates(); // TODO figure out where this should go
+            locationUpdater.startLocationUpdates();
         }
 
         selector = SelectionCrier.getInstance().getSelector(R.id.inspectAllSelector);
@@ -140,6 +149,16 @@ public class PlayMapActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void addObserver(@NonNull LocationObserver locationObserver) {
+        locationUpdater.addObserver(locationObserver);
+    }
+
+    @Override
+    public void removeObserver(@NonNull LocationObserver locationObserver) {
+        locationUpdater.removeObserver(locationObserver);
+    }
+
     /**
      * Update selectable content with new fetched selected.
      */
@@ -148,13 +167,32 @@ public class PlayMapActivity extends AppCompatActivity {
     }
 
     /**
-     * Add pacman character on next location update.
+     * Load pacman character, which ensures one after the next location update.
      */
-    private void addPacMan() {
+    private void loadPacMan() {
+        // Remove all characters, except a single pacman, from the map markers collection
+        Collection<Marker> currentCharacters =
+                mapMarkers.getMarkersWithClass(R.id.pacManMapFrame, Character.class);
+        boolean foundPacMan = false;
+        for (Marker marker: currentCharacters) {
+            if (marker instanceof PacMan && !foundPacMan) {
+                foundPacMan = true;
+            } else {
+                mapMarkers.removeMarker(marker);
+            }
+        }
+
+        // If a pacman was found to be part of the map markers collection,
+        // then we do not need to create a new one.
+        if (foundPacMan) {
+            return;
+        }
+
         locationUpdater.observeNextLocation(location -> {
             PacMan pacMan = new PacMan(R.id.pacManMapFrame,
                     location.getLatitude(), location.getLongitude(), PlayMapActivity.this);
-            pacMan.loadOnMapArea(getApplicationContext());
+            mapMarkers.addMarker(pacMan);
+            Log.i(TAG, "Added new pacman to pac man map frame.");
         });
 
     }

@@ -31,8 +31,9 @@ public abstract class Character extends Marker implements Serializable, Location
      */
     Character(int frameId, double latitude, double longitude, int drawableId, int markerId,
               @NotNull Context context) {
-        super(frameId, latitude, longitude, drawableId, markerId,
-                true, context);
+        super(frameId, latitude, longitude, drawableId, markerId, context);
+        setAnimate(true);
+        setDisplayOnTop(true);
     }
 
     /**
@@ -46,8 +47,9 @@ public abstract class Character extends Marker implements Serializable, Location
      */
     Character(int frameId, double latitude, double longitude, int markerId,
               @NotNull Context context) {
-        super(frameId, latitude, longitude, markerId, true,
-                context);
+        super(frameId, latitude, longitude, markerId, context);
+        setAnimate(true);
+        setDisplayOnTop(true);
     }
 
     //>>> Methods to control the character <<<//
@@ -116,6 +118,7 @@ public abstract class Character extends Marker implements Serializable, Location
     @Override
     public void onLocationUpdate(@NotNull Location location) {
         move(location.getLatitude(), location.getLongitude());
+        Log.i(TAG, "Moving character with new location update");
     }
 
 }

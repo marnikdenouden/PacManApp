@@ -25,7 +25,7 @@ public class PowerPellet extends Marker implements Selectable {
      * @param context   Context that the power pellet is created in
      */
     public PowerPellet(int frameId, double latitude, double longitude, Context context) {
-        super(frameId, latitude, longitude, drawableId, markerId, false, context);
+        super(frameId, latitude, longitude, drawableId, markerId, context);
     }
 
     /**

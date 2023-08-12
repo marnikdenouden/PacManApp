@@ -46,7 +46,6 @@ public class LocationUpdater implements DynamicLocation {
     private final Collection<LocationObserver> observers;
     private final Collection<LocationObserver> singleObservers;
     private LocationResult locationResult;
-    private Location lastLocation;
 
     /**
      * Location updater requests location and notifies of results to location observers.
@@ -79,9 +78,7 @@ public class LocationUpdater implements DynamicLocation {
     }
 
     /**
-     * Notify location observers of location result.
-     *
-     * @param location Location received from update
+     * Notify location observers of last location result.
      */
     private void notifyLocationUpdate(@NotNull Location location) {
         for (LocationObserver locationObserver: observers) {
@@ -90,6 +87,8 @@ public class LocationUpdater implements DynamicLocation {
         for (LocationObserver locationObserver: singleObservers) {
             locationObserver.onLocationUpdate(location);
         }
+        Log.i(TAG, "Successfully notified the location update to " + observers.size() +
+                " observers and " + singleObservers.size() + " single observers");
         singleObservers.clear();
     }
 
@@ -135,7 +134,7 @@ public class LocationUpdater implements DynamicLocation {
      *
      * @param locationObserver Location observer to receive only the next location result
      */
-    public void observeNextLocation(LocationObserver locationObserver) {
+    public void observeNextLocation(@NotNull LocationObserver locationObserver) {
         singleObservers.add(locationObserver);
     }
 
@@ -144,11 +143,22 @@ public class LocationUpdater implements DynamicLocation {
      *
      * @param locationObserver Location observer to be notified of location results
      */
-    public void addObserver(LocationObserver locationObserver) {
+    @Override
+    public void addObserver(@NotNull LocationObserver locationObserver) {
         if (observers.contains(locationObserver)) {
             return; // locationObserver is already added to the observers list.
         }
         observers.add(locationObserver);
+    }
+
+    /**
+     * Remove location observer.
+     *
+     * @param locationObserver Location observer to remove from listeners
+     */
+    @Override
+    public void removeObserver(@NotNull LocationObserver locationObserver) {
+        observers.remove(locationObserver);
     }
 
     /**

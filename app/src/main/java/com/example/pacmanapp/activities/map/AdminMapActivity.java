@@ -24,9 +24,11 @@ import com.example.pacmanapp.location.LocationObserver;
 import com.example.pacmanapp.location.LocationUpdater;
 import com.example.pacmanapp.map.MapArea;
 import com.example.pacmanapp.map.MapType;
+import com.example.pacmanapp.markers.Character;
 import com.example.pacmanapp.markers.Ghost;
 import com.example.pacmanapp.markers.GhostType;
 import com.example.pacmanapp.markers.MapMarkers;
+import com.example.pacmanapp.markers.Marker;
 import com.example.pacmanapp.markers.PacDot;
 import com.example.pacmanapp.markers.PowerPellet;
 import com.example.pacmanapp.navigation.Navigate;
@@ -40,6 +42,7 @@ import com.example.pacmanapp.selection.Selector;
 import com.example.pacmanapp.storage.SavePlatform;
 
 import java.time.Duration;
+import java.util.Collection;
 import java.util.Random;
 
 public class AdminMapActivity extends AppCompatActivity implements DynamicLocation {
@@ -69,7 +72,7 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
         mapMarkers = MapMarkers.getFromSave(SavePlatform.getSave());
 
         selector = AcceptAllSelector.getAcceptAllSelector(R.id.editAllSelector);
-        selectionListener = AdminMapActivity.this::onSelection;
+        selectionListener = AdminMapActivity.this::select;
 
         Clock clock = new Clock(AdminMapActivity.this, AdminMapActivity.this);
         clock.setTime(Duration.ofSeconds(2678));
@@ -84,16 +87,18 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
     protected void onStart() {
         super.onStart();
 
+        // Load ghost and then load map to have old characters removed
+        // and new one created on next location update.
+        loadGhost();
         mapMarkers.loadMap(this, R.id.pacManMapFrame);
-
-        addGhost();
 
         if (locationUpdater.isRequestingLocationUpdates()) {
             locationUpdater.startLocationUpdates();
         }
 
         selector = SelectionCrier.getInstance().getSelector(R.id.editAllSelector);
-        onSelection(selector.getSelected()); // TODO figure out what the right place is for this selection code and how to simplify selection code.
+        select(selector.getSelected()); // TODO figure out what the right place is for this selection code and how to simplify selection code.
+                                        //  Maybe use a interface that specifies a select method?
         selector.addOnSelectionListener(selectionListener);
     }
 
@@ -154,14 +159,19 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
     }
 
     @Override
-    public void addObserver(LocationObserver locationObserver) {
+    public void addObserver(@NonNull LocationObserver locationObserver) {
         locationUpdater.addObserver(locationObserver);
+    }
+
+    @Override
+    public void removeObserver(@NonNull LocationObserver locationObserver) {
+        locationUpdater.removeObserver(locationObserver);
     }
 
     /**
      * Update selectable content with new fetched selected.
      */
-    private void onSelection(Selectable selectable) {
+    private void select(Selectable selectable) {
         SelectableContent.setContent(this, selectable);
     }
 
@@ -199,22 +209,37 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
     }
 
     /**
-     * Add ghost character on next location update.
+     * Load ghost character, which ensures one after the next location update.
      */
-    private void addGhost() {
+    private void loadGhost() {
+        // Remove all characters, except a single ghost, from the map markers collection
+        Collection<Marker> currentCharacters =
+                mapMarkers.getMarkersWithClass(R.id.pacManMapFrame, Character.class);
+        boolean foundGhost = false;
+        for (Marker marker: currentCharacters) {
+            if (marker instanceof Ghost && !foundGhost) {
+                foundGhost = true;
+            } else {
+                mapMarkers.removeMarker(marker);
+            }
+        }
+
+        // If a ghost was found to be part of the map markers collection,
+        // then we do not need to create a new one.
+        if (foundGhost) {
+            return;
+        }
+
         // Get a random ghost type
         Random random = new Random();
         GhostType ghostType = GhostType.values()[random.nextInt(GhostType.values().length)];
 
         // Create a new ghost on the next location result
         locationUpdater.observeNextLocation(location -> {
-            if (location == null) {
-                Log.e(TAG, "Could not add ghost without valid location");
-                throw new NullPointerException("Location could not be observed");
-            }
             Ghost ghost = new Ghost(ghostType, R.id.pacManMapFrame,
                     location.getLatitude(), location.getLongitude(), AdminMapActivity.this);
-            ghost.loadOnMapArea(getApplicationContext());
+            mapMarkers.addMarker(ghost);
+            Log.i(TAG, "Added new ghost to pac man map frame.");
         });
     }
 

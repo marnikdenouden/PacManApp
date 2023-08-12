@@ -14,13 +14,17 @@ import com.example.pacmanapp.storage.SaveObject;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 public class MapMarkers extends SaveObject implements Serializable {
     private final static String TAG = "MapMarkers";
     private static final long serialVersionUID = 1L;
     public static int mapMarkerId = R.id.mapMarkers;
-    private final Collection<Marker> mapMarkers;
+    private final Map<Integer, Collection<Marker>> mapMarkers;
+    private boolean hasDynamicLocation;
+    private transient AppCompatActivity currentMapContext;
 
     /**
      * Create a collection of markers that can be serialized.
@@ -29,7 +33,7 @@ public class MapMarkers extends SaveObject implements Serializable {
      */
     public MapMarkers(GameSave gameSave) {
         super(mapMarkerId, gameSave);
-        mapMarkers = new HashSet<>();
+        mapMarkers = new HashMap<>();
     }
 
     /**
@@ -38,7 +42,8 @@ public class MapMarkers extends SaveObject implements Serializable {
      * @param marker Marker to add to the collection
      */
     public void addMarker(Marker marker) {
-        mapMarkers.add(marker);
+        getMapCollection(marker.getFrameId()).add(marker);
+        loadMarkerOnCurrentMap(marker);
         Log.i(TAG, "Marker of class " + marker.getClass().getSimpleName()
                 + " was added to the collection");
     }
@@ -49,9 +54,70 @@ public class MapMarkers extends SaveObject implements Serializable {
      * @param marker Marker to add to the collection
      */
     public void removeMarker(Marker marker) {
-        mapMarkers.remove(marker);
+        getMapCollection(marker.getFrameId()).remove(marker);
+        ((DynamicLocation) currentMapContext).removeObserver((LocationObserver) marker);
         Log.i(TAG, "Marker of class " + marker.getClass().getSimpleName()
                 + " was removed from the collection");
+    }
+
+    /**
+     * Gets the map collection of markers for a specified frame id.
+     *
+     * @param frameId Frame id for the map collection to get
+     * @return Map collection for the specified frame id
+     */
+    private Collection<Marker> getMapCollection(int frameId) {
+        if (mapMarkers.containsKey(frameId)) {
+            return mapMarkers.get(frameId);
+        }
+        Collection<Marker> mapCollection = new HashSet<>();
+        mapMarkers.put(frameId, mapCollection);
+        return mapCollection;
+    }
+
+    /**
+     * Check if map markers contains a marker with specified class.
+     *
+     * @param markerClass Class to check if a marker from the collection is an instance of
+     * @return Truth assignment, if there exists a marker that is an instance of the specified class
+     */
+    public boolean hasMarkerWithClass(int frameId, Class<? extends Marker> markerClass) {
+        for (Marker marker: getMapCollection(frameId)) {
+            if (markerClass.isInstance(marker)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Get the collection of map markers for the specified frame id with the specified class.
+     *
+     * @param frameId Frame id to search collection for
+     * @param markerClass Class of markers to get
+     * @return Collection of map markers with the specified class for the specified frame id
+     */
+    public Collection<Marker> getMarkersWithClass(int frameId,
+                                                  Class<? extends Marker> markerClass) {
+        Collection<Marker> markers = new HashSet<>();
+        for (Marker marker: getMapCollection(frameId)) {
+            if (markerClass.isInstance(marker)) {
+                markers.add(marker);
+            }
+        }
+        return markers;
+    }
+
+    /**
+     * Clears the map markers for the specified frame id.
+     *
+     * @param frameId Frame id to remove map markers for
+     */
+    public void clearMapMarkers(int frameId) {
+        for (Marker marker: getMapCollection(frameId)) {
+            removeMarker(marker);
+        }
+        mapMarkers.remove(frameId);
     }
 
     /**
@@ -76,11 +142,11 @@ public class MapMarkers extends SaveObject implements Serializable {
      * @param frameId Frame id to load map for
      */
     public void loadMap(AppCompatActivity appCompatActivity, int frameId) {
-        // Get the map area to load
-        MapArea mapArea = MapArea.getMapArea(appCompatActivity, frameId);
+        // Set current app compat activity as map context for the map markers.
+        this.currentMapContext = appCompatActivity;
 
-        // Set the map area to control the frame id
-        MapManager.getMapManager().setMapArea(frameId, mapArea);
+        // Set truth assignment, if map context has dynamic location
+        hasDynamicLocation = currentMapContext instanceof DynamicLocation;
 
         // Load the map with the specified frame id
         if (!MapManager.hasMapArea(frameId)) {
@@ -89,24 +155,31 @@ public class MapMarkers extends SaveObject implements Serializable {
             return;
         }
 
-        // Check if activity has dynamic location
-        boolean hasDynamicLocation = appCompatActivity instanceof DynamicLocation;
-
-        for (Marker marker: mapMarkers) {
-            // Check if the marker belongs on the frame id map that is being loaded
-            if (!marker.belongsOnMap(frameId)) {
-                continue;
-            }
-
-            // Load marker on the map area
-            marker.loadOnMapArea(mapArea.getContext());
-
-            // Add location observer markers to receive location updates
-            if (hasDynamicLocation && marker instanceof LocationObserver) {
-                ((DynamicLocation) appCompatActivity).addObserver((LocationObserver) marker);
-            }
+        for (Marker marker: getMapCollection(frameId)) {
+            loadMarkerOnCurrentMap(marker);
         }
+
         Log.i(TAG, "Loaded map markers for frame id " + frameId);
+    }
+
+    /**
+     * Load marker in the current map context.
+     *
+     * @param marker Marker to load in current map context
+     */
+    private void loadMarkerOnCurrentMap(Marker marker) {
+        // Check if a map area exists in the current map context for the markers frame id.
+        if (!MapArea.hasMapArea(currentMapContext, marker.getFrameId())) {
+            return;
+        }
+
+        // Load marker on the current map context
+        marker.loadOnMapArea(currentMapContext);
+
+        // Add location observer markers to receive location updates
+        if (hasDynamicLocation && marker instanceof LocationObserver) {
+            ((DynamicLocation) currentMapContext).addObserver((LocationObserver) marker);
+        }
     }
 
 }

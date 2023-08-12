@@ -67,9 +67,14 @@ public class MapArea extends ConstraintLayout {
      * Adds a marker to the map.
      *
      * @param marker Marker to add to the map
+     * @param displayOnTop Truth assignment, if marker should be displayed on top
      */
-    public void addMarker(Marker marker) {
-        markerLayout.addView(marker.getImageView());
+    public void addMarker(Marker marker, boolean displayOnTop) {
+        if (displayOnTop) {
+            markerLayout.addView(marker.getImageView(), 0);
+        } else {
+            markerLayout.addView(marker.getImageView(), 0);
+        }
         markerLayout.addOnLayoutChangeListener(
                 (view, i, i1, i2, i3, i4, i5, i6, i7) -> marker.updatePlacement());
     }
@@ -95,6 +100,19 @@ public class MapArea extends ConstraintLayout {
         view.addView(mapArea);
         view.addView(new MapController(mapArea), 0);
         MapManager.getMapManager().setMapArea(view.getId(), mapArea);
+    }
+
+    /**
+     * Check if the map area for the specified frame id exists in the specified activity.
+     *
+     * @param appCompatActivity Activity to check frame id in
+     * @param frameId Frame id to check for
+     * @return Truth assignment, if map area with frame id exists in the specified activity
+     */
+    public static boolean hasMapArea(AppCompatActivity appCompatActivity, int frameId) {
+        // Check if the frame layout for the frame id is null.
+        FrameLayout frameLayout = appCompatActivity.findViewById(frameId);
+        return frameLayout != null;
     }
 
     /**

@@ -14,7 +14,7 @@ public class InfoSelectableActivity extends AppCompatActivity implements Selecta
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_inspect_info); // This sets the navigation bar to play. TODO how to include navigation bar to all activities without specifying which one.
+        setContentView(R.layout.activity_inspect_info);
 
         NavigationBar.configure(this, PageType.INSPECT);
     }

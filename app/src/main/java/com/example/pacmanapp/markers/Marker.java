@@ -31,12 +31,14 @@ public class Marker implements Serializable {
     private static final long serialVersionUID = 1L;
     private final static String TAG = "Marker";
     private transient ImageView imageView;
-    private final int frameId; // mapFrameId reference to the map area that marker is placed on
+    private final int frameId; // mapFrameId reference to the single map area,
+                               //   that this marker is placed on
     private double latitude;
     private double longitude;
     private final int markerId;
     private int drawableId;
-    protected boolean animate; // Determines if drawable gets animated
+    private boolean displayOnTop = false;
+    private boolean animate = false; // Determines if drawable gets animated
     private transient Drawable drawable;
     private transient Context context;
 
@@ -49,13 +51,11 @@ public class Marker implements Serializable {
      * @param latitude  Latitude used to position marker on map area
      * @param longitude Longitude used to position marker on map area
      * @param markerId  MarkerId set to ImageView for potential reference
-     * @param animate   Boolean animate to state if drawable should animate
      * @param context   Context in which the marker is created
      */
-    Marker(int frameId, double latitude, double longitude, int markerId, boolean animate,
+    Marker(int frameId, double latitude, double longitude, int markerId,
            @NotNull Context context) {
         // Set marker values
-        this.animate = animate;
         this.frameId = frameId;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -71,13 +71,11 @@ public class Marker implements Serializable {
      * @param longitude  Longitude used to position marker on map area
      * @param drawableId DrawableId used to get drawable to display for the marker
      * @param markerId   MarkerId set to ImageView for potential reference
-     * @param animate    Boolean animate to state if drawable should animate
      * @param context    Context in which the marker is created
      */
-    Marker(int frameId, double latitude, double longitude, int drawableId, int markerId, boolean animate,
+    Marker(int frameId, double latitude, double longitude, int drawableId, int markerId,
            Context context) {
         // Set marker values
-        this.animate = animate;
         this.frameId = frameId;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -100,19 +98,25 @@ public class Marker implements Serializable {
             return; // No map area available for the frame id
         }
 
-        createImageView(context);
-
         // Remove image view from the parent before adding marker to the map
-        if (!(imageView == null || imageView.getParent() == null)) {
+        if (imageView != null && imageView.getParent() != null) {
             ViewGroup viewGroup = (ViewGroup) imageView.getParent();
             viewGroup.removeView(imageView);
         }
 
-
+        // Create image view for the markers context
+        createImageView(context);
         tryAnimate(animate);
-        MapManager.getMapArea(frameId).addMarker(this);
+
+        // Add the marker to the map area
+        MapManager.getMapArea(frameId).addMarker(this, displayOnTop);
     }
 
+    /**
+     * Create the image view to display the marker with.
+     *
+     * @param context Context to create image view for
+     */
     protected void createImageView(Context context) {
         // Create imageView for on the map area
         imageView = new ImageView(context);
@@ -124,7 +128,7 @@ public class Marker implements Serializable {
         });
 
         setLayoutParams(latitude, longitude);
-        setMarkerId(markerId);
+        imageView.setId(markerId);
         if (drawableId != 0) {
             setDrawable(drawableId);
         }
@@ -156,6 +160,25 @@ public class Marker implements Serializable {
             return;
         }
         imageView.setImageDrawable(drawable);
+        tryAnimate(animate);
+    }
+
+    /**
+     * Set if the drawable should animate, class default is false.
+     *
+     * @param animate Truth assignment, if drawable should animate
+     */
+    protected void setAnimate(boolean animate) {
+        this.animate = animate;
+    }
+
+    /**
+     * Set if the drawable should be displayed on top, class default is false.
+     *
+     * @param displayOnTop Truth assignment, if drawable should be displayed on top
+     */
+    protected void setDisplayOnTop(boolean displayOnTop) {
+        this.displayOnTop = displayOnTop;
     }
 
     /**
@@ -180,12 +203,12 @@ public class Marker implements Serializable {
     }
 
     /**
-     * Set the id for this marker.
+     * Get the marker id.
      *
-     * @param markerId marker id to set
+     * @return Marker id
      */
-    private void setMarkerId(int markerId) {
-        imageView.setId(markerId);
+    public int getMarkerId() {
+        return markerId;
     }
 
     /**

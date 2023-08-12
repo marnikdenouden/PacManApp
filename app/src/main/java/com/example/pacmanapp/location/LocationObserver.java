@@ -2,6 +2,8 @@ package com.example.pacmanapp.location;
 
 import android.location.Location;
 
+import org.jetbrains.annotations.NotNull;
+
 public interface LocationObserver {
 
     /**
@@ -9,5 +11,5 @@ public interface LocationObserver {
      *
      * @param location Location update received
      */
-    void onLocationUpdate(Location location);
+    void onLocationUpdate(@NotNull Location location);
 }
