@@ -121,18 +121,6 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
         super.onResume();
     }
 
-//    private void createMarkers(int mapFrameId) {
-//        // Create markers
-//        mapMarkers.addMarker(new PacMan(mapFrameId,
-//                51.4198767, 5.485905, AdminMapActivity.this));
-//        mapMarkers.addMarker(new Ghost(GhostType.Blinky, mapFrameId,
-//                51.4191783, 5.48632, AdminMapActivity.this));
-//        mapMarkers.addMarker(new PowerPellet(mapFrameId,
-//                51.4191983, 5.492802, AdminMapActivity.this));
-//        mapMarkers.addMarker(new PacDot(mapFrameId,
-//                51.419331, 5.48632, AdminMapActivity.this));
-//    }
-
     // Location permission setup. //
 
     @Override
