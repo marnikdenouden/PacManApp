@@ -138,6 +138,7 @@ public class Marker implements Serializable {
             return;
         }
         imageView.setImageDrawable(drawable);
+        tryAnimate(animate); // TODO problem, when marker is created and wants to adjust drawable with animated drawable, then try animate has a problem.
     }
 
     /**
@@ -164,18 +165,15 @@ public class Marker implements Serializable {
      * @param animate Boolean if the marker is set to animate
      */
     void tryAnimate(boolean animate) {
-        // If animate is true, cast and start to animate the drawable.
-        if (animate) {
-            try {
-                // Cast the drawable to animation drawable
-                AnimationDrawable animationDrawable = ((AnimationDrawable) imageView.getDrawable());
+        Drawable drawable = imageView.getDrawable();
+        // If animate is true and drawable an instance of animation drawable,
+        // then cast and start to animate the drawable.
+        if (animate && drawable instanceof AnimationDrawable) {
+            // Cast the drawable to animation drawable
+            AnimationDrawable animationDrawable = ((AnimationDrawable) drawable);
 
-                // Start the animation drawable
-                animationDrawable.start();
-            } catch(ClassCastException classCastException) {
-                Log.e(TAG, "Could not cast drawable to animationDrawable," +
-                        " while animate is set to true");
-            }
+            // Start the animation drawable
+            animationDrawable.start();
         }
     }
 

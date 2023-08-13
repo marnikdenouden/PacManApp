@@ -11,7 +11,7 @@ public class Information implements Content {
     public Information(String info) {
         this.info = info;
     }
-
+// TODO make a layout for this class, so the text view can be more easily customized and adjusted.
     @Override
     public void addView(@NonNull ViewGroup viewGroup, boolean editable) {
         TextView textView = new TextView(viewGroup.getContext());
