@@ -5,7 +5,7 @@
     tools:context=".activities.edit.EditActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+<!-- TODO Account for top space of transparent top bar -->
     <TextView
         android:id="@id/selectable_label"
         android:layout_width="0dp"

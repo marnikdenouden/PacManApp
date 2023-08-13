@@ -6,9 +6,11 @@ import android.view.View;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.contents.Content;
+import com.example.pacmanapp.contents.HiddenHint;
 import com.example.pacmanapp.contents.Hint;
 import com.example.pacmanapp.contents.Information;
 import com.example.pacmanapp.selection.Selectable;
+import com.example.pacmanapp.selection.selectables.Fruit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,9 @@ public class PacDot extends Marker implements Selectable {
         contentList = new ArrayList<>();
         contentList.add(new Information("Location hints"));
         contentList.add(new Hint.HintBuilder(this).build());
+        Fruit fruit = new Fruit(Fruit.FruitType.CHERRY);
+        Hint hint = new Hint.HintBuilder(fruit).setHint("This is a secret hint to the Cherry").build();
+        contentList.add(new HiddenHint(hint, this, "key"));
     }
 
     @Override

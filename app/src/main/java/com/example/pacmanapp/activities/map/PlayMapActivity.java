@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.save.SaveActivity;
-import com.example.pacmanapp.contents.InfoInspect;
+import com.example.pacmanapp.selection.selectables.InfoInspect;
 import com.example.pacmanapp.displays.Clock;
 import com.example.pacmanapp.displays.Score;
 import com.example.pacmanapp.location.DynamicLocation;
@@ -34,7 +34,6 @@ import com.example.pacmanapp.navigation.PageType;
 import com.example.pacmanapp.selection.AcceptAllSelector;
 import com.example.pacmanapp.selection.Selectable;
 import com.example.pacmanapp.selection.SelectableContent;
-import com.example.pacmanapp.selection.SelectionCrier;
 import com.example.pacmanapp.selection.Selector;
 import com.example.pacmanapp.storage.SavePlatform;
 

@@ -17,8 +17,8 @@ import android.widget.Toast;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.save.SaveActivity;
-import com.example.pacmanapp.contents.InfoEdit;
-import com.example.pacmanapp.contents.InfoInspect;
+import com.example.pacmanapp.selection.selectables.InfoEdit;
+import com.example.pacmanapp.selection.selectables.InfoInspect;
 import com.example.pacmanapp.displays.Clock;
 import com.example.pacmanapp.displays.Score;
 import com.example.pacmanapp.location.DynamicLocation;

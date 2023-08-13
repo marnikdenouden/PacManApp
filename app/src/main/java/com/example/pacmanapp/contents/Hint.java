@@ -45,7 +45,7 @@ public class Hint implements Content {
      *
      * @param viewGroup ViewGroup to add edit hint view to
      */
-    private void addInfoView(ViewGroup viewGroup) {
+    void addInfoView(ViewGroup viewGroup) {
         View hintView = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.hint_text, viewGroup);
 
@@ -66,7 +66,7 @@ public class Hint implements Content {
      *
      * @param viewGroup ViewGroup to add edit hint view to
      */
-    private void addEditView(ViewGroup viewGroup) {
+    void addEditView(ViewGroup viewGroup) {
         View hintView = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.hint_text_edit, viewGroup);
 
@@ -107,12 +107,11 @@ public class Hint implements Content {
             // Add any required values for hint in the hint builder parameter.
         }
 
-        public HintBuilder(Marker marker) {
-            iconId = marker.getDrawableId();
-            label = marker.getClass().getSimpleName();
-            if (marker instanceof Selectable) {
-                label = ((Selectable) marker).getLabel();
-            }
+        // TODO Should hints only be constructed with selectable, so icon can be clickable and take you to that page?
+
+        public HintBuilder(Selectable selectable) {
+            iconId = selectable.getIconId();
+            label = selectable.getLabel();
         }
 
         public HintBuilder setHint(String hint) {
