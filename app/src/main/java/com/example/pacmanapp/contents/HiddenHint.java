@@ -65,7 +65,10 @@ public class HiddenHint implements Content {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (key.equals(editable.toString())) {
-                    locked = false; // TODO how to change and update view?
+                    locked = false;
+                    viewGroup.removeView(hintView);
+                    hint.addInfoView(viewGroup);
+                    keyTextView.setEnabled(false); // TODO could use some more juice
                 }
             }
         });
