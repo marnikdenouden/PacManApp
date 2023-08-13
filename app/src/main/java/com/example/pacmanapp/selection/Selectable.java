@@ -1,19 +1,17 @@
 package com.example.pacmanapp.selection;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.example.pacmanapp.contents.Content;
 
 import java.io.Serializable;
+import java.util.List;
 
 public interface Selectable extends Serializable {
-
-    Class<? extends AppCompatActivity> getInspectPage();
-
-    Class<? extends AppCompatActivity> getEditPage();
-
     String getLabel();
 
     int getIconId();
 
     String getDescription();
 
+    List<Content> getContent();
 }
+

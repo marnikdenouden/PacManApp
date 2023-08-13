@@ -18,7 +18,7 @@ public class Digit {
     Digit(Context context, AppCompatActivity activity, int digitId) {
         this(context, activity.findViewById(digitId));
     }
-
+// TODO allow color of digit to be set, so clock and score can be distinct
     Digit(Context context, ImageView imageView) {
         this.imageView = imageView;
         createNumberDrawableMap(context);

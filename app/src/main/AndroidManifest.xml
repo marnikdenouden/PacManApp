@@ -24,35 +24,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.create.CreatePacDotActivity"
-            android:exported="false">
-        </activity>
-        <activity
-            android:name=".activities.create.CreatePowerPalletActivity"
-            android:exported="false">
-        </activity>
-        <activity
             android:name=".activities.edit.EditActivity"
             android:exported="false">
         </activity>
         <activity
-            android:name=".activities.edit.EditPacDotActivity"
-            android:exported="false">
-        </activity>
-        <activity
-            android:name=".activities.edit.EditPowerPelletActivity"
-            android:exported="false">
-        </activity>
-        <activity
             android:name=".activities.inspect.InspectActivity"
-            android:exported="false">
-        </activity>
-        <activity
-            android:name=".activities.inspect.InspectPacDotActivity"
-            android:exported="false">
-        </activity>
-        <activity
-            android:name=".activities.inspect.InspectPowerPelletActivity"
             android:exported="false">
         </activity>
         <activity
@@ -73,10 +49,6 @@
         </activity>
         <activity
             android:name=".activities.settings.PlaySettingsActivity"
-            android:exported="false">
-        </activity>
-        <activity
-            android:name=".activities.InfoSelectableActivity"
             android:exported="false">
         </activity>
 

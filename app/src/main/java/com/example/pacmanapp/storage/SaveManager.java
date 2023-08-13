@@ -23,7 +23,7 @@ public class SaveManager {
         File saveDirectory = new File(context.getFilesDir(), "saves");
         fileManager = new FileManager(saveDirectory);
     }
-
+// TODO on loading a new save the selection should be reset somehow? Maybe make what is selected part of the save.
     /**
      * Load a game save with the specified save name and load it in the given context.
      *

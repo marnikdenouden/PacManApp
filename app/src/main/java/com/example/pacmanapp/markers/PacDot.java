@@ -2,15 +2,16 @@ package com.example.pacmanapp.markers;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.pacmanapp.R;
-import com.example.pacmanapp.activities.edit.EditPacDotActivity;
-import com.example.pacmanapp.activities.inspect.InspectPacDotActivity;
+import com.example.pacmanapp.contents.Content;
+import com.example.pacmanapp.contents.Hint;
+import com.example.pacmanapp.contents.Information;
 import com.example.pacmanapp.selection.Selectable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressLint("ViewConstructor")
 public class PacDot extends Marker implements Selectable {
@@ -18,9 +19,7 @@ public class PacDot extends Marker implements Selectable {
     private static final long serialVersionUID = 1L;
     private final static int drawableId = R.drawable.pac_dot;
     private final static int markerId = R.id.pacdot;
-    private int debugOffset = 0;
-
-    private String hint = "No hint is set to the location of this pac dot.";
+    private final List<Content> contentList;
 
     /**
      * Pac-dot marker to display on the map and use.
@@ -32,21 +31,14 @@ public class PacDot extends Marker implements Selectable {
      */
     public PacDot(int frameId, double latitude, double longitude, Context context) {
         super(frameId, latitude, longitude, drawableId, markerId, context);
+        contentList = new ArrayList<>();
+        contentList.add(new Information("Location hints"));
+        contentList.add(new Hint.HintBuilder(this).build());
     }
 
     @Override
     public void onClick(View view) {
         super.onClick(view);
-    }
-
-    @Override
-    public Class<? extends AppCompatActivity> getInspectPage() {
-        return InspectPacDotActivity.class;
-    }
-
-    @Override
-    public Class<? extends AppCompatActivity> getEditPage() {
-        return EditPacDotActivity.class;
     }
 
     @Override
@@ -65,11 +57,8 @@ public class PacDot extends Marker implements Selectable {
                 "When found they provide a hint to the location of a fruit.";
     }
 
-    public void setHint(String hint) {
-        this.hint = hint;
-    }
-
-    public String getHint() {
-        return hint;
+    @Override
+    public List<Content> getContent() {
+        return contentList;
     }
 }

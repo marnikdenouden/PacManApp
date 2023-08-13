@@ -56,13 +56,13 @@
         android:textAllCaps="false"
         android:textSize="19sp"
         app:layout_constraintBottom_toTopOf="@id/bottom_bar"
-        app:layout_constraintEnd_toStartOf="@id/selectable_content"
+        app:layout_constraintEnd_toStartOf="@id/selectable_preview"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/pacManMapFrame" />
 
     <include
-        android:id="@id/selectable_content"
-        layout="@layout/selectable_content"
+        android:id="@id/selectable_preview"
+        layout="@layout/selected_preview"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="24dp"

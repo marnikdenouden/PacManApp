@@ -3,12 +3,12 @@ package com.example.pacmanapp.markers;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.pacmanapp.R;
-import com.example.pacmanapp.activities.edit.EditPowerPelletActivity;
-import com.example.pacmanapp.activities.inspect.InspectPowerPelletActivity;
+import com.example.pacmanapp.contents.Content;
 import com.example.pacmanapp.selection.Selectable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressLint("ViewConstructor")
 public class PowerPellet extends Marker implements Selectable {
@@ -48,16 +48,6 @@ public class PowerPellet extends Marker implements Selectable {
     }
 
     @Override
-    public Class<? extends AppCompatActivity> getInspectPage() {
-        return InspectPowerPelletActivity.class;
-    }
-
-    @Override
-    public Class<? extends AppCompatActivity> getEditPage() {
-        return EditPowerPelletActivity.class;
-    }
-
-    @Override
     public String getLabel() {
         return "Power pellet";
     }
@@ -70,5 +60,10 @@ public class PowerPellet extends Marker implements Selectable {
     @Override
     public String getDescription() {
         return "Power pellets allow pacman to eat ghosts for a short duration when collected.";
+    }
+
+    @Override
+    public List<Content> getContent() {
+        return new ArrayList<>();
     }
 }

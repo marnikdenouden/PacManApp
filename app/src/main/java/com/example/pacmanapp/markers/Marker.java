@@ -36,32 +36,12 @@ public class Marker implements Serializable {
     private double latitude;
     private double longitude;
     private final int markerId;
-    private int drawableId;
+    private final int drawableId; // Should always be able to be used as icon for the marker
     private boolean displayOnTop = false;
-    private boolean animate = false; // Determines if drawable gets animated
-    private transient Drawable drawable;
+    private boolean animate = false;
     private transient Context context;
 
     //>>> Constructors for marker <<<//
-
-    /**
-     * Create a marker for specified context, activity and alike.
-     *
-     * @param frameId   FrameId reference to map area that the marker is placed on
-     * @param latitude  Latitude used to position marker on map area
-     * @param longitude Longitude used to position marker on map area
-     * @param markerId  MarkerId set to ImageView for potential reference
-     * @param context   Context in which the marker is created
-     */
-    Marker(int frameId, double latitude, double longitude, int markerId,
-           @NotNull Context context) {
-        // Set marker values
-        this.frameId = frameId;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.markerId = markerId;
-        this.context = context;
-    }
 
     /**
      * Create a marker for specified context, activity and alike.
@@ -74,7 +54,7 @@ public class Marker implements Serializable {
      * @param context    Context in which the marker is created
      */
     Marker(int frameId, double latitude, double longitude, int drawableId, int markerId,
-           Context context) {
+           @NotNull Context context) {
         // Set marker values
         this.frameId = frameId;
         this.latitude = latitude;
@@ -129,9 +109,7 @@ public class Marker implements Serializable {
 
         setLayoutParams(latitude, longitude);
         imageView.setId(markerId);
-        if (drawableId != 0) {
-            setDrawable(drawableId);
-        }
+        setDrawable(drawableId);
     }
 
     /**
@@ -160,7 +138,6 @@ public class Marker implements Serializable {
             return;
         }
         imageView.setImageDrawable(drawable);
-        tryAnimate(animate);
     }
 
     /**
@@ -319,6 +296,16 @@ public class Marker implements Serializable {
      */
     public ImageView getImageView() {
         return imageView;
+    }
+
+    /**
+     * Get the drawable id of the marker.
+     * (Can be used as icon for the marker)
+     *
+     * @return Drawable id of the marker
+     */
+    public int getDrawableId() {
+        return drawableId;
     }
 
     /**

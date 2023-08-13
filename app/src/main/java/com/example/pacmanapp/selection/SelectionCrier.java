@@ -41,7 +41,7 @@ public class SelectionCrier {
      * @param id Id of the selector to get
      * @return Selector that is mapped from the specified id
      */
-    public Selector getSelector(int id) {
+    Selector getSelector(int id) {
         return selectors.get(id);
     }
 
@@ -51,7 +51,7 @@ public class SelectionCrier {
      * @param id Id of the selector to check
      * @return Truth assignment, if selector with id is stored
      */
-    public boolean hasSelector(int id) {
+    boolean hasSelector(int id) {
         return selectors.containsKey(id);
     }
 

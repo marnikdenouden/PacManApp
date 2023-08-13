@@ -35,7 +35,7 @@ public class Ghost extends Character implements Serializable, LocationObserver {
      */
     public Ghost(@NotNull GhostType ghostType, int frameId, double latitude, double longitude,
                  Context context) {
-        super(frameId, latitude, longitude, ghostType.getId(), context);
+        super(frameId, latitude, longitude, R.drawable.ghost_icon, ghostType.getId(), context);
         this.ghostType = ghostType;
     }
 

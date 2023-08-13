@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.save.SaveActivity;
+import com.example.pacmanapp.contents.InfoInspect;
 import com.example.pacmanapp.displays.Clock;
 import com.example.pacmanapp.displays.Score;
 import com.example.pacmanapp.location.DynamicLocation;
@@ -24,7 +25,6 @@ import com.example.pacmanapp.location.LocationUpdater;
 import com.example.pacmanapp.map.MapArea;
 import com.example.pacmanapp.map.MapType;
 import com.example.pacmanapp.markers.Character;
-import com.example.pacmanapp.markers.Ghost;
 import com.example.pacmanapp.markers.MapMarkers;
 import com.example.pacmanapp.markers.Marker;
 import com.example.pacmanapp.markers.PacMan;
@@ -46,7 +46,7 @@ public class PlayMapActivity extends AppCompatActivity implements DynamicLocatio
     private LocationUpdater locationUpdater;
     private MapMarkers mapMarkers;
     private Selector selector;
-    private Selector.SelectionListener selectionListener;
+    private final Selector.SelectionListener selectionListener = PlayMapActivity.this::onSelection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +57,8 @@ public class PlayMapActivity extends AppCompatActivity implements DynamicLocatio
 
         NavigationBar.configure(this, PageType.MAP);
 
-        selector = AcceptAllSelector.getAcceptAllSelector(R.id.inspectAllSelector);
-        selectionListener = PlayMapActivity.this::onSelection;
+        // Get selector to make sure it gets relevant selections.
+        selector = AcceptAllSelector.getAcceptAllSelector(R.id.inspectAllSelector, new InfoInspect(getResources()));
 
         if (!SavePlatform.hasSave()) {
             Navigate.navigate(this, SaveActivity.class);
@@ -111,8 +111,10 @@ public class PlayMapActivity extends AppCompatActivity implements DynamicLocatio
             locationUpdater.startLocationUpdates();
         }
 
-        selector = SelectionCrier.getInstance().getSelector(R.id.inspectAllSelector);
+        // Call on selection with currently selected to load in preview
         onSelection(selector.getSelected());
+
+        // Add selection listener to selector to update selection preview
         selector.addOnSelectionListener(selectionListener);
     }
 
@@ -163,7 +165,7 @@ public class PlayMapActivity extends AppCompatActivity implements DynamicLocatio
      * Update selectable content with new fetched selected.
      */
     private void onSelection(Selectable selectable) {
-        SelectableContent.setContent(this, selectable);
+        SelectableContent.setData(this, selectable, false);
     }
 
     /**

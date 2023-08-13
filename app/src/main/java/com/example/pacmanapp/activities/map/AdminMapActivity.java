@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.save.SaveActivity;
+import com.example.pacmanapp.contents.InfoEdit;
+import com.example.pacmanapp.contents.InfoInspect;
 import com.example.pacmanapp.displays.Clock;
 import com.example.pacmanapp.displays.Score;
 import com.example.pacmanapp.location.DynamicLocation;
@@ -37,7 +39,6 @@ import com.example.pacmanapp.navigation.PageType;
 import com.example.pacmanapp.selection.AcceptAllSelector;
 import com.example.pacmanapp.selection.Selectable;
 import com.example.pacmanapp.selection.SelectableContent;
-import com.example.pacmanapp.selection.SelectionCrier;
 import com.example.pacmanapp.selection.Selector;
 import com.example.pacmanapp.storage.SavePlatform;
 
@@ -51,7 +52,7 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
     private LocationUpdater locationUpdater;
     private MapMarkers mapMarkers;
     private Selector selector;
-    private Selector.SelectionListener selectionListener;
+    private final Selector.SelectionListener selectionListener = AdminMapActivity.this::onSelection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,8 +72,9 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
 
         mapMarkers = MapMarkers.getFromSave(SavePlatform.getSave());
 
-        selector = AcceptAllSelector.getAcceptAllSelector(R.id.editAllSelector);
-        selectionListener = AdminMapActivity.this::select;
+        // Get selectors to make sure they get relevant selections.
+        AcceptAllSelector.getAcceptAllSelector(R.id.inspectAllSelector, new InfoInspect(getResources()));
+        selector = AcceptAllSelector.getAcceptAllSelector(R.id.editAllSelector, new InfoEdit(getResources()));
 
         Clock clock = new Clock(AdminMapActivity.this, AdminMapActivity.this);
         clock.setTime(Duration.ofSeconds(2678));
@@ -96,9 +98,10 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
             locationUpdater.startLocationUpdates();
         }
 
-        selector = SelectionCrier.getInstance().getSelector(R.id.editAllSelector);
-        select(selector.getSelected()); // TODO figure out what the right place is for this selection code and how to simplify selection code.
-                                        //  Maybe use a interface that specifies a select method?
+        // Call on selection with currently selected to load in preview
+        onSelection(selector.getSelected());
+
+        // Add selection listener to selector to update selection preview
         selector.addOnSelectionListener(selectionListener);
     }
 
@@ -159,8 +162,8 @@ public class AdminMapActivity extends AppCompatActivity implements DynamicLocati
     /**
      * Update selectable content with new fetched selected.
      */
-    private void select(Selectable selectable) {
-        SelectableContent.setContent(this, selectable);
+    private void onSelection(Selectable selectable) {
+        SelectableContent.setData(this, selectable, false);
     }
 
     /**

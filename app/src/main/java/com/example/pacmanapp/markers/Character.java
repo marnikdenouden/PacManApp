@@ -36,22 +36,6 @@ public abstract class Character extends Marker implements Serializable, Location
         setDisplayOnTop(true);
     }
 
-    /**
-     * Create a character marker for specified context, activity and alike.
-     *
-     * @param frameId   FrameId reference to map area that the marker is placed on
-     * @param latitude  Latitude used to position character on map area
-     * @param longitude Longitude used to position character on map area
-     * @param markerId  MarkerId set to ImageView for potential reference
-     * @param context   Context in which the marker is created
-     */
-    Character(int frameId, double latitude, double longitude, int markerId,
-              @NotNull Context context) {
-        super(frameId, latitude, longitude, markerId, context);
-        setAnimate(true);
-        setDisplayOnTop(true);
-    }
-
     //>>> Methods to control the character <<<//
 
     /**

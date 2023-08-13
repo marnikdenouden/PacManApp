@@ -77,8 +77,8 @@
         app:layout_constraintTop_toBottomOf="@id/ghostInteractionButton" />
 
     <include
-        android:id="@id/selectable_content"
-        layout="@layout/selectable_content"
+        android:id="@id/selectable_preview"
+        layout="@layout/selected_preview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"

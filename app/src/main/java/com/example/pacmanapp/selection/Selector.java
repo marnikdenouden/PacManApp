@@ -30,7 +30,7 @@ public abstract class Selector {
     void select(@NotNull Selectable selected) {
         this.selected = selected;
         for (SelectionListener listener: listeners) {
-            listener.onSelection(selected);
+            listener.onSelect(selected);
         }
     }
 
@@ -53,7 +53,7 @@ public abstract class Selector {
     }
 
     public interface SelectionListener {
-        void onSelection(Selectable selectable);
+        void onSelect(Selectable selectable);
     }
 }
 

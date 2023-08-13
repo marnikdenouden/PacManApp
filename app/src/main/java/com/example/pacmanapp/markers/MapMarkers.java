@@ -55,7 +55,9 @@ public class MapMarkers extends SaveObject implements Serializable {
      */
     public void removeMarker(Marker marker) {
         getMapCollection(marker.getFrameId()).remove(marker);
-        ((DynamicLocation) currentMapContext).removeObserver((LocationObserver) marker);
+        if (currentMapContext != null) {
+            ((DynamicLocation) currentMapContext).removeObserver((LocationObserver) marker);
+        }
         Log.i(TAG, "Marker of class " + marker.getClass().getSimpleName()
                 + " was removed from the collection");
     }
