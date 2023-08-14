@@ -9,6 +9,8 @@ import com.example.pacmanapp.location.DynamicLocation;
 import com.example.pacmanapp.location.LocationObserver;
 import com.example.pacmanapp.map.MapArea;
 import com.example.pacmanapp.map.MapManager;
+import com.example.pacmanapp.selection.Selectable;
+import com.example.pacmanapp.selection.SelectionCrier;
 import com.example.pacmanapp.storage.GameSave;
 import com.example.pacmanapp.storage.SaveObject;
 
@@ -44,6 +46,9 @@ public class MapMarkers extends SaveObject implements Serializable {
     public void addMarker(Marker marker) {
         getMapCollection(marker.getFrameId()).add(marker);
         loadMarkerOnCurrentMap(marker);
+        if (marker instanceof Selectable) {
+            SelectionCrier.getInstance().select((Selectable) marker);
+        }
         Log.i(TAG, "Marker of class " + marker.getClass().getSimpleName()
                 + " was added to the collection");
     }

@@ -22,6 +22,15 @@ public class Navigate {
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); // TODO update this flag, for example such that you can't return to an outdated version of the map activity.
         intent.setClass(currentActivity, nextActivityClass);
         currentActivity.startActivity(intent);
+        // Except for activities that implement the base activity,
+        if (!(currentActivity instanceof BaseActivity)) {
+            // the activity is finished or recreated when trying to navigate to the same class.
+            if (nextActivityClass.equals(currentActivity.getClass())) {
+                currentActivity.recreate();
+            } else {
+                currentActivity.finish();
+            }
+        }
     }
 
     /**
@@ -73,6 +82,12 @@ public class Navigate {
     public static void configure(View navigator, Intent intent, AppCompatActivity currentActivity,
                                  Class<? extends AppCompatActivity> nextActivityClass) {
         setNavigationListener(navigator, intent, currentActivity, nextActivityClass);
+    }
+
+    /**
+     * Activities that implement this interface will not be finished on navigate.
+     */
+    public interface BaseActivity {
     }
 
 }

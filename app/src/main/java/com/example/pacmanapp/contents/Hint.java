@@ -3,7 +3,6 @@ package com.example.pacmanapp.contents;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,41 +10,52 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.pacmanapp.R;
-import com.example.pacmanapp.markers.Marker;
+import com.example.pacmanapp.activities.edit.EditActivity;
+import com.example.pacmanapp.activities.inspect.InspectActivity;
 import com.example.pacmanapp.selection.Selectable;
+
+import org.jetbrains.annotations.NotNull;
 
 public class Hint implements Content {
     private static final String TAG = "ContentHint";
     private final int iconId;
     private final String label;
+    private final Selectable selectable;
     private String hint;
 
-    public Hint(HintBuilder hintBuilder) {
-        iconId = hintBuilder.iconId;
-        label = hintBuilder.label;
+    /**
+     * Constructor of hint that is used by the hint builder.
+     *
+     * @param hintBuilder Hint builder that has hint data
+     */
+    private Hint(HintBuilder hintBuilder) {
+        iconId = hintBuilder.selectable.getIconId();
+        label = hintBuilder.selectable.getLabel();
+        selectable = hintBuilder.selectable;
         hint = hintBuilder.hint;
     }
 
     @Override
-    public void addView(@NonNull ViewGroup viewGroup, boolean editable) {
+    public void addView(@NotNull AppCompatActivity activity,
+                        @NotNull ViewGroup viewGroup, boolean editable) {
         if (editable) {
-            addEditView(viewGroup);
+            addEditView(activity, viewGroup);
         } else {
-            addInfoView(viewGroup);
+            addInfoView(activity, viewGroup);
         }
     }
 
     /**
-     * Set the hint text on the activity page.
+     * Add the info hint view on the activity page to the specified view group.
      *
+     * @param activity Activity that the view is being added in
      * @param viewGroup ViewGroup to add edit hint view to
      */
-    void addInfoView(ViewGroup viewGroup) {
+    void addInfoView(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup) {
         View hintView = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.hint_text, viewGroup);
 
@@ -59,14 +69,16 @@ public class Hint implements Content {
         Drawable iconImage = ResourcesCompat.getDrawable(hintView.getResources(), iconId,
                 hintView.getContext().getTheme());
         iconImageView.setImageDrawable(iconImage);
+        iconImageView.setOnClickListener(view -> InspectActivity.open(selectable, activity));
     }
 
     /**
-     * Set the hint text on the activity page.
+     * Add the edit hint view on the activity page to the specified view group.
      *
+     * @param activity Activity that the view is being added in
      * @param viewGroup ViewGroup to add edit hint view to
      */
-    void addEditView(ViewGroup viewGroup) {
+    void addEditView(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup) {
         View hintView = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.hint_text_edit, viewGroup);
 
@@ -96,29 +108,40 @@ public class Hint implements Content {
         Drawable iconImage = ResourcesCompat.getDrawable(hintView.getResources(), iconId,
                 hintView.getContext().getTheme());
         iconImageView.setImageDrawable(iconImage);
+        iconImageView.setOnClickListener(view -> EditActivity.open(selectable, activity));
     }
 
     public static class HintBuilder {
         private String hint = "";
-        private String label;
-        private int iconId;
-
-        public HintBuilder(String label, int iconId) {
-            // Add any required values for hint in the hint builder parameter.
-        }
+        private final Selectable selectable;
 
         // TODO Should hints only be constructed with selectable, so icon can be clickable and take you to that page?
 
+        /**
+         * Hint builder that can be created with a selectable.
+         *
+         * @param selectable Selectable to create hint for.
+         */
         public HintBuilder(Selectable selectable) {
-            iconId = selectable.getIconId();
-            label = selectable.getLabel();
+            this.selectable = selectable;
         }
 
+        /**
+         * Add a hint string to the hint builder.
+         *
+         * @param hint Hint that will be added to hint builder
+         * @return HintBuilder that be continued
+         */
         public HintBuilder setHint(String hint) {
             this.hint = hint;
             return this;
         }
 
+        /**
+         * Finish hint building and get the created hint.
+         *
+         * @return Hint that was created by the hint builder
+         */
         public Hint build() {
             return new Hint(this);
         }

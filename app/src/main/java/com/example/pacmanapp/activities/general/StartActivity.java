@@ -17,7 +17,7 @@ import com.example.pacmanapp.navigation.Navigate;
 import com.example.pacmanapp.navigation.NavigationBar;
 import com.example.pacmanapp.navigation.NavigationBarType;
 
-public class StartActivity extends AppCompatActivity {
+public class StartActivity extends AppCompatActivity implements Navigate.BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

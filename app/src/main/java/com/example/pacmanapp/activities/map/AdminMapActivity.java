@@ -46,7 +46,8 @@ import java.time.Duration;
 import java.util.Collection;
 import java.util.Random;
 
-public class AdminMapActivity extends AppCompatActivity implements DynamicLocation {
+public class AdminMapActivity extends AppCompatActivity
+        implements DynamicLocation, Navigate.BaseActivity {
     private final static String TAG = "AdminMapActivity";
 
     private LocationUpdater locationUpdater;

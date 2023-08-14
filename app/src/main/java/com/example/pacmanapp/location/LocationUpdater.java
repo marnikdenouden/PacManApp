@@ -81,6 +81,8 @@ public class LocationUpdater implements DynamicLocation {
      * Notify location observers of last location result.
      */
     private void notifyLocationUpdate(@NotNull Location location) {
+        Log.i(TAG, "Starting to notify new location update to " + observers.size() +
+                " observers and " + singleObservers.size() + " single observers");
         for (LocationObserver locationObserver: observers) {
             locationObserver.onLocationUpdate(location);
         }

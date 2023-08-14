@@ -2,7 +2,6 @@ package com.example.pacmanapp.selection;
 
 import android.graphics.drawable.Drawable;
 import android.util.Log;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -11,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.activities.inspect.InspectActivity;
 import com.example.pacmanapp.contents.Content;
 
 public class SelectableContent {
@@ -46,6 +46,8 @@ public class SelectableContent {
         Drawable iconImage = ResourcesCompat.getDrawable(activity.getResources(),
                 selectable.getIconId(), activity.getTheme());
         iconImageView.setImageDrawable(iconImage);
+        iconImageView.setOnClickListener(view ->
+                InspectActivity.open(selectable, (AppCompatActivity) view.getContext()));
     }
 
     /**
@@ -91,7 +93,7 @@ public class SelectableContent {
         }
 
         for (Content content: selectable.getContent()) {
-            content.addView(linearLayoutContent, editable);
+            content.addView(activity, linearLayoutContent, editable);
         }
     }
 }

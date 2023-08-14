@@ -10,10 +10,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.activities.inspect.InspectActivity;
 import com.example.pacmanapp.selection.Selectable;
+import com.example.pacmanapp.selection.SelectableContent;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -22,31 +25,46 @@ public class HiddenHint implements Content {
     private boolean locked = true;
     private final String key;
     private final Hint hint;
-    private final Selectable cluePage;
+    private final Selectable selectable;
 
-    // TODO add java docs...
-    public HiddenHint(Hint hint, Selectable cluePage, String key) {
+    // TODO add java docs to various places across files...
+
+    /**
+     * Constructs a hidden hint content that reveals hint after key is entered.
+     *
+     * @param hint Hint that will be revealed after entering the key
+     * @param selectable Selectable that displays the clues for the key
+     * @param key Key that will unlock the hint
+     */
+    public HiddenHint(Hint hint, Selectable selectable, String key) {
         this.hint = hint;
-        this.cluePage = cluePage;
+        this.selectable = selectable;
         this.key = key;
     }
 
     @Override
-    public void addView(@NonNull ViewGroup viewGroup, boolean editable) {
+    public void addView(@NotNull AppCompatActivity activity,
+                        @NonNull ViewGroup viewGroup, boolean editable) {
         if (editable) {
-            hint.addEditView(viewGroup);
+            hint.addEditView(activity, viewGroup);
             return;
         }
 
         if (!locked) {
-            hint.addInfoView(viewGroup);
+            hint.addInfoView(activity, viewGroup);
             return;
         }
 
-        addLockView(viewGroup);
+        addLockView(activity, viewGroup);
     }
 
-    void addLockView(@NotNull ViewGroup viewGroup) {
+    /**
+     * Add the lock hint view on the activity page to the specified view group.
+     *
+     * @param activity Activity that the view is being added in
+     * @param viewGroup ViewGroup to add edit hint view to
+     */
+    void addLockView(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup) {
         View hintView = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.lock_content, viewGroup);
 
@@ -67,16 +85,17 @@ public class HiddenHint implements Content {
                 if (key.equals(editable.toString())) {
                     locked = false;
                     viewGroup.removeView(hintView);
-                    hint.addInfoView(viewGroup);
+                    hint.addInfoView(activity, viewGroup);
                     keyTextView.setEnabled(false); // TODO could use some more juice
                 }
             }
         });
 
-        ImageView iconImageView = hintView.findViewById(R.id.lock_icon); // TODO icon should be clickable to where the clue for the lock is located.
+        ImageView iconImageView = hintView.findViewById(R.id.lock_icon);
         Drawable iconImage = ResourcesCompat.getDrawable(hintView.getResources(),
-                cluePage.getIconId(), hintView.getContext().getTheme());
+                selectable.getIconId(), hintView.getContext().getTheme());
         iconImageView.setImageDrawable(iconImage);
+        iconImageView.setOnClickListener(view -> InspectActivity.open(selectable, activity));
     }
 
 }

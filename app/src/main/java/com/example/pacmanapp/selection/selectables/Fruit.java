@@ -4,6 +4,7 @@ import com.example.pacmanapp.R;
 import com.example.pacmanapp.contents.Content;
 import com.example.pacmanapp.selection.Selectable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Fruit implements Selectable {
@@ -30,7 +31,7 @@ public class Fruit implements Selectable {
 
     @Override
     public List<Content> getContent() {
-        return null;
+        return new ArrayList<>();
     }
 
     public enum FruitType {

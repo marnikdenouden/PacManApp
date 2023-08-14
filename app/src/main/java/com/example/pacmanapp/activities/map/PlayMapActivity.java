@@ -40,7 +40,8 @@ import com.example.pacmanapp.storage.SavePlatform;
 import java.time.Duration;
 import java.util.Collection;
 
-public class PlayMapActivity extends AppCompatActivity implements DynamicLocation {
+public class PlayMapActivity extends AppCompatActivity
+        implements DynamicLocation, Navigate.BaseActivity {
     private final static String TAG = "PlayMapActivity";
     private LocationUpdater locationUpdater;
     private MapMarkers mapMarkers;
