@@ -46,6 +46,10 @@
         <item name="android:textSize" >40sp</item>
     </style>
     <style
+        name="text_button_black" parent="text_button">
+        <item name="android:textColor" >@color/black_text</item>
+    </style>
+    <style
         name="text_description" >
         <item name="android:fontFamily" >@font/montserrat_light</item>
         <item name="android:textSize" >16sp</item>
