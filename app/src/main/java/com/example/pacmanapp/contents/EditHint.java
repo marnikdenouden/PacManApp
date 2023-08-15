@@ -17,6 +17,12 @@ public class EditHint implements Content {
     private String key = "";
     private Selectable hintTarget;
 
+    // Variables used to update the last added view of this edit hint.
+    private transient View view;
+    private transient ViewGroup viewGroup;
+    private transient AppCompatActivity activity;
+    private transient boolean editable;
+
     /**
      * Create edit hint that edit its hint content.
      *
@@ -30,14 +36,20 @@ public class EditHint implements Content {
     }
 
     @Override
-    public void addView(@NonNull AppCompatActivity activity, @NonNull ViewGroup viewGroup, boolean editable) {
+    public View addView(@NonNull AppCompatActivity activity, @NonNull ViewGroup viewGroup, boolean editable) {
+        this.viewGroup = viewGroup;
+        this.activity = activity;
+        this.editable = editable;
+        
         if (editable) {
             View.OnClickListener onClickListener = view -> new EditHintDialog(activity, this)
                     .show(activity.getSupportFragmentManager(), "EditHint");
-            Util.addButton(activity, viewGroup, true, "Edit", content, onClickListener);
+            view = Util.addButton(activity, viewGroup, true, "Edit", content,
+            onClickListener);
         } else {
-            content.addView(activity, viewGroup, false);
+            view = content.addView(activity, viewGroup, false);
         }
+        return view;
     }
 
     /**
@@ -145,6 +157,17 @@ public class EditHint implements Content {
                 content = new HiddenHint(hint, EditHint.this.hintProvider, key);
             }
         }
+
+        // TODO it requires a lot to update the content from within, maybe this can be simplified and reworked overall?
+        public void updateLastAddedView() {
+            int index = viewGroup.indexOfChild(view);
+            viewGroup.removeView(view);
+            View updatedView = addView(activity, viewGroup, editable);
+            // Remove and add the view at its previous index.
+            viewGroup.removeView(updatedView);
+            viewGroup.addView(updatedView, index);
+        }
+
     }
 
 }

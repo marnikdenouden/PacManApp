@@ -1,5 +1,6 @@
 package com.example.pacmanapp.contents;
 
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,8 +16,10 @@ public interface Content extends Serializable {
      * @param activity Activity that the view is being added in
      * @param viewGroup View group to insert hint view in
      * @param editable Truth assignment, if hint should be editable in view
+     *
+     * @return View view that was added to the specified view group
      */
-    void addView(@NotNull AppCompatActivity activity,
+    View addView(@NotNull AppCompatActivity activity,
                  @NotNull ViewGroup viewGroup, boolean editable);
 
 }

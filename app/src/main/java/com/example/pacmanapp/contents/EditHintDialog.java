@@ -64,6 +64,7 @@ public class EditHintDialog extends DialogFragment {
 
         builder.setView(editHintView).setPositiveButton("Save", (dialogInterface, i) -> {
                     hintEditor.save();
+                    hintEditor.updateLastAddedView();
                     dismiss();
                 }).setNegativeButton("Cancel", (dialogInterface, i) -> dismiss());
         return builder.create();

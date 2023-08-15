@@ -40,19 +40,17 @@ public class HiddenHint implements Content {
     }
 
     @Override
-    public void addView(@NotNull AppCompatActivity activity,
+    public View addView(@NotNull AppCompatActivity activity,
                         @NonNull ViewGroup viewGroup, boolean editable) {
         if (editable) {
-            hint.addEditView(activity, viewGroup);
-            return;
+            return hint.addEditView(activity, viewGroup);
         }
 
         if (!locked) {
-            hint.addInfoView(activity, viewGroup);
-            return;
+            return hint.addInfoView(activity, viewGroup);
         }
 
-        addLockView(activity, viewGroup);
+        return addLockView(activity, viewGroup);
     }
 
     /**
@@ -60,8 +58,10 @@ public class HiddenHint implements Content {
      *
      * @param activity Activity that the view is being added in
      * @param viewGroup ViewGroup to add edit hint view to
+     *
+     * @return View view that was added to the specified view group
      */
-    void addLockView(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup) {
+    View addLockView(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup) {
         View hintView = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.lock_content, viewGroup, false);
 
@@ -84,6 +84,7 @@ public class HiddenHint implements Content {
         iconImageView.setOnClickListener(view -> InspectActivity.open(activity, hintProvider));
 
         viewGroup.addView(hintView);
+        return hintView;
     }
 
 }

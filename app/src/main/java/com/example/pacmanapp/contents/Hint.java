@@ -38,12 +38,12 @@ public class Hint implements Content {
     }
 
     @Override
-    public void addView(@NotNull AppCompatActivity activity,
+    public View addView(@NotNull AppCompatActivity activity,
                         @NotNull ViewGroup viewGroup, boolean editable) {
         if (editable) {
-            addEditView(activity, viewGroup);
+            return addEditView(activity, viewGroup);
         } else {
-            addInfoView(activity, viewGroup);
+            return addInfoView(activity, viewGroup);
         }
     }
 
@@ -52,8 +52,10 @@ public class Hint implements Content {
      *
      * @param activity Activity that the view is being added in
      * @param viewGroup ViewGroup to add edit hint view to
+     *
+     * @return View view that was added to the specified view group
      */
-    void addInfoView(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup) {
+    View addInfoView(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup) {
         View hintView = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.hint_text, viewGroup, false);
 
@@ -70,6 +72,7 @@ public class Hint implements Content {
         iconImageView.setOnClickListener(view -> InspectActivity.open(activity, hintTarget));
 
         viewGroup.addView(hintView);
+        return hintView;
     }
 
     /**
@@ -77,8 +80,10 @@ public class Hint implements Content {
      *
      * @param activity Activity that the view is being added in
      * @param viewGroup ViewGroup to add edit hint view to
+     *
+     * @return View view that was added to the specified view group
      */
-    void addEditView(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup) {
+    View addEditView(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup) {
         View hintView = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.hint_text_edit, viewGroup, false);
 
@@ -96,6 +101,7 @@ public class Hint implements Content {
         iconImageView.setOnClickListener(view -> EditActivity.open(activity, hintTarget));
 
         viewGroup.addView(hintView);
+        return hintView;
     }
 
     public static class HintBuilder {

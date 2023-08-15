@@ -1,5 +1,6 @@
 package com.example.pacmanapp.contents;
 
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -15,10 +16,11 @@ public class Information implements Content {
     }
 // TODO make a layout for this class, so the text view can be more easily customized and adjusted.
     @Override
-    public void addView(@NotNull AppCompatActivity activity,
+    public View addView(@NotNull AppCompatActivity activity,
                         @NotNull ViewGroup viewGroup, boolean editable) {
         TextView textView = new TextView(viewGroup.getContext());
         textView.setText(info);
         viewGroup.addView(textView);
+        return textView;
     }
 }

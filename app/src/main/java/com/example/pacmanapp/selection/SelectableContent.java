@@ -3,6 +3,7 @@ package com.example.pacmanapp.selection;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -110,6 +111,7 @@ public class SelectableContent {
                     + selectable.getLabel() + " activity of class " + activity.getLocalClassName());
             return;
         }
+        linearLayoutContent.removeAllViews();
 
         for (Content content: selectable.getContent()) {
             content.addView(activity, linearLayoutContent, editable);
@@ -126,12 +128,13 @@ public class SelectableContent {
         }
 
         @Override
-        public void addView(@NonNull AppCompatActivity activity,
+        public View addView(@NonNull AppCompatActivity activity,
                             @NonNull ViewGroup viewGroup, boolean editable) {
             this.activity = activity;
             this.editable = editable;
-            LayoutInflater.from(activity).inflate(R.layout.selectable_preview, viewGroup);
+            View view = LayoutInflater.from(activity).inflate(R.layout.selectable_preview, viewGroup);
             update(selectable);
+            return view;
         }
 
         public void update(Selectable selectable) {

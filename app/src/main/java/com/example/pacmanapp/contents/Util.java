@@ -45,8 +45,10 @@ public class Util {
      * @param label String to put on the button
      * @param content Content to add button to
      * @param onClickListener OnClickListener for the button to use
+     *
+     * @return View view that was added to the specified view group
      */
-    public static void addButton(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup,
+    public static View addButton(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup,
                                  boolean editable, String label, @NotNull Content content,
                                  View.OnClickListener onClickListener) {
         View view = LayoutInflater.from(activity).inflate(R.layout.add_button , viewGroup,
@@ -56,6 +58,7 @@ public class Util {
         button.setText(label);
         button.setOnClickListener(onClickListener);
         viewGroup.addView(view);
+        return view;
     }
 
     public interface TextListener {
