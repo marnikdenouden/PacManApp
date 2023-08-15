@@ -225,7 +225,7 @@ public class Marker implements Serializable {
      */
     public void onLongClick(View view) {
         if (this instanceof Selectable) {
-            InspectActivity.open((Selectable) this, (AppCompatActivity) view.getContext());
+            InspectActivity.open((AppCompatActivity) view.getContext(), (Selectable) this);
         }
     }
 

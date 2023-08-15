@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item type="id" name="mapMarkers" />
+    <item type="id" name="fruitStorage" />
     <item type="id" name="gameSettings" />
 </resources>

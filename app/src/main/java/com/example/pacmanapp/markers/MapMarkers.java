@@ -23,7 +23,7 @@ import java.util.Map;
 public class MapMarkers extends SaveObject implements Serializable {
     private final static String TAG = "MapMarkers";
     private static final long serialVersionUID = 1L;
-    public static int mapMarkerId = R.id.mapMarkers;
+    private static final int mapMarkerId = R.id.mapMarkers;
     private final Map<Integer, Collection<Marker>> mapMarkers;
     private boolean hasDynamicLocation;
     private transient AppCompatActivity currentMapContext;
@@ -128,10 +128,10 @@ public class MapMarkers extends SaveObject implements Serializable {
     }
 
     /**
-     * Gets or creates the map marker for the current save of the specified save manager.
+     * Gets or creates the map marker for the current save of the specified game save.
      *
      * @param gameSave Save to get map marker from
-     * @return Map marker from current save of the specified save manager
+     * @return Map marker from current save of the specified game save
      */
     public static MapMarkers getFromSave(GameSave gameSave) {
         if (gameSave.hasSaveObject(mapMarkerId)) {

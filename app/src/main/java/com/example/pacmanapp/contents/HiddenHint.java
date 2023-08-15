@@ -16,7 +16,6 @@ import androidx.core.content.res.ResourcesCompat;
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.inspect.InspectActivity;
 import com.example.pacmanapp.selection.Selectable;
-import com.example.pacmanapp.selection.SelectableContent;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -25,20 +24,18 @@ public class HiddenHint implements Content {
     private boolean locked = true;
     private final String key;
     private final Hint hint;
-    private final Selectable selectable;
-
-    // TODO add java docs to various places across files...
+    private final Selectable hintProvider;
 
     /**
      * Constructs a hidden hint content that reveals hint after key is entered.
      *
      * @param hint Hint that will be revealed after entering the key
-     * @param selectable Selectable that displays the clues for the key
+     * @param hintProvider Selectable that displays the clues for the key
      * @param key Key that will unlock the hint
      */
-    public HiddenHint(Hint hint, Selectable selectable, String key) {
+    public HiddenHint(Hint hint, Selectable hintProvider, String key) {
         this.hint = hint;
-        this.selectable = selectable;
+        this.hintProvider = hintProvider;
         this.key = key;
     }
 
@@ -66,36 +63,27 @@ public class HiddenHint implements Content {
      */
     void addLockView(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup) {
         View hintView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.lock_content, viewGroup);
+                .inflate(R.layout.lock_content, viewGroup, false);
 
         EditText keyTextView = hintView.findViewById(R.id.key_input);
-        keyTextView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+        Util.TextListener textListener = (String text) -> {
+            if (key.equals(text)) {
+                locked = false;
+                viewGroup.removeView(hintView);
+                hint.addInfoView(activity, viewGroup);
+                keyTextView.setEnabled(false); // TODO could use some more juice
+                keyTextView.getRootView().clearFocus();
             }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (key.equals(editable.toString())) {
-                    locked = false;
-                    viewGroup.removeView(hintView);
-                    hint.addInfoView(activity, viewGroup);
-                    keyTextView.setEnabled(false); // TODO could use some more juice
-                }
-            }
-        });
+        };
+        Util.configureEditText(keyTextView, "", textListener);
 
         ImageView iconImageView = hintView.findViewById(R.id.lock_icon);
         Drawable iconImage = ResourcesCompat.getDrawable(hintView.getResources(),
-                selectable.getIconId(), hintView.getContext().getTheme());
+                hintProvider.getIconId(), hintView.getContext().getTheme());
         iconImageView.setImageDrawable(iconImage);
-        iconImageView.setOnClickListener(view -> InspectActivity.open(selectable, activity));
+        iconImageView.setOnClickListener(view -> InspectActivity.open(activity, hintProvider));
+
+        viewGroup.addView(hintView);
     }
 
 }

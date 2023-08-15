@@ -42,8 +42,8 @@ public class InspectActivity extends AppCompatActivity {
         iconView.setOnClickListener(view -> finish());
     }
 
-    public static void open(@NotNull Selectable selectable,
-                            @NotNull AppCompatActivity currentActivity) {
+    public static void open(@NotNull AppCompatActivity currentActivity,
+                            @NotNull Selectable selectable) {
         AcceptAllSelector.getAcceptAllSelector(R.id.inspectAllSelector,
                 new InfoEdit(currentActivity.getResources()));
         SelectionCrier.getInstance().select(selectable);

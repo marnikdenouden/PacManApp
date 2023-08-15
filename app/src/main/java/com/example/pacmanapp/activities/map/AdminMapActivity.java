@@ -53,6 +53,7 @@ public class AdminMapActivity extends AppCompatActivity
     private LocationUpdater locationUpdater;
     private MapMarkers mapMarkers;
     private Selector selector;
+    private SelectableContent.Preview preview;
     private final Selector.SelectionListener selectionListener = AdminMapActivity.this::onSelection;
 
     @Override
@@ -76,6 +77,10 @@ public class AdminMapActivity extends AppCompatActivity
         // Get selectors to make sure they get relevant selections.
         AcceptAllSelector.getAcceptAllSelector(R.id.inspectAllSelector, new InfoInspect(getResources()));
         selector = AcceptAllSelector.getAcceptAllSelector(R.id.editAllSelector, new InfoEdit(getResources()));
+
+        preview = new SelectableContent.Preview(selector.getSelected()); // TODO could replace preview by blank edit (and blank inspect in PlayMapActivity)
+        ViewGroup viewGroup = findViewById(R.id.selected_preview);
+        preview.addView(this, viewGroup, true);
 
         Clock clock = new Clock(AdminMapActivity.this, AdminMapActivity.this);
         clock.setTime(Duration.ofSeconds(2678));
@@ -164,7 +169,7 @@ public class AdminMapActivity extends AppCompatActivity
      * Update selectable content with new fetched selected.
      */
     private void onSelection(Selectable selectable) {
-        SelectableContent.setData(this, selectable, false);
+        preview.update(selectable);
     }
 
     /**

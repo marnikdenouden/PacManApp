@@ -46,6 +46,7 @@ public class PlayMapActivity extends AppCompatActivity
     private LocationUpdater locationUpdater;
     private MapMarkers mapMarkers;
     private Selector selector;
+    private SelectableContent.Preview preview;
     private final Selector.SelectionListener selectionListener = PlayMapActivity.this::onSelection;
 
     @Override
@@ -59,6 +60,10 @@ public class PlayMapActivity extends AppCompatActivity
 
         // Get selector to make sure it gets relevant selections.
         selector = AcceptAllSelector.getAcceptAllSelector(R.id.inspectAllSelector, new InfoInspect(getResources()));
+
+        preview = new SelectableContent.Preview(selector.getSelected());
+        ViewGroup viewGroup = findViewById(R.id.selected_preview);
+        preview.addView(this, viewGroup, false);
 
         if (!SavePlatform.hasSave()) {
             Navigate.navigate(this, SaveActivity.class);
@@ -165,7 +170,7 @@ public class PlayMapActivity extends AppCompatActivity
      * Update selectable content with new fetched selected.
      */
     private void onSelection(Selectable selectable) {
-        SelectableContent.setData(this, selectable, false);
+        preview.update(selectable);
     }
 
     /**

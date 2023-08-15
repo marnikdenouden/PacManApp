@@ -19,7 +19,7 @@ public class Navigate {
     public static void navigate(Intent intent, AppCompatActivity currentActivity,
                                 Class<? extends AppCompatActivity> nextActivityClass) {
         Log.i(TAG, "User tries to navigate to " + nextActivityClass.getSimpleName());
-        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); // TODO update this flag, for example such that you can't return to an outdated version of the map activity.
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.setClass(currentActivity, nextActivityClass);
         currentActivity.startActivity(intent);
         // Except for activities that implement the base activity,

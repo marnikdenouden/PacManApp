@@ -23,6 +23,11 @@ public enum Direction {
         this.drawableGhostEyesId = drawableGhostEyesId;
     }
 
+    /**
+     * Get the degrees of the direction.
+     *
+     * @return Degrees of the direction
+     */
     int getDegrees() {
         return degrees;
     }

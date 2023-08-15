@@ -28,6 +28,10 @@
             android:exported="false">
         </activity>
         <activity
+            android:name=".activities.edit.EditHintActivity"
+            android:exported="false">
+        </activity>
+        <activity
             android:name=".activities.inspect.InspectActivity"
             android:exported="false">
         </activity>

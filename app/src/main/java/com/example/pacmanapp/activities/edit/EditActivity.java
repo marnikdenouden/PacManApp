@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.inspect.InspectActivity;
+import com.example.pacmanapp.activities.save.CreateSaveDialog;
 import com.example.pacmanapp.navigation.Navigate;
 import com.example.pacmanapp.selection.SelectionCrier;
 import com.example.pacmanapp.selection.selectables.InfoEdit;
@@ -27,7 +28,7 @@ public class EditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_inspect);
+        setContentView(R.layout.activity_edit); // TODO add "Add hint" button to layout and activity.
         selector = AcceptAllSelector.getAcceptAllSelector(R.id.editAllSelector,
                 new InfoEdit(getResources()));
         NavigationBar.configure(this, PageType.EDIT);
@@ -40,11 +41,11 @@ public class EditActivity extends AppCompatActivity {
         SelectableContent.setData(this, selected, true);
         ImageView iconView = findViewById(R.id.selectable_icon);
         iconView.setOnClickListener(view ->
-                InspectActivity.open(selected, EditActivity.this));
+                InspectActivity.open(EditActivity.this, selected));
     }
 
-    public static void open(@NotNull Selectable selectable,
-                            @NotNull AppCompatActivity currentActivity) {
+    public static void open(@NotNull AppCompatActivity currentActivity,
+                            @NotNull Selectable selectable) {
         AcceptAllSelector.getAcceptAllSelector(R.id.editAllSelector,
                 new InfoEdit(currentActivity.getResources()));
         SelectionCrier.getInstance().select(selectable);
