@@ -27,24 +27,29 @@ public class SelectableContent {
      * Add all data of selectable to the activity.
      *
      * @param activity Activity that is active
+     * @param viewGroup ViewGroup that selectable data is contained in
      * @param selectable Selectable to set content for
+     * @param editable Truth assignment, if selectable should be editable
      */
-    public static void setData(AppCompatActivity activity, Selectable selectable, boolean editable) {
-        setIcon(activity, selectable, editable);
-        setLabel(activity, selectable);
-        setDescription(activity, selectable);
-        setContent(activity, selectable, editable);
+    public static void setData(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup,
+                               @NotNull Selectable selectable, boolean editable) {
+        setIcon(activity, viewGroup, selectable, editable);
+        setLabel(activity, viewGroup, selectable);
+        setDescription(activity, viewGroup, selectable);
+        setContent(activity, viewGroup, selectable, editable);
     }
 
     /**
      * Set icon for the selectable.
      *
      * @param activity Activity that is active
+     * @param viewGroup ViewGroup that selectable data is contained in
      * @param selectable Selectable to set icon for
      * @param editable Truth assignment, if selectable should be editable
      */
-    private static void setIcon(AppCompatActivity activity, Selectable selectable, boolean editable) {
-        ImageView iconImageView = activity.findViewById(R.id.selectable_icon);
+    private static void setIcon(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup,
+                                @NotNull Selectable selectable, boolean editable) {
+        ImageView iconImageView = viewGroup.findViewById(R.id.selectable_icon);
         if (iconImageView == null) {
             Log.i(TAG, "No icon image found to set for content of selectable "
                     + selectable.getLabel() + " activity of class " + activity.getLocalClassName());
@@ -67,10 +72,12 @@ public class SelectableContent {
      * Set label for selectable.
      *
      * @param activity Activity that is active
+     * @param viewGroup ViewGroup that selectable data is contained in
      * @param selectable Selectable to set label for
      */
-    private static void setLabel(AppCompatActivity activity, Selectable selectable) {
-        TextView labelTextView = activity.findViewById(R.id.selectable_label);
+    private static void setLabel(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup,
+                                 Selectable selectable) {
+        TextView labelTextView = viewGroup.findViewById(R.id.selectable_label);
         if (labelTextView == null) {
             Log.i(TAG, "No label text found to set for content of selectable "
                     + selectable.getLabel() + " activity of class " + activity.getLocalClassName());
@@ -84,10 +91,13 @@ public class SelectableContent {
      * Set description for selectable.
      *
      * @param activity Activity that is active
+     * @param viewGroup ViewGroup that selectable data is contained in
      * @param selectable Selectable to set description for
      */
-    private static void setDescription(AppCompatActivity activity, Selectable selectable) {
-        TextView descriptionTextView = activity.findViewById(R.id.selectable_description);
+    private static void setDescription(@NotNull AppCompatActivity activity,
+                                       @NotNull ViewGroup viewGroup,
+                                       @NotNull Selectable selectable) {
+        TextView descriptionTextView = viewGroup.findViewById(R.id.selectable_description);
         if (descriptionTextView == null) {
             Log.i(TAG, "No description text found to set for content of selectable "
                     + selectable.getLabel() + " activity of class " + activity.getLocalClassName());
@@ -101,11 +111,14 @@ public class SelectableContent {
      * Set content for selectable.
      *
      * @param activity Activity that is active
+     * @param viewGroup ViewGroup that selectable data is contained in
      * @param selectable Selectable to set content for
      * @param editable Truth assignment, if content should be editable
      */
-    private static void setContent(AppCompatActivity activity, Selectable selectable, boolean editable) {
-        LinearLayout linearLayoutContent = activity.findViewById(R.id.selectable_content);
+    private static void setContent(@NotNull AppCompatActivity activity,
+                                   @NotNull ViewGroup viewGroup, @NotNull Selectable selectable,
+                                   boolean editable) {
+        LinearLayout linearLayoutContent = viewGroup.findViewById(R.id.selectable_content);
         if (linearLayoutContent == null) {
             Log.i(TAG, "No content container found to add content to for selectable "
                     + selectable.getLabel() + " activity of class " + activity.getLocalClassName());
@@ -120,9 +133,16 @@ public class SelectableContent {
 
     public static class Preview implements Content {
         private AppCompatActivity activity;
+        private ViewGroup selectableView;
         private boolean editable;
         private final Selectable selectable;
-        // TODO add java doc comments.
+
+        /**
+         * Creates a preview for a selectable. Preview can be added as content view.
+         *
+         *
+         * @param selectable Selectable to use for the view data.
+         */
         public Preview(@NotNull Selectable selectable) {
             this.selectable = selectable;
         }
@@ -132,15 +152,27 @@ public class SelectableContent {
                             @NonNull ViewGroup viewGroup, boolean editable) {
             this.activity = activity;
             this.editable = editable;
-            View view = LayoutInflater.from(activity).inflate(R.layout.selectable_preview, viewGroup);
+            selectableView = (ViewGroup) LayoutInflater.from(activity)
+                    .inflate(R.layout.selectable_preview, viewGroup, false);
+            viewGroup.addView(selectableView);
             update(selectable);
-            return view;
+            return selectableView;
         }
 
-        public void update(Selectable selectable) {
-            setDescription(activity, selectable);
-            setLabel(activity, selectable);
-            setIcon(activity, selectable, editable);
+        /**
+         * Update the last view that was added with new selectable data.
+         *
+         * @pre AddView has been called before
+         * @param selectable Selectable to use for new data
+         */
+        public void update(@NotNull Selectable selectable) {
+            if (selectableView == null || activity == null) {
+                throw new IllegalStateException("Pre condition violated, could not update preview");
+            }
+
+            setDescription(activity, selectableView, selectable);
+            setLabel(activity, selectableView, selectable);
+            setIcon(activity, selectableView, selectable, editable);
         }
     }
 }

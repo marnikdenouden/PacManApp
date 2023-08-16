@@ -1,6 +1,7 @@
 package com.example.pacmanapp.activities.inspect;
 
 import android.os.Bundle;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
@@ -37,7 +38,8 @@ public class InspectActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Selectable selected = selector.getSelected();
-        SelectableContent.setData(this, selected, false);
+        ViewGroup viewGroup = findViewById(R.id.inspect_activity);
+        SelectableContent.setData(this, viewGroup, selected, false);
         ImageView iconView = findViewById(R.id.selectable_icon);
         iconView.setOnClickListener(view -> finish());
     }

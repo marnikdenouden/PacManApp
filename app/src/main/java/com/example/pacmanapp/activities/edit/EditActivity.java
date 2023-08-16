@@ -2,6 +2,7 @@ package com.example.pacmanapp.activities.edit;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
@@ -38,7 +39,8 @@ public class EditActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Selectable selected = selector.getSelected();
-        SelectableContent.setData(this, selected, true);
+        ViewGroup viewGroup = findViewById(R.id.edit_activity);
+        SelectableContent.setData(this, viewGroup, selected, true);
         ImageView iconView = findViewById(R.id.selectable_icon);
         iconView.setOnClickListener(view ->
                 InspectActivity.open(EditActivity.this, selected));

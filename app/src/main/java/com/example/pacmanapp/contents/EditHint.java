@@ -40,7 +40,7 @@ public class EditHint implements Content {
         this.viewGroup = viewGroup;
         this.activity = activity;
         this.editable = editable;
-        
+
         if (editable) {
             View.OnClickListener onClickListener = view -> new EditHintDialog(activity, this)
                     .show(activity.getSupportFragmentManager(), "EditHint");
