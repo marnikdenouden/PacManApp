@@ -19,7 +19,7 @@ public class Navigate {
     public static void navigate(Intent intent, AppCompatActivity currentActivity,
                                 Class<? extends AppCompatActivity> nextActivityClass) {
         Log.i(TAG, "User tries to navigate to " + nextActivityClass.getSimpleName());
-        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.setClass(currentActivity, nextActivityClass);
         currentActivity.startActivity(intent);
         // Except for activities that implement the base activity,

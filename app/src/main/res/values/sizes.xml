@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="defaultMapSize">1320dp</dimen>
-    <dimen name="defaultMarkerSize">32dp</dimen>
+<!--    <dimen name="defaultMapSize">1320dp</dimen>-->
+<!--    <dimen name="defaultMarkerSize">32dp</dimen>-->
+    <dimen name="defaultMapSize">660dp</dimen>
+    <dimen name="defaultMarkerSize">16dp</dimen>
         <dimen name="powerPelletSize">30dp</dimen>
         <dimen name="pacDotSize">32dp</dimen>
         <dimen name="defaultCharacterSize">32dp</dimen>

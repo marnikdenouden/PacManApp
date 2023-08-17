@@ -3,45 +3,87 @@
     <style name="Theme.PacManApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowTranslucentStatus">true</item>
 
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/md_theme_dark_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_dark_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/md_theme_dark_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_dark_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/md_theme_dark_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_dark_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/md_theme_dark_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_dark_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/md_theme_dark_tertiary</item>
+        <item name="colorOnTertiary">@color/md_theme_dark_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/md_theme_dark_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_dark_onTertiaryContainer</item>
+        <item name="colorError">@color/md_theme_dark_error</item>
+        <item name="colorErrorContainer">@color/md_theme_dark_errorContainer</item>
+        <item name="colorOnError">@color/md_theme_dark_onError</item>
+        <item name="colorOnErrorContainer">@color/md_theme_dark_onErrorContainer</item>
+        <item name="android:colorBackground">@color/md_theme_dark_background</item>
+        <item name="colorOnBackground">@color/md_theme_dark_onBackground</item>
+        <item name="colorSurface">@color/md_theme_dark_surface</item>
+        <item name="colorOnSurface">@color/md_theme_dark_onSurface</item>
+        <item name="colorSurfaceVariant">@color/md_theme_dark_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_dark_onSurfaceVariant</item>
+        <item name="colorOutline">@color/md_theme_dark_outline</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_dark_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/md_theme_dark_inverseSurface</item>
+        <item name="colorPrimaryInverse">@color/md_theme_dark_inversePrimary</item>
 
-        <!-- Set default dialog theme -->
+        <item name="fontFamily">@font/montserrat</item>
+
         <item name="alertDialogTheme">@style/DialogTheme</item>
         <item name="android:alertDialogTheme">?alertDialogTheme</item>
         <item name="dialogTheme">?alertDialogTheme</item>
         <item name="android:dialogTheme">?alertDialogTheme</item>
     </style>
 
+<!--    <style name="Theme.PacManApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">-->
+<!--        <item name="android:windowTranslucentStatus">true</item>-->
+
+<!--        &lt;!&ndash; Primary theme color. &ndash;&gt;-->
+<!--        <item name="colorPrimary">@color/blue_base</item>-->
+<!--        <item name="colorPrimaryVariant">@color/blue_variant</item>-->
+<!--        <item name="colorOnPrimary">@color/white</item>-->
+<!--        &lt;!&ndash; Secondary theme color. &ndash;&gt;-->
+<!--        <item name="colorSecondary">@color/yellow_base</item>-->
+<!--        <item name="colorSecondaryVariant">@color/yellow_variant</item>-->
+<!--        <item name="colorOnSecondary">@color/black</item>-->
+<!--        &lt;!&ndash; Secondary theme color. &ndash;&gt;-->
+<!--        <item name="colorTertiary">@color/red_base</item>-->
+<!--        <item name="colorOnTertiary">@color/white</item>-->
+
+<!--        &lt;!&ndash; Status bar color. &ndash;&gt;-->
+<!--        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>-->
+<!--        &lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+
+<!--        &lt;!&ndash; Set default dialog theme &ndash;&gt;-->
+<!--        <item name="alertDialogTheme">@style/DialogTheme</item>-->
+<!--        <item name="android:alertDialogTheme">?alertDialogTheme</item>-->
+<!--        <item name="dialogTheme">?alertDialogTheme</item>-->
+<!--        <item name="android:dialogTheme">?alertDialogTheme</item>-->
+<!--    </style>-->
+
         <!-- define your dialog theme -->
     <style name="DialogTheme" parent="Theme.MaterialComponents.DayNight.Dialog.MinWidth">
         <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
         <item name="buttonBarNeutralButtonStyle">@style/NeutralButtonStyle</item>
         <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
-        <item name="android:textColor">@color/gray_blue_base</item>
-        <item name="android:textColorHint">@color/light_orange_base</item>
-        <item name="android:textColorPrimary">@color/Pinky</item>
-        <item name="android:textColorSecondary">@color/Blinky</item>
+<!--        <item name="android:textColor">@color/gray_blue_base</item>-->
+<!--        <item name="android:textColorHint">@color/light_orange_base</item>-->
+<!--        <item name="android:textColorPrimary">@color/Pinky</item>-->
+<!--        <item name="android:textColorSecondary">@color/Blinky</item>-->
     </style>
 
     <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/orange_base</item>
+        <item name="android:textColor">?attr/colorTertiary</item>
     </style>
 
     <style name="NeutralButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/cyan_base</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
     </style>
 
     <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/purple_500</item>
+        <item name="android:textColor">?attr/colorSecondary</item>
     </style>
 </resources>

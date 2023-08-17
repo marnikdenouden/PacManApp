@@ -42,7 +42,7 @@
             app:layout_constraintEnd_toStartOf="@id/mapOption"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/icon_background"
-            app:tint="@color/orange_base" />
+            app:tint="@color/navigation_inspect_color" />
 
         <ImageButton
             android:id="@+id/inspectOption"
@@ -71,7 +71,7 @@
             app:layout_constraintStart_toEndOf="@id/inspectOption"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/icon_background"
-            app:tint="@color/cyan_base" />
+            app:tint="@color/navigation_map_color" />
 
         <ImageButton
             android:id="@+id/mapOption"
@@ -100,7 +100,7 @@
             app:layout_constraintStart_toEndOf="@id/mapOption"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/icon_background"
-            app:tint="@color/gray_blue_base" />
+            app:tint="@color/navigation_settings_color" />
 
         <ImageButton
             android:id="@+id/settingsOption"

@@ -47,7 +47,7 @@ public class MapArea extends ConstraintLayout {
     private void setupMapArea() {
         setId(mapAreaId);
         setLayoutParams();
-        setBackgroundColor(getResources().getColor(mapType.getBackgroundColor(), getContext().getTheme()));
+        setBackgroundColor(mapType.getBackgroundColor(getContext()));
     }
 
     /**
@@ -71,7 +71,7 @@ public class MapArea extends ConstraintLayout {
      */
     public void addMarker(Marker marker, boolean displayOnTop) {
         if (displayOnTop) {
-            markerLayout.addView(marker.getImageView(), 0);
+            markerLayout.addView(marker.getImageView());
         } else {
             markerLayout.addView(marker.getImageView(), 0);
         }

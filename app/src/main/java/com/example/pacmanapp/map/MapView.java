@@ -1,7 +1,9 @@
 package com.example.pacmanapp.map;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -45,6 +47,12 @@ public class MapView extends androidx.appcompat.widget.AppCompatImageView {
     private void setMapDrawable(MapType mapType) {
         Drawable drawable = ResourcesCompat.getDrawable(getResources(),
                 mapType.getDrawable(), getContext().getTheme());
+        if (drawable == null) {
+            Log.e(TAG, "Could not set drawable for map, as drawable of map type " +
+                    mapType.name() + " is null");
+            return;
+        }
+        drawable.setTint(mapType.getLineColor(getContext()));
         setImageDrawable(drawable);
     }
 
