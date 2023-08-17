@@ -8,6 +8,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.pacmanapp.R;
+
 public class ClearSavesDialog extends DialogFragment {
     private final SaveActivity activity;
 
@@ -18,7 +20,7 @@ public class ClearSavesDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.DialogTheme);
         builder.setMessage("Are you sure you want to remove all saves?")
                 .setPositiveButton("Confirm", (dialogInterface, i) -> {
                     activity.clearSaves();

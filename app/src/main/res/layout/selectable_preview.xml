@@ -6,6 +6,8 @@
 
     <TextView
         android:id="@id/selectable_label"
+        android:textAppearance="@style/text_title_small"
+        android:textColor="?attr/colorOnSurface"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -30,6 +32,8 @@
 
     <TextView
         android:id="@id/selectable_description"
+        android:textAppearance="@style/text_description"
+        android:textColor="?attr/colorOnSurface"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="This is a description of what ever is selected in this activity.

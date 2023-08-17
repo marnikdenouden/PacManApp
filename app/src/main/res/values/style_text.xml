@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style
-        name="text" >
+        name="text">
         <item name="android:fontFamily" >@font/montserrat</item>
         <item name="android:textSize" >16sp</item>
-        <item name="android:textColor" >@color/black_text</item>
     </style>
     <style
-        name="text_bold" >
+        name="text_bold">
         <item name="android:fontFamily" >@font/montserrat_bold</item>
+        <item name="android:textSize" >16sp</item>
+    </style>
+    <style
+        name="text_bold_extra" parent="text_bold">
         <item name="android:textSize" >28sp</item>
-        <item name="android:textColor" >@color/black_text</item>
         <item name="android:textAllCaps" >true</item>
     </style>
     <style
         name="text_title">
         <item name="android:fontFamily" >@font/montserrat_bold</item>
         <item name="android:textSize" >36sp</item>
-        <item name="android:textColor" >@color/white_text</item>
         <item name="android:textAlignment" >gravity</item>
+    </style>
+    <style
+        name="text_title_small" parent="text_title">
+        <item name="android:textSize" >24sp</item>
     </style>
     <style
         name="text_title_extra" parent="text_title">
@@ -26,19 +31,9 @@
         <item name="android:textSize" >40sp</item>
     </style>
     <style
-        name="text_title_black" parent="text_title">
-        <item name="android:textColor" >@color/black_text</item>
-        <item name="android:textSize" >32sp</item>
-    </style>
-    <style
-        name="text_title_black_small" parent="text_title_black" >
-        <item name="android:textSize" >16sp</item>
-    </style>
-    <style
         name="text_button">
         <item name="android:fontFamily" >@font/montserrat_medium</item>
         <item name="android:textSize" >16sp</item>
-        <item name="android:textColor" >@color/white_text</item>
         <item name="android:textAllCaps" >true</item>
     </style>
     <style
@@ -46,14 +41,9 @@
         <item name="android:textSize" >40sp</item>
     </style>
     <style
-        name="text_button_black" parent="text_button">
-        <item name="android:textColor" >@color/black_text</item>
-    </style>
-    <style
         name="text_description" >
         <item name="android:fontFamily" >@font/montserrat_light</item>
         <item name="android:textSize" >16sp</item>
-        <item name="android:textColor" >@color/black_text</item>
         <item name="autoSizeMinTextSize" >12dp</item>
         <item name="android:textAlignment" >gravity</item>
     </style>
@@ -71,13 +61,5 @@
         name="text_description_pop" parent="text_description" >
         <item name="android:fontFamily" >@font/montserrat_medium</item>
         <item name="android:textSize" >18sp</item>
-    </style>
-    <style
-        name="text_description_gray" parent="text_description" >
-        <item name="android:textColor" >@color/gray_text</item>
-    </style>
-    <style
-        name="text_description_white" parent="text_description" >
-        <item name="android:textColor" >@color/white_text</item>
     </style>
 </resources>

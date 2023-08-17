@@ -37,7 +37,7 @@ public class EditHintDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.DialogTheme);
 
         @SuppressLint("InflateParams") View editHintView = LayoutInflater.from(activity)
                 .inflate(R.layout.activity_edit_hint, null, false);

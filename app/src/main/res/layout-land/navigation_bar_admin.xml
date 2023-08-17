@@ -17,8 +17,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/background"
-        app:tint="@color/black_base" />
+        app:srcCompat="@drawable/background" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@id/admin_navigation_bar"
@@ -42,7 +41,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/icon_background"
-            app:tint="@color/gray_blue_base" />
+            app:tint="@color/navigation_settings_color" />
 
         <ImageButton
             android:id="@+id/settingsOption"
@@ -56,7 +55,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/icon_settings"
-            app:tint="@color/white_text" />
+            app:tint="?attr/colorSurface" />
 
         <ImageView
             android:id="@+id/pageMarkerMap"
@@ -71,7 +70,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/settingsOption"
             app:srcCompat="@drawable/icon_background"
-            app:tint="@color/cyan_base" />
+            app:tint="@color/navigation_map_color" />
 
         <ImageButton
             android:id="@+id/mapOption"
@@ -85,7 +84,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/settingsOption"
             app:srcCompat="@drawable/icon_map"
-            app:tint="@color/white_text" />
+            app:tint="?attr/colorSurface" />
 
         <ImageView
             android:id="@+id/pageMarkerEdit"
@@ -100,7 +99,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/mapOption"
             app:srcCompat="@drawable/icon_background"
-            app:tint="@color/orange_base" />
+            app:tint="@color/navigation_edit_color" />
 
         <ImageButton
             android:id="@+id/editOption"
@@ -114,7 +113,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/mapOption"
             app:srcCompat="@drawable/icon_edit"
-            app:tint="@color/white_text"/>
+            app:tint="?attr/colorSurface" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

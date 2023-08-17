@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="navigation_map_color">@color/orange_base</color>
-    <color name="navigation_edit_color">@color/cyan_base</color>
-    <color name="navigation_inspect_color">@color/cyan_base</color>
-    <color name="navigation_settings_color">@color/gray_blue_base</color>
+    <color name="navigation_map_color">@color/primary</color>
+    <color name="navigation_edit_color">@color/tertiary</color>
+    <color name="navigation_inspect_color">@color/tertiary</color>
+    <color name="navigation_settings_color">@color/secondary</color>
 </resources>

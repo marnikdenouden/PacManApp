@@ -2,12 +2,18 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".activities.save.SaveActivity" >
 
     <EditText
         android:id="@+id/createSaveName"
+        android:textAppearance="@style/text_description"
+        android:textColor="?attr/colorOnSurface"
+        android:textColorHint="?attr/colorOnSurfaceVariant"
+        android:backgroundTint="?attr/colorTertiary"
+        android:textCursorDrawable="@drawable/text_cursor_tertiary"
+        android:textColorHighlight="?attr/colorTertiaryContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
