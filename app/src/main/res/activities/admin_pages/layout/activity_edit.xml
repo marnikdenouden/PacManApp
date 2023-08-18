@@ -6,30 +6,59 @@
     tools:context=".activities.edit.EditActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<!-- TODO Account for top space of transparent top bar -->
-    <TextView
-        android:id="@id/selectable_label"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        android:gravity="center_horizontal|center_vertical"
-        android:text="Edit info"
-        android:textAlignment="gravity"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/selectable_icon"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@id/selectable_icon"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:minHeight="160dp"
+        android:layout_marginBottom="@dimen/negativeRoundRadius"
+        android:background="@drawable/drawable_left_bottom_round_corner"
+        android:backgroundTint="?attr/colorTertiary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/icon_edit" />
+        app:layout_constraintVertical_bias="0" >
+
+        <Space
+            android:id="@+id/top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/topBarHeight"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@id/selectable_label"
+            android:textAppearance="@style/text_title"
+            android:textColor="?attr/colorOnTertiary"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="Edit info"
+            android:textAlignment="gravity"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/selectable_icon"
+            app:layout_constraintTop_toBottomOf="@id/top_bar" />
+
+        <ImageView
+            android:id="@id/selectable_icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="24dp"
+            android:layout_marginStart="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/selectable_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/top_bar"
+            app:srcCompat="@drawable/icon_edit" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@id/selectable_description"
@@ -43,12 +72,14 @@
         app:layout_constraintBottom_toTopOf="@id/selectable_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/selectable_label" />
+        app:layout_constraintTop_toBottomOf="@id/top_container" />
 
     <LinearLayout
         android:id="@+id/selectable_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:minHeight="200dp"
+        android:maxHeight="400dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         app:layout_constraintBottom_toTopOf="@id/bottom_bar"

@@ -1,14 +1,16 @@
 package com.example.pacmanapp.contents;
 
+import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.pacmanapp.R;
 
@@ -49,14 +51,16 @@ public class Util {
      * @return View view that was added to the specified view group
      */
     public static View addButton(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup,
-                                 boolean editable, String label, @NotNull Content content,
+                                 boolean editable, int iconId, @NotNull Content content,
                                  View.OnClickListener onClickListener) {
         View view = LayoutInflater.from(activity).inflate(R.layout.add_button , viewGroup,
                 false);
         content.addView(activity, view.findViewById(R.id.content_container), editable);
-        Button button = view.findViewById(R.id.add_button);
-        button.setText(label);
-        button.setOnClickListener(onClickListener);
+        ImageView imageButton = view.findViewById(R.id.added_button);
+        imageButton.setOnClickListener(onClickListener);
+        ImageView imageIcon = view.findViewById(R.id.added_button_icon);
+        Drawable iconDrawable = AppCompatResources.getDrawable(activity, iconId);
+        imageIcon.setImageDrawable(iconDrawable);
         viewGroup.addView(view);
         return view;
     }

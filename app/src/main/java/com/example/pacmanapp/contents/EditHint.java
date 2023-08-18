@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.edit.EditHintDialog;
 import com.example.pacmanapp.selection.Selectable;
 
@@ -45,7 +46,7 @@ public class EditHint implements Content {
         if (editable) {
             View.OnClickListener onClickListener = view -> new EditHintDialog(activity, this)
                     .show(activity.getSupportFragmentManager(), "EditHint");
-            view = Util.addButton(activity, viewGroup, true, "Edit", content,
+            view = Util.addButton(activity, viewGroup, true, R.drawable.icon_edit, content,
             onClickListener);
         } else {
             view = content.addView(activity, viewGroup, false);

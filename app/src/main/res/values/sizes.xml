@@ -10,6 +10,7 @@
             <dimen name="pacmanMarkerSize">32dp</dimen>
             <dimen name="ghostMarkerSize">32dp</dimen>
 
+    <dimen name="topBarHeight">64dp</dimen>
     <dimen name="roundRadius">36dp</dimen>
     <dimen name="negativeRoundRadius">-36dp</dimen>
 </resources>
