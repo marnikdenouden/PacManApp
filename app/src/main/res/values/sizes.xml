@@ -9,7 +9,6 @@
         <dimen name="defaultCharacterSize">32dp</dimen>
             <dimen name="pacmanMarkerSize">32dp</dimen>
             <dimen name="ghostMarkerSize">32dp</dimen>
-    <dimen name="digitSize">14dp</dimen>
 
     <dimen name="roundRadius">36dp</dimen>
     <dimen name="negativeRoundRadius">-36dp</dimen>

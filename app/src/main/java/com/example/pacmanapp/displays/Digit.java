@@ -11,29 +11,48 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Digit {
-    private ImageView imageView;
+    private final ImageView imageView;
 
     private Map<Number, Drawable> numberDrawableMap;
 
-    Digit(Context context, AppCompatActivity activity, int digitId) {
-        this(context, activity.findViewById(digitId));
+    /**
+     * Create digit for the specified context, image view and color id.
+     *
+     * @param context Context to create digits with
+     * @param activity Activity to create digits in
+     * @param digitId int Id of view to create digits in
+     * @param colorId int color id to use for the digits
+     */
+    Digit(Context context, AppCompatActivity activity, int digitId, int colorId) {
+        this(context, activity.findViewById(digitId), colorId);
     }
-// TODO allow color of digit to be set, so clock and score can be distinct
-    Digit(Context context, ImageView imageView) {
+
+    /**
+     * Create digit for the specified context, image view and color id.
+     *
+     * @param context Context to create digits with
+     * @param imageView Imageview to create digits in
+     * @param colorId int color id to use for the digits
+     */
+    Digit(Context context, ImageView imageView, int colorId) {
         this.imageView = imageView;
-        createNumberDrawableMap(context);
+        createNumberDrawableMap(context, colorId);
     }
 
     /**
      * Create number drawable map for the digit.
      *
      * @param context Context to get drawable with
+     * @param colorId Int color id to set for drawables
      */
-    private void createNumberDrawableMap(Context context) {
+    private void createNumberDrawableMap(Context context, int colorId) {
         numberDrawableMap = new HashMap<>();
 
         for (Number number: Number.values()) {
-            numberDrawableMap.put(number, number.getDrawable(context));
+            Drawable drawable = number.getDrawable(context);
+            int color = context.getResources().getColor(colorId, context.getTheme());
+            drawable.setTint(color);
+            numberDrawableMap.put(number, drawable);
         }
 
     }

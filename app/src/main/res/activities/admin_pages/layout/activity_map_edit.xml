@@ -42,33 +42,62 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <include
-            android:id="@+id/clock"
-            layout="@layout/clock"
-            android:layout_width="0dp"
-            android:layout_height="28dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="32dp"
+        <TextView
+            android:id="@+id/score_text"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintBottom_toTopOf="@id/score"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:text="Score"
+            android:textAlignment="textEnd"
+            android:textAppearance="@style/text_bold_extra"
+            android:textColor="?attr/colorOnPrimaryContainer"
+            app:layout_constraintBottom_toBottomOf="@id/score"
+            app:layout_constraintEnd_toStartOf="@id/score"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/top_bar" />
+            app:layout_constraintTop_toTopOf="@id/score" />
 
         <include
             android:id="@+id/score"
             layout="@layout/score"
             android:layout_width="0dp"
-            android:layout_height="28dp"
+            android:layout_height="20sp"
             android:layout_marginBottom="16dp"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toTopOf="@id/clock"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/score_text"
+            app:layout_constraintTop_toBottomOf="@id/top_bar" />
+
+        <ImageView
+            android:id="@+id/time_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="72dp"
+            android:layout_marginEnd="16dp"
+            android:text="Time"
+            app:srcCompat="@drawable/time_icon"
+            app:tint="?attr/colorOnPrimaryContainer"
+            app:layout_constraintBottom_toBottomOf="@id/clock"
+            app:layout_constraintEnd_toStartOf="@id/clock"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/clock" />
+
+        <include
+            android:id="@+id/clock"
+            layout="@layout/clock"
+            android:layout_width="0dp"
+            android:layout_height="20sp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/clock" />
+            app:layout_constraintStart_toEndOf="@id/time_icon"
+            app:layout_constraintTop_toBottomOf="@id/score" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

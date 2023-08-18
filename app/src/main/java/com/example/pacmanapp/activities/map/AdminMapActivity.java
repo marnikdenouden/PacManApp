@@ -84,11 +84,13 @@ public class AdminMapActivity extends AppCompatActivity
         ViewGroup selectableView = findViewById(R.id.selected_preview);
         preview.configure(this, selectableView, true);
 
-        Clock clock = new Clock(AdminMapActivity.this, AdminMapActivity.this);
+        Clock clock = new Clock(AdminMapActivity.this, AdminMapActivity.this,
+                R.color.onPrimaryContainer);
         clock.setTime(Duration.ofSeconds(2678));
 
         Score score = new Score(5, R.id.scoreLayout,
-                AdminMapActivity.this, AdminMapActivity.this);
+                AdminMapActivity.this, AdminMapActivity.this,
+                R.color.onPrimaryContainer);
         score.setValue(4678);
         locationUpdater = new LocationUpdater(AdminMapActivity.this);
     }

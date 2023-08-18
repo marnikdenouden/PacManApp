@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.time.Duration;
 
 public class Clock {
@@ -21,16 +23,30 @@ public class Clock {
     Digit second_0;
     Digit second_1;
 
-    public Clock(Context context, AppCompatActivity activity) {
-        createDigits(context, activity);
+    /**
+     * Create clock with specified context, activity and color id.
+     *
+     * @param context Context to create clock with
+     * @param activity Activity to create clock in
+     * @param colorId int color id to use for clock
+     */
+    public Clock(@NotNull Context context, @NotNull AppCompatActivity activity, int colorId) {
+        createDigits(context, activity, colorId);
     }
 
-    void createDigits(Context context, AppCompatActivity activity) {
-        hour = new Digit(context, activity.findViewById(hourId));
-        minute_0 = new Digit(context, activity.findViewById(minuteId_0));
-        minute_1 = new Digit(context, activity.findViewById(minuteId_1));
-        second_0 = new Digit(context, activity.findViewById(secondId_0));
-        second_1 = new Digit(context, activity.findViewById(secondId_1));
+    /**
+     * Create the digits of the clock
+     *
+     * @param context Context to create digits with
+     * @param activity Activity create digits in
+     * @param colorId int color id to use for digits
+     */
+    private void createDigits(@NotNull Context context, @NotNull AppCompatActivity activity, int colorId) {
+        hour = new Digit(context, activity, hourId, colorId);
+        minute_0 = new Digit(context, activity, minuteId_0, colorId);
+        minute_1 = new Digit(context, activity, minuteId_1, colorId);
+        second_0 = new Digit(context, activity, secondId_0, colorId);
+        second_1 = new Digit(context, activity, secondId_1, colorId);
     }
 
     /**

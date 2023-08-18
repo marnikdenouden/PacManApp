@@ -60,7 +60,8 @@ public class PlayMapActivity extends AppCompatActivity
         NavigationBar.configure(this, PageType.MAP);
 
         // Get selector to make sure it gets relevant selections.
-        selector = AcceptAllSelector.getAcceptAllSelector(R.id.inspectAllSelector, new BlankInspect(getResources()));
+        selector = AcceptAllSelector.getAcceptAllSelector(R.id.inspectAllSelector,
+                new BlankInspect(getResources()));
 
         preview = new SelectableContent.Preview(selector.getSelected());
         ViewGroup viewGroup = findViewById(R.id.selected_preview);
@@ -78,11 +79,13 @@ public class PlayMapActivity extends AppCompatActivity
         MapArea.createMap(MapType.PacMan, mapFrame);
 
 
-        Clock clock = new Clock(PlayMapActivity.this, PlayMapActivity.this);
+        Clock clock = new Clock(PlayMapActivity.this, PlayMapActivity.this,
+                R.color.onPrimaryContainer);
         clock.setTime(Duration.ofSeconds(2678));
 
         Score score = new Score(5, R.id.scoreLayout,
-                PlayMapActivity.this, PlayMapActivity.this);
+                PlayMapActivity.this, PlayMapActivity.this,
+                R.color.onPrimaryContainer);
         score.setValue(4678);
 
         locationUpdater = new LocationUpdater(PlayMapActivity.this);
