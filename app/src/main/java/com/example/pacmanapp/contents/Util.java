@@ -53,7 +53,7 @@ public class Util {
     public static View addButton(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup,
                                  boolean editable, int iconId, @NotNull Content content,
                                  View.OnClickListener onClickListener) {
-        View view = LayoutInflater.from(activity).inflate(R.layout.add_button , viewGroup,
+        View view = LayoutInflater.from(activity).inflate(R.layout.content_add_button, viewGroup,
                 false);
         content.addView(activity, view.findViewById(R.id.content_container), editable);
         ImageView imageButton = view.findViewById(R.id.added_button);

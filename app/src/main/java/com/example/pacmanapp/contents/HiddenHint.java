@@ -1,8 +1,6 @@
 package com.example.pacmanapp.contents;
 
 import android.graphics.drawable.Drawable;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +61,7 @@ public class HiddenHint implements Content {
      */
     View addLockView(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup) {
         View hintView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.lock_content, viewGroup, false);
+                .inflate(R.layout.content_lock, viewGroup, false);
 
         EditText keyTextView = hintView.findViewById(R.id.key_input);
         Util.TextListener textListener = (String text) -> {

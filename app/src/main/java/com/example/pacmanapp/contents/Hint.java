@@ -57,7 +57,7 @@ public class Hint implements Content {
      */
     View addInfoView(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup) {
         View hintView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.hint_text, viewGroup, false);
+                .inflate(R.layout.content_hint_text, viewGroup, false);
 
         TextView hintInfoTextView = hintView.findViewById(R.id.hint_text);
         hintInfoTextView.setText(hint);
@@ -85,7 +85,7 @@ public class Hint implements Content {
      */
     View addEditView(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup) {
         View hintView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.hint_text_edit, viewGroup, false);
+                .inflate(R.layout.content_hint_text_edit, viewGroup, false);
 
         EditText hintEditTextView = hintView.findViewById(R.id.hint_text);
         Util.TextListener textListener = (String text) -> hint = text;

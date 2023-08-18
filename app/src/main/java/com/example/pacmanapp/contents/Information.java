@@ -6,6 +6,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.pacmanapp.R;
+
 import org.jetbrains.annotations.NotNull;
 
 public class Information implements Content {
@@ -14,13 +16,15 @@ public class Information implements Content {
     public Information(String info) {
         this.info = info;
     }
-// TODO make a layout for this class, so the text view can be more easily customized and adjusted.
+
     @Override
     public View addView(@NotNull AppCompatActivity activity,
                         @NotNull ViewGroup viewGroup, boolean editable) {
-        TextView textView = new TextView(viewGroup.getContext());
+        View informationView = activity.getLayoutInflater().inflate(R.layout.content_information,
+                viewGroup, false);
+        TextView textView = informationView.findViewById(R.id.information_text);
         textView.setText(info);
-        viewGroup.addView(textView);
-        return textView;
+        viewGroup.addView(informationView);
+        return informationView;
     }
 }
