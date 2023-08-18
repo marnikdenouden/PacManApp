@@ -9,88 +9,165 @@
     tools:context=".activities.map.AdminMapActivity"
     android:id="@+id/layout">
 
-    <include
-        android:id="@+id/clock"
-        layout="@layout/clock"
-        android:layout_width="0dp"
-        android:layout_height="28dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintEnd_toStartOf="@id/score"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <include
-        android:id="@+id/score"
-        layout="@layout/score"
-        android:layout_width="0dp"
-        android:layout_height="28dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/clock"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <FrameLayout
         android:id="@+id/pacManMapFrame"
-        android:layout_width="400dp"
-        android:layout_height="400dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="32dp"
-        app:layout_constraintBottom_toTopOf="@id/ghostInteractionButton"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/negativeRoundRadius"
+        android:layout_marginBottom="@dimen/negativeRoundRadius"
+        app:layout_constraintBottom_toTopOf="@id/bottom_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/score"/>
+        app:layout_constraintTop_toBottomOf="@id/top_container" />
 
-    <Button
-        android:id="@+id/ghostInteractionButton"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:text="Create pac-dot"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="8dp"
-        android:textAllCaps="false"
-        android:textSize="19sp"
-        android:onClick="createPacDot"
-        app:layout_constraintBottom_toTopOf="@id/createPowerPelletButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pacManMapFrame" />
-
-    <Button
-        android:id="@+id/createPowerPelletButton"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="8dp"
-        android:text="Create power pellet"
-        android:textAllCaps="false"
-        android:textSize="19sp"
-        android:onClick="createPowerPellet"
-        app:layout_constraintBottom_toTopOf="@id/bottom_bar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ghostInteractionButton" />
-
-    <FrameLayout
-        android:id="@+id/selected_preview"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="24dp"
-        app:layout_constraintBottom_toTopOf="@id/bottom_bar"
+        android:minHeight="160dp"
+        android:layout_marginBottom="@dimen/negativeRoundRadius"
+        android:background="@drawable/drawable_left_bottom_round_corner"
+        android:backgroundTint="?attr/colorPrimaryVariant"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/ghostInteractionButton"
-        app:layout_constraintTop_toBottomOf="@id/pacManMapFrame" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0" >
 
-    <include
-        android:id="@+id/bottom_bar"
-        layout="@layout/navigation_bar" />
+        <Space
+            android:id="@+id/top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/clock"
+            layout="@layout/clock"
+            android:layout_width="0dp"
+            android:layout_height="28dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toTopOf="@id/score"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/top_bar" />
+
+        <include
+            android:id="@+id/score"
+            layout="@layout/score"
+            android:layout_width="0dp"
+            android:layout_height="28dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/clock" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/add_button"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="8dp"
+        android:scaleX="0.6"
+        android:scaleY="0.6"
+        android:clickable="true"
+        android:onClick="addMarker"
+        app:layout_constraintBottom_toTopOf="@id/bottom_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/circle_shape"
+        app:tint="?attr/colorTertiary" />
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:clickable="false"
+        android:focusable="false"
+        app:layout_constraintBottom_toBottomOf="@id/add_button"
+        app:layout_constraintEnd_toEndOf="@id/add_button"
+        app:layout_constraintStart_toStartOf="@id/add_button"
+        app:layout_constraintTop_toTopOf="@id/add_button"
+        app:srcCompat="@drawable/add_icon"
+        app:tint="?attr/colorOnTertiary" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottom_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:minHeight="160dp"
+        android:layout_marginTop="@dimen/negativeRoundRadius"
+        android:background="@drawable/drawable_right_up_round_corner"
+        android:backgroundTint="?attr/colorSurfaceInverse"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="1" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/selected_preview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="32dp"
+            app:layout_constraintBottom_toTopOf="@id/bottom_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/bottom_container" >
+
+            <TextView
+                android:id="@id/selectable_label"
+                android:textAppearance="@style/text_title_small"
+                android:textColor="?attr/colorOnSurfaceInverse"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical"
+                android:text="Label"
+                android:textAlignment="gravity"
+                app:layout_constraintBottom_toTopOf="@id/selectable_description"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/selectable_icon"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@id/selectable_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:layout_constraintBottom_toBottomOf="@id/selectable_label"
+                app:layout_constraintEnd_toStartOf="@id/selectable_label"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/selectable_label" />
+
+            <TextView
+                android:id="@id/selectable_description"
+                android:textAppearance="@style/text_description"
+                android:textColor="?attr/colorOnSurfaceInverse"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="This is a description of what ever is selected in this activity. So that could be a marker, but maybe that could also be something else."
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/selectable_label" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <include
+            android:id="@+id/bottom_bar"
+            layout="@layout/navigation_bar" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -59,6 +59,6 @@
 
     <include
         android:id="@+id/bottom_bar"
-        layout="@layout/navigation_bar" />
+        layout="@layout/navigation_bar_inverse" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

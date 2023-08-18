@@ -140,29 +140,41 @@ public class SelectableContent {
         /**
          * Creates a preview for a selectable. Preview can be added as content view.
          *
-         *
-         * @param selectable Selectable to use for the view data.
+         * @param selectable Selectable to use for the view data
          */
         public Preview(@NotNull Selectable selectable) {
             this.selectable = selectable;
         }
 
         @Override
-        public View addView(@NonNull AppCompatActivity activity,
-                            @NonNull ViewGroup viewGroup, boolean editable) {
-            this.activity = activity;
-            this.editable = editable;
+        public View addView(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup,
+                            boolean editable) {
             selectableView = (ViewGroup) LayoutInflater.from(activity)
                     .inflate(R.layout.selectable_preview, viewGroup, false);
             viewGroup.addView(selectableView);
-            update(selectable);
+            configure(activity, selectableView, editable);
             return selectableView;
+        }
+
+        /**
+         * Configure the preview with data to use for updating.
+         *
+         * @param activity Activity that preview is placed in
+         * @param selectableView GroupView that data fields are placed in
+         * @param editable Truth assignment, if selectable may be edited
+         */
+        public void configure(@NotNull AppCompatActivity activity,
+                              @NotNull ViewGroup selectableView, boolean editable) {
+            this.activity = activity;
+            this.selectableView = selectableView;
+            this.editable = editable;
+            update(selectable);
         }
 
         /**
          * Update the last view that was added with new selectable data.
          *
-         * @pre AddView has been called before
+         * @pre Configure or addView has been called before
          * @param selectable Selectable to use for new data
          */
         public void update(@NotNull Selectable selectable) {
@@ -174,5 +186,6 @@ public class SelectableContent {
             setLabel(activity, selectableView, selectable);
             setIcon(activity, selectableView, selectable, editable);
         }
+
     }
 }

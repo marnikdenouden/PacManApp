@@ -17,7 +17,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/background" />
+        app:srcCompat="@drawable/background_inverse" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@id/admin_navigation_bar"
@@ -55,7 +55,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/icon_settings"
-            app:tint="?attr/colorSurfaceInverse" />
+            app:tint="?attr/colorSurface" />
 
         <ImageView
             android:id="@+id/pageMarkerMap"
@@ -84,7 +84,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/settingsOption"
             app:srcCompat="@drawable/icon_map"
-            app:tint="?attr/colorSurfaceInverse" />
+            app:tint="?attr/colorSurface" />
 
         <ImageView
             android:id="@+id/pageMarkerEdit"
@@ -113,7 +113,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/mapOption"
             app:srcCompat="@drawable/icon_edit"
-            app:tint="?attr/colorSurfaceInverse" />
+            app:tint="?attr/colorSurface" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

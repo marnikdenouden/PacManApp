@@ -13,6 +13,6 @@
         tools:layout_editor_absoluteY="142dp" />
 
     <include
-        layout="@layout/navigation_bar" />
+        layout="@layout/navigation_bar_inverse" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

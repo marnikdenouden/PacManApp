@@ -55,7 +55,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/icon_inspect"
-            app:tint="?attr/colorSurface" />
+            app:tint="?attr/colorSurfaceInverse" />
 
         <ImageView
             android:id="@+id/pageMarkerMap"
@@ -84,7 +84,7 @@
             app:layout_constraintStart_toEndOf="@id/inspectOption"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/icon_map"
-            app:tint="?attr/colorSurface" />
+            app:tint="?attr/colorSurfaceInverse" />
 
         <ImageView
             android:id="@+id/pageMarkerSettings"
@@ -113,7 +113,7 @@
             app:layout_constraintStart_toEndOf="@id/mapOption"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/icon_settings"
-            app:tint="?attr/colorSurface" />
+            app:tint="?attr/colorSurfaceInverse" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -7,16 +7,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.pacmanapp.R;
 
 public enum NavigationBarType {
-    ADMIN(R.layout.navigation_bar_admin, R.id.admin_navigation_bar, new PageType[] {PageType.EDIT, PageType.ADMIN_MAP, PageType.ADMIN_SETTINGS}),
-    PLAY(R.layout.navigation_bar_play, R.id.play_navigation_bar, new PageType[] {PageType.INSPECT, PageType.MAP, PageType.SETTINGS});
+    ADMIN(R.layout.navigation_bar_admin, R.layout.navigation_bar_admin_inverse,
+            R.id.admin_navigation_bar,
+            new PageType[] {PageType.EDIT, PageType.ADMIN_MAP, PageType.ADMIN_SETTINGS}),
+    PLAY(R.layout.navigation_bar_play, R.layout.navigation_bar_play_inverse,
+            R.id.play_navigation_bar,
+            new PageType[] {PageType.INSPECT, PageType.MAP, PageType.SETTINGS});
 
     private final static String TAG = "NavigationBarType";
 
     private final int navigationBarId;
     private final int layoutId;
+    private final int inverseLayoutId;
     private final PageType[] pageTypes;
-    NavigationBarType(int layoutId, int navigationBarId, PageType[] pageTypes) {
+    NavigationBarType(int layoutId, int inverseLayoutId, int navigationBarId, PageType[] pageTypes) {
         this.layoutId = layoutId;
+        this.inverseLayoutId = inverseLayoutId;
         this.navigationBarId = navigationBarId;
         this.pageTypes = pageTypes;
     }
@@ -41,6 +47,15 @@ public enum NavigationBarType {
      */
     public int getLayoutId() {
         return layoutId;
+    }
+
+    /**
+     * Get the navigation bar inverse layout id.
+     *
+     * @return Inverse layout id for this navigation bar
+     */
+    public int getInverseLayoutId() {
+        return inverseLayoutId;
     }
 
     public static NavigationBarType getNavigationBarType(AppCompatActivity activity) {

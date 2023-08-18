@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.save.SaveActivity;
+import com.example.pacmanapp.selection.selectables.BlankEdit;
 import com.example.pacmanapp.selection.selectables.InfoEdit;
 import com.example.pacmanapp.selection.selectables.InfoInspect;
 import com.example.pacmanapp.displays.Clock;
@@ -55,6 +56,7 @@ public class AdminMapActivity extends AppCompatActivity
     private Selector selector;
     private SelectableContent.Preview preview;
     private final Selector.SelectionListener selectionListener = AdminMapActivity.this::onSelection;
+    private AddMarkerDialog addMarkerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +80,9 @@ public class AdminMapActivity extends AppCompatActivity
         AcceptAllSelector.getAcceptAllSelector(R.id.inspectAllSelector, new InfoInspect(getResources()));
         selector = AcceptAllSelector.getAcceptAllSelector(R.id.editAllSelector, new InfoEdit(getResources()));
 
-        preview = new SelectableContent.Preview(selector.getSelected()); // TODO could replace preview by blank edit (and blank inspect in PlayMapActivity)
-        ViewGroup viewGroup = findViewById(R.id.selected_preview);
-        preview.addView(this, viewGroup, true);
+        preview = new SelectableContent.Preview(new BlankEdit(getResources()));
+        ViewGroup selectableView = findViewById(R.id.selected_preview);
+        preview.configure(this, selectableView, true);
 
         Clock clock = new Clock(AdminMapActivity.this, AdminMapActivity.this);
         clock.setTime(Duration.ofSeconds(2678));
@@ -173,36 +175,38 @@ public class AdminMapActivity extends AppCompatActivity
     }
 
     /**
-     * Create pac dot on last location.
+     * Add marker to current map and location using the add marker dialog.
      *
-     * @param view View that method can be called from.
+     * @param view View that method can be called from
      */
-    public void createPacDot(View view) {
+    public void addMarker(View view) {
         if (!locationUpdater.hasLocation()) {
             Toast.makeText(getApplicationContext(),
-                    "No location received yet, try again later", Toast.LENGTH_SHORT).show();
+                    "Please wait on location", Toast.LENGTH_SHORT).show();
             return;
         }
-        Location location = locationUpdater.getLastLocation();
-        mapMarkers.addMarker(new PacDot(R.id.pacManMapFrame,
-                location.getLatitude(), location.getLongitude(), this));
+
+        addMarkerDialog = new AddMarkerDialog(this, mapMarkers, locationUpdater,
+                R.id.pacManMapFrame);
+        addMarkerDialog.show(getSupportFragmentManager(), "AddMarker");
     }
 
     /**
-     * Create power pellet on last location.
+     * Select pac dot for the add marker dialog.
      *
-     * @param view View that method can be called from.
+     * @param view View that method can be called from
      */
-    public void createPowerPellet(View view) {
-        if (!locationUpdater.hasLocation()) {
-            Toast.makeText(getApplicationContext(),
-                    "No location received yet, try again later", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        Location location = locationUpdater.getLastLocation();
-        mapMarkers.addMarker(new PowerPellet(R.id.pacManMapFrame,
-                location.getLatitude(), location.getLongitude(), this));
+    public void selectPacDot(View view) {
+        addMarkerDialog.selectPacDot();
+    }
 
+    /**
+     * Select power pellet for the add marker dialog.
+     *
+     * @param view View that method can be called from
+     */
+    public void selectPowerPellet(View view) {
+        addMarkerDialog.selectPowerPellet();
     }
 
     /**

@@ -1,4 +1,4 @@
-<vector android:height="24dp" android:width="24dp" android:tint="?attr/colorOnSurface"
+<vector android:height="24dp" android:width="24dp" android:tint="?attr/colorOnSurfaceInverse"
     android:viewportHeight="24" android:viewportWidth="24"
     xmlns:android="http://schemas.android.com/apk/res/android">
 

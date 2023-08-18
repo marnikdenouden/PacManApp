@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.pacmanapp.activities.edit.EditHintDialog;
 import com.example.pacmanapp.selection.Selectable;
 
 import org.jetbrains.annotations.NotNull;

@@ -2,7 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
 
-    <solid android:color="?attr/colorOnSurfaceInverse"/> <!-- Set the background color -->
+    <solid android:color="?attr/colorOnSurface"/> <!-- Set the background color -->
     <corners android:radius="20dp"/> <!-- Set the radius of the corners -->
 
     <padding

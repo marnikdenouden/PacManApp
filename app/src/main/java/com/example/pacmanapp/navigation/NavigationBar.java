@@ -14,6 +14,7 @@ public class NavigationBar {
     // Log tag for NavigationBar
     private static final String TAG = "NavigationBar";
     private static final int navigationBarId = R.id.navigation_bar;
+    private static final int inverseNavigationBarId = R.id.navigation_bar_inverse;
     private static NavigationBarType navigationBarType = NavigationBarType.PLAY;
 
     /**
@@ -76,11 +77,18 @@ public class NavigationBar {
      */
     private static void addNavigationBar(AppCompatActivity activity) {
         ViewGroup viewGroup = (ViewGroup) activity.findViewById(navigationBarId);
-        if (viewGroup == null) {
+        ViewGroup viewGroupInverse = (ViewGroup) activity.findViewById(inverseNavigationBarId);
+        if (viewGroup == null && viewGroupInverse == null) {
             Log.e(TAG, "Could not find navigation bar to set. " +
                     "Make sure the activity " + activity.getLocalClassName() +
                     " includes the navigation bar layout.");
-            throw new NullPointerException("No view group found with navigation bar id " + navigationBarId);
+            throw new NullPointerException("No view group found with valid navigation bar id");
+        }
+
+        if (viewGroup == null) {
+            activity.getLayoutInflater()
+                    .inflate(navigationBarType.getInverseLayoutId(), viewGroupInverse);
+            return;
         }
         activity.getLayoutInflater().inflate(navigationBarType.getLayoutId(), viewGroup);
     }

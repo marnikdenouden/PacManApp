@@ -1,4 +1,4 @@
-package com.example.pacmanapp.contents;
+package com.example.pacmanapp.activities.edit;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -19,6 +19,8 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.contents.EditHint;
+import com.example.pacmanapp.contents.Util;
 import com.example.pacmanapp.navigation.Navigate;
 import com.example.pacmanapp.selection.SelectableContent;
 

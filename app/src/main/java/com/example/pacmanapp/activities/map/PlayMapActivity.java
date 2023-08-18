@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.save.SaveActivity;
+import com.example.pacmanapp.selection.selectables.BlankInspect;
 import com.example.pacmanapp.selection.selectables.InfoInspect;
 import com.example.pacmanapp.displays.Clock;
 import com.example.pacmanapp.displays.Score;
@@ -59,7 +60,7 @@ public class PlayMapActivity extends AppCompatActivity
         NavigationBar.configure(this, PageType.MAP);
 
         // Get selector to make sure it gets relevant selections.
-        selector = AcceptAllSelector.getAcceptAllSelector(R.id.inspectAllSelector, new InfoInspect(getResources()));
+        selector = AcceptAllSelector.getAcceptAllSelector(R.id.inspectAllSelector, new BlankInspect(getResources()));
 
         preview = new SelectableContent.Preview(selector.getSelected());
         ViewGroup viewGroup = findViewById(R.id.selected_preview);
