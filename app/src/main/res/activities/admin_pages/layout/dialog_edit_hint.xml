@@ -67,20 +67,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/hint_text" />
 
-    <Button
-        android:id="@+id/cancel_edit_hint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cancel"
-        tools:layout_editor_absoluteX="117dp"
-        tools:layout_editor_absoluteY="608dp" />
-
-    <Button
-        android:id="@+id/save_edit_hint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save"
-        tools:layout_editor_absoluteX="247dp"
-        tools:layout_editor_absoluteY="608dp" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

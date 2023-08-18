@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -21,8 +20,6 @@ import androidx.fragment.app.DialogFragment;
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.contents.EditHint;
 import com.example.pacmanapp.contents.Util;
-import com.example.pacmanapp.navigation.Navigate;
-import com.example.pacmanapp.selection.SelectableContent;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -42,7 +39,7 @@ public class EditHintDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.DialogTheme);
 
         @SuppressLint("InflateParams") View editHintView = LayoutInflater.from(activity)
-                .inflate(R.layout.activity_edit_hint, null, false);
+                .inflate(R.layout.dialog_edit_hint, null, false);
 
         EditText keyTextView = editHintView.findViewById(R.id.key_text);
         Util.configureEditText(keyTextView, hintEditor.getKey(), hintEditor::setKey);
