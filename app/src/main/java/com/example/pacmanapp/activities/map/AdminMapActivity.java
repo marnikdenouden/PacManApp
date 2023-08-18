@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -17,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.save.SaveActivity;
+import com.example.pacmanapp.selection.selectables.Blank;
 import com.example.pacmanapp.selection.selectables.BlankEdit;
 import com.example.pacmanapp.selection.selectables.InfoEdit;
 import com.example.pacmanapp.selection.selectables.InfoInspect;
@@ -32,8 +32,6 @@ import com.example.pacmanapp.markers.Ghost;
 import com.example.pacmanapp.markers.GhostType;
 import com.example.pacmanapp.markers.MapMarkers;
 import com.example.pacmanapp.markers.Marker;
-import com.example.pacmanapp.markers.PacDot;
-import com.example.pacmanapp.markers.PowerPellet;
 import com.example.pacmanapp.navigation.Navigate;
 import com.example.pacmanapp.navigation.NavigationBar;
 import com.example.pacmanapp.navigation.PageType;
@@ -77,8 +75,10 @@ public class AdminMapActivity extends AppCompatActivity
         mapMarkers = MapMarkers.getFromSave(SavePlatform.getSave());
 
         // Get selectors to make sure they get relevant selections.
-        AcceptAllSelector.getAcceptAllSelector(R.id.inspectAllSelector, new InfoInspect(getResources()));
-        selector = AcceptAllSelector.getAcceptAllSelector(R.id.editAllSelector, new InfoEdit(getResources()));
+        AcceptAllSelector.getAcceptAllSelector(R.id.inspectAllSelector,
+                new InfoInspect(getResources()));
+        selector = AcceptAllSelector.getAcceptAllSelector(R.id.editAllSelector,
+                new InfoEdit(getResources()));
 
         preview = new SelectableContent.Preview(new BlankEdit(getResources()));
         ViewGroup selectableView = findViewById(R.id.selected_preview);
@@ -109,7 +109,10 @@ public class AdminMapActivity extends AppCompatActivity
         }
 
         // Call on selection with currently selected to load in preview
-        onSelection(selector.getSelected());
+        Selectable selectable = selector.getSelected();
+        if (!(selectable instanceof Blank)) {
+            onSelection(selectable);
+        }
 
         // Add selection listener to selector to update selection preview
         selector.addOnSelectionListener(selectionListener);

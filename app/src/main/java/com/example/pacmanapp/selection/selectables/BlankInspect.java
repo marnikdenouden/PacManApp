@@ -12,16 +12,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlankInspect implements Selectable {
-    private final Resources resources;
-
+public class BlankInspect extends Blank {
     public BlankInspect(@NotNull Resources resources) {
-        this.resources = resources;
-    }
-
-    @Override
-    public String getLabel() {
-        return resources.getString(R.string.selectable_inspect_label);
+        super(resources);
     }
 
     @Override

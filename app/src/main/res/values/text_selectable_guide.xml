@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="selectable_inspect_label">Nothing selected</string>
+    <string name="selectable_blank_label">Nothing selected</string>
+    <string name="selectable_inspect_title">Inspect</string>
+    <string name="selectable_edit_title">Edit</string>
     <string name="selectable_inspect_description">You can select things on the screen by clicking them. The selected object can be inspected by clicking the inspect looking-glass or by holding the selected object.</string>
     <string name="selectable_inspect_information">On inspect pages the information to the selected item provides can be found</string>
-    <string name="selectable_edit_label">Nothing selected</string>
     <string name="selectable_edit_description">You can select things on the screen by clicking them. The selected object can be edited by clicking the edit pencil.</string>
     <string name="selectable_edit_information">On edit pages information of the selected item can be changed</string>
+
 </resources>

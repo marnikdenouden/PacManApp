@@ -12,26 +12,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InfoInspect implements Selectable {
-    private final Resources resources;
+public class InfoInspect extends BlankInspect {
 
     public InfoInspect(@NotNull Resources resources) {
-        this.resources = resources;
+        super(resources);
     }
 
     @Override
     public String getLabel() {
-        return resources.getString(R.string.selectable_inspect_label);
-    }
-
-    @Override
-    public int getIconId() {
-        return R.drawable.icon_inspect;
-    }
-
-    @Override
-    public String getDescription() {
-        return resources.getString(R.string.selectable_inspect_description);
+        return resources.getString(R.string.selectable_inspect_title);
     }
 
     @Override

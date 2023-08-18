@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.save.SaveActivity;
+import com.example.pacmanapp.selection.selectables.Blank;
 import com.example.pacmanapp.selection.selectables.BlankInspect;
 import com.example.pacmanapp.selection.selectables.InfoInspect;
 import com.example.pacmanapp.displays.Clock;
@@ -61,9 +62,9 @@ public class PlayMapActivity extends AppCompatActivity
 
         // Get selector to make sure it gets relevant selections.
         selector = AcceptAllSelector.getAcceptAllSelector(R.id.inspectAllSelector,
-                new BlankInspect(getResources()));
+                new InfoInspect(getResources()));
 
-        preview = new SelectableContent.Preview(selector.getSelected());
+        preview = new SelectableContent.Preview(new BlankInspect(getResources()));
         ViewGroup viewGroup = findViewById(R.id.selected_preview);
         preview.addView(this, viewGroup, false);
 
@@ -121,7 +122,10 @@ public class PlayMapActivity extends AppCompatActivity
         }
 
         // Call on selection with currently selected to load in preview
-        onSelection(selector.getSelected());
+        Selectable selectable = selector.getSelected();
+        if (!(selectable instanceof Blank)) {
+            onSelection(selectable);
+        }
 
         // Add selection listener to selector to update selection preview
         selector.addOnSelectionListener(selectionListener);

@@ -12,16 +12,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlankEdit implements Selectable {
-    private final Resources resources;
+public class BlankEdit extends Blank {
 
     public BlankEdit(@NotNull Resources resources) {
-        this.resources = resources;
-    }
-
-    @Override
-    public String getLabel() {
-        return resources.getString(R.string.selectable_edit_label);
+        super(resources);
     }
 
     @Override

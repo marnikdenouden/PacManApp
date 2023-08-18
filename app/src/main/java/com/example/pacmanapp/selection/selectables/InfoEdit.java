@@ -12,26 +12,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InfoEdit implements Selectable {
-    private final Resources resources;
+public class InfoEdit extends BlankEdit {
 
     public InfoEdit(@NotNull Resources resources) {
-        this.resources = resources;
+        super(resources);
     }
 
     @Override
     public String getLabel() {
-        return resources.getString(R.string.selectable_edit_label);
-    }
-
-    @Override
-    public int getIconId() {
-        return R.drawable.icon_edit;
-    }
-
-    @Override
-    public String getDescription() {
-        return resources.getString(R.string.selectable_edit_description);
+        return resources.getString(R.string.selectable_edit_title);
     }
 
     @Override
