@@ -93,6 +93,7 @@ public class SaveActivity extends AppCompatActivity {
         return saveButton;
     }
 
+    // TODO add java doc comments
     void createSave(String saveName) {
         getSaveManager().setCurrentSave(saveName);
         updateSaveList();
