@@ -46,6 +46,7 @@ public class EditActivity extends AppCompatActivity {
                 InspectActivity.open(EditActivity.this, selected));
     }
 
+    // TODO add java doc comment
     public static void open(@NotNull AppCompatActivity currentActivity,
                             @NotNull Selectable selectable) {
         AcceptAllSelector.getAcceptAllSelector(R.id.editAllSelector,

@@ -43,7 +43,7 @@ public class InspectActivity extends AppCompatActivity {
         ImageView iconView = findViewById(R.id.selectable_icon);
         iconView.setOnClickListener(view -> finish());
     }
-
+// TODO add java doc comment
     public static void open(@NotNull AppCompatActivity currentActivity,
                             @NotNull Selectable selectable) {
         AcceptAllSelector.getAcceptAllSelector(R.id.inspectAllSelector,
