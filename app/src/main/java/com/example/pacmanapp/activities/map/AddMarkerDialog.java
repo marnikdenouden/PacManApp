@@ -2,6 +2,7 @@ package com.example.pacmanapp.activities.map;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,7 +26,7 @@ public class AddMarkerDialog extends DialogFragment {
     private final MapMarkers mapMarkers;
     private final LocationUpdater locationUpdater;
     private final int frameId;
-    private static Marker marker;
+    private Marker marker;
 
     /**
      * Create add marker dialog that can create a new marker for a specified map frame.
@@ -57,26 +58,47 @@ public class AddMarkerDialog extends DialogFragment {
         return builder.create();
     }
 
+    /**
+     * Add marker to the map markers given to this dialog.
+     */
     private void addMarker() {
         if (marker != null) {
             mapMarkers.addMarker(marker);
+            Toast.makeText(getContext(), "Added new " + marker.getClass().getSimpleName(),
+                    Toast.LENGTH_SHORT).show();
             dismiss();
         }
     }
 
+    /**
+     * Get the latitude of the last location.
+     *
+     * @return latitude Double latitude of the last location
+     */
     private double getLatitude() {
         return locationUpdater.getLastLocation().getLatitude();
     }
 
+    /**
+     * Get the longitude of the last location.
+     *
+     * @return longitude Double longitude of the last location
+     */
     private double getLongitude() {
         return locationUpdater.getLastLocation().getLongitude();
     }
 
+    /**
+     * Select pac dot to be the new marker to add.
+     */
     public void selectPacDot() {
         marker = new PacDot(frameId, getLatitude(), getLongitude(), activity);
         Objects.requireNonNull(getDialog()).setTitle("Add pac dot?");
     }
 
+    /**
+     * Select power pellet to be the new marker to add.
+     */
     public void selectPowerPellet() {
         marker = new PowerPellet(frameId, getLatitude(), getLongitude(), activity);
         Objects.requireNonNull(getDialog()).setTitle("Add power pellet?");

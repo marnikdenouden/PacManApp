@@ -62,4 +62,12 @@
         <item name="android:fontFamily" >@font/montserrat_medium</item>
         <item name="android:textSize" >18sp</item>
     </style>
+    <style
+        name="text_edit">
+        <item name="android:textAppearance" >@style/text_description</item>
+        <item name="android:textColorHint" >?attr/colorOnSurfaceVariant</item>
+        <item name="android:backgroundTint" >?attr/colorTertiary</item>
+        <item name="android:textCursorDrawable" >@drawable/text_cursor_tertiary</item>
+        <item name="android:textColorHighlight" >?attr/colorTertiaryContainer</item>
+    </style>
 </resources>

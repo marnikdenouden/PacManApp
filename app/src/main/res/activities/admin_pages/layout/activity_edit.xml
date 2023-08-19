@@ -37,7 +37,7 @@
             android:layout_height="48dp"
             android:layout_marginBottom="24dp"
             android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="48dp"
             android:gravity="center_horizontal|center_vertical"
             android:text="Edit info"
             android:textAlignment="gravity"
@@ -66,29 +66,44 @@
         android:textColor="?attr/colorOnSurface"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:gravity="center_horizontal|center_vertical"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="48dp"
+        android:gravity="center_vertical"
         android:text="This is the edit info page"
         android:textAlignment="gravity"
-        app:layout_constraintBottom_toTopOf="@id/selectable_content"
+        app:layout_constraintBottom_toTopOf="@id/content_scroll_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/top_container" />
 
-    <LinearLayout
-        android:id="@+id/selectable_content"
+<!--    TODO fix the scroll layout view not displaying-->
+    <ScrollView
+        android:id="@+id/content_scroll_view"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:minHeight="200dp"
-        android:maxHeight="400dp"
+        android:layout_height="0dp"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
         android:layout_marginEnd="24dp"
         app:layout_constraintBottom_toTopOf="@id/bottom_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/selectable_description"
-        android:orientation="vertical" />
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/selectable_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:orientation="vertical" />
+
+    </ScrollView>
 
     <include
         android:id="@+id/bottom_bar"

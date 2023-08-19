@@ -9,10 +9,6 @@
         android:id="@+id/lock_label"
         android:textAppearance="@style/text_title_small"
         android:textColor="?attr/colorOnSurface"
-        android:textColorHint="?attr/colorOnSurfaceVariant"
-        android:backgroundTint="?attr/colorTertiary"
-        android:textCursorDrawable="@drawable/text_cursor_tertiary"
-        android:textColorHighlight="?attr/colorTertiaryContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -37,7 +33,7 @@
 
     <EditText
         android:id="@+id/key_input"
-        android:textAppearance="@style/text_description"
+        style="@style/text_edit"
         android:textColor="?attr/colorOnSurface"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

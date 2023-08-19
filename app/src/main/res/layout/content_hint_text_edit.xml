@@ -33,12 +33,8 @@
 
     <EditText
         android:id="@+id/hint_text"
-        android:textAppearance="@style/text_description"
+        style="@style/text_edit"
         android:textColor="?attr/colorOnSurface"
-        android:textColorHint="?attr/colorOnSurfaceVariant"
-        android:backgroundTint="?attr/colorTertiary"
-        android:textCursorDrawable="@drawable/text_cursor_tertiary"
-        android:textColorHighlight="?attr/colorTertiaryContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="This is a hint of what ever this is labeled for. So this could be the hint to find a pacdot or even of a fruit."
