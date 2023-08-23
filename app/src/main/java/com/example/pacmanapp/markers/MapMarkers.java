@@ -32,7 +32,7 @@ public class MapMarkers extends SaveObject implements Serializable {
     /**
      * Create a collection of markers that can be serialized.
      *
-     * @param gameSave Save to add game settings to
+     * @param gameSave Save to add map markers to
      */
     public MapMarkers(GameSave gameSave) {
         super(mapMarkerId, gameSave);
@@ -129,10 +129,10 @@ public class MapMarkers extends SaveObject implements Serializable {
     }
 
     /**
-     * Gets or creates the map marker for the current save of the specified game save.
+     * Gets or creates the map marker for the specified game save.
      *
      * @param gameSave Save to get map marker from
-     * @return Map marker from current save of the specified game save
+     * @return Map marker from the specified game save
      */
     public static MapMarkers getFromSave(GameSave gameSave) {
         if (gameSave.hasSaveObject(mapMarkerId)) {

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="scoreValue" />
+    <item type="id" name="startTime" />
+    <item type="id" name="timeDuration" />
+</resources>

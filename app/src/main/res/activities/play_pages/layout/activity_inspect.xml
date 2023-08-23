@@ -7,58 +7,105 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@id/selectable_label"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top_container"
         android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
-        android:gravity="center_horizontal|center_vertical"
-        android:text="Inspect info"
-        android:textAlignment="gravity"
+        android:layout_height="wrap_content"
+        android:minHeight="160dp"
+        android:layout_marginBottom="@dimen/negativeRoundRadius"
+        android:background="@drawable/drawable_left_bottom_round_corner"
+        android:backgroundTint="?attr/colorPrimaryVariant"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/selectable_icon"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@id/selectable_icon"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/icon_inspect" />
+        app:layout_constraintVertical_bias="0" >
+
+        <Space
+            android:id="@+id/top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/topBarHeight"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@id/selectable_label"
+            android:textAppearance="@style/text_title"
+            android:textColor="?attr/colorOnPrimary"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="48dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="Inspect info"
+            android:textAlignment="gravity"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/selectable_icon"
+            app:layout_constraintTop_toBottomOf="@id/top_bar" />
+
+        <ImageView
+            android:id="@id/selectable_icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="24dp"
+            android:layout_marginStart="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/selectable_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/top_bar"
+            app:srcCompat="@drawable/icon_edit" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@id/selectable_description"
+        android:textAppearance="@style/text_description"
+        android:textColor="?attr/colorOnSurface"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:gravity="center_horizontal|center_vertical"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="48dp"
+        android:gravity="center_vertical"
         android:text="This is the inspect info page"
         android:textAlignment="gravity"
-        app:layout_constraintBottom_toTopOf="@id/selectable_content"
+        app:layout_constraintBottom_toTopOf="@id/content_scroll_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/selectable_label" />
+        app:layout_constraintTop_toBottomOf="@id/top_container" />
 
-    <LinearLayout
-        android:id="@+id/selectable_content"
+    <ScrollView
+        android:id="@+id/content_scroll_view"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
         android:layout_marginEnd="24dp"
         app:layout_constraintBottom_toTopOf="@id/bottom_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/selectable_description"
-        android:orientation="vertical" />
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/selectable_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:orientation="vertical" />
+
+    </ScrollView>
 
     <include
-        android:id="@id/bottom_bar"
+        android:id="@+id/bottom_bar"
         layout="@layout/navigation_bar_inverse" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

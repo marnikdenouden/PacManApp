@@ -11,8 +11,6 @@ import android.os.Bundle;
 
 import android.util.Log;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.save.SaveActivity;
@@ -37,6 +35,7 @@ import com.example.pacmanapp.selection.AcceptAllSelector;
 import com.example.pacmanapp.selection.Selectable;
 import com.example.pacmanapp.selection.SelectableContent;
 import com.example.pacmanapp.selection.Selector;
+import com.example.pacmanapp.storage.GameSave;
 import com.example.pacmanapp.storage.SavePlatform;
 
 import java.time.Duration;
@@ -56,7 +55,8 @@ public class PlayMapActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        Button ghostInteractionButton = findViewById(R.id.ghostInteractionButton);
+        // TODO add ghost interaction button
+        //Button ghostInteractionButton = findViewById(R.id.ghostInteractionButton);
 
         NavigationBar.configure(this, PageType.MAP);
 
@@ -74,27 +74,26 @@ public class PlayMapActivity extends AppCompatActivity
             return;
         }
 
-        mapMarkers = MapMarkers.getFromSave(SavePlatform.getSave());
+        GameSave gameSave = SavePlatform.getSave();
+
+        mapMarkers = MapMarkers.getFromSave(gameSave);
 
         ViewGroup mapFrame = findViewById(R.id.pacManMapFrame);
         MapArea.createMap(MapType.PacMan, mapFrame);
 
+        Clock clock = new Clock(gameSave);
+        clock.updateDisplay(PlayMapActivity.this, R.color.onPrimaryContainer);
 
-        Clock clock = new Clock(PlayMapActivity.this, PlayMapActivity.this,
+        Score score = new Score(gameSave);
+        score.updateDisplay(5, R.id.scoreLayout, PlayMapActivity.this,
                 R.color.onPrimaryContainer);
-        clock.setTime(Duration.ofSeconds(2678));
-
-        Score score = new Score(5, R.id.scoreLayout,
-                PlayMapActivity.this, PlayMapActivity.this,
-                R.color.onPrimaryContainer);
-        score.setValue(4678);
 
         locationUpdater = new LocationUpdater(PlayMapActivity.this);
 
-        ghostInteractionButton.setOnClickListener(view -> {
-            Toast.makeText(PlayMapActivity.this,
-                    "Get captured by ghost or eat a ghost.", Toast.LENGTH_SHORT).show(); // TODO implement the button
-        });
+//        ghostInteractionButton.setOnClickListener(view -> {
+//            Toast.makeText(PlayMapActivity.this,
+//                    "Get captured by ghost or eat a ghost.", Toast.LENGTH_SHORT).show(); // TODO implement the button
+//        });
 
     }
 

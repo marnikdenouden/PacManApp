@@ -1,81 +1,73 @@
 package com.example.pacmanapp.displays;
 
-import android.content.Context;
+import android.os.SystemClock;
+import android.widget.Chronometer;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.storage.GameSave;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 
 public class Clock {
-    private final static int hourId = R.id.digit_hour;
-    private final static int minuteId_0 = R.id.digit_minute_0;
-    private final static int minuteId_1 = R.id.digit_minute_1;
-    private final static int secondId_0 = R.id.digit_second_0;
-    private final static int secondId_1 = R.id.digit_second_1;
-
-    Digit hour;
-    Digit minute_0;
-    Digit minute_1;
-    Digit second_0;
-    Digit second_1;
+    private final static String TAG = "Clock";
+    private final static int startTimeId = R.id.startTime;
+    private final static int timeDurationId = R.id.timeDuration;
+    private final PlayValues playValues;
 
     /**
-     * Create clock with specified context, activity and color id.
+     * Utilize chronometer clock within specified context, activity and color id.
      *
-     * @param context Context to create clock with
-     * @param activity Activity to create clock in
-     * @param colorId int color id to use for clock
+     * @param gameSave GameSave to store start time in
      */
-    public Clock(@NotNull Context context, @NotNull AppCompatActivity activity, int colorId) {
-        createDigits(context, activity, colorId);
+    public Clock(@NotNull GameSave gameSave) {
+        playValues = PlayValues.getFromSave(gameSave);
     }
 
     /**
-     * Create the digits of the clock
-     *
-     * @param context Context to create digits with
-     * @param activity Activity create digits in
-     * @param colorId int color id to use for digits
-     */
-    private void createDigits(@NotNull Context context, @NotNull AppCompatActivity activity, int colorId) {
-        hour = new Digit(context, activity, hourId, colorId);
-        minute_0 = new Digit(context, activity, minuteId_0, colorId);
-        minute_1 = new Digit(context, activity, minuteId_1, colorId);
-        second_0 = new Digit(context, activity, secondId_0, colorId);
-        second_1 = new Digit(context, activity, secondId_1, colorId);
-    }
-
-    /**
-     * Set time of clock to the time duration.
+     * Set time of clock to the specified time duration.
      *
      * @param time Time to set clock to, max displayed time is 10 hours
      */
     public void setTime(Duration time) {
-        long seconds = time.getSeconds();
-
-        // Compute hours, minutes and remaining seconds
-        int hours = (int) seconds / 3600;
-        int minutes = (int) (seconds % 3600) / 60;
-        int remainingSeconds = (int) seconds % 60;
-
-        // Set hour value
-        if (hours == 0) {
-            hour.setVisible(false);
-        } else {
-            hour.setVisible(true);
-            hour.setValue(hours); // Set hour value
-        }
-
-        // Set minute values
-        minute_0.setValue(minutes / 10); // Set significant minute value
-        minute_1.setValue(minutes % 10); // Set rounding minute value
-
-        // Set second values
-        second_0.setValue(remainingSeconds / 10); // Set significant second value
-        second_1.setValue(remainingSeconds % 10); // Set rounding second value
+        resetClock();
+        long timeDuration = time.getSeconds() * 1000;
+        playValues.setValue(timeDurationId, timeDuration);
     }
+
+    /**
+     * Reset the start time of the clock to now.
+     */
+    public void resetClock() {
+        long currentTime = SystemClock.elapsedRealtime();
+        playValues.setValue(startTimeId, currentTime);
+    }
+
+    /**
+     * Update the display of the clock in the specified activity.
+     *
+     * @param activity Activity to update clock in
+     * @param colorId int color id to use for clock display
+     */
+    public void updateDisplay(@NotNull AppCompatActivity activity, int colorId) {
+        Chronometer chronometer = activity.findViewById(R.id.clock);
+        int color = ResourcesCompat.getColor(activity.getResources(), colorId, activity.getTheme());
+        chronometer.setTextColor(color);
+        chronometer.setCountDown(true);
+
+        long startTime = playValues.getValue(startTimeId, 0);
+        long timeDuration = playValues.getValue(timeDurationId, 0);
+        long currentTime = SystemClock.elapsedRealtime();
+
+        long elapsedTime = currentTime - startTime;
+        long displayTime = Math.max(0, timeDuration - elapsedTime);
+
+        chronometer.setBase(SystemClock.elapsedRealtime() + displayTime);
+        chronometer.start();
+    }
+
 }

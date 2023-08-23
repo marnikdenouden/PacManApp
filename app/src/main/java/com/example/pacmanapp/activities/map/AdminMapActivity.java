@@ -39,6 +39,7 @@ import com.example.pacmanapp.selection.AcceptAllSelector;
 import com.example.pacmanapp.selection.Selectable;
 import com.example.pacmanapp.selection.SelectableContent;
 import com.example.pacmanapp.selection.Selector;
+import com.example.pacmanapp.storage.GameSave;
 import com.example.pacmanapp.storage.SavePlatform;
 
 import java.time.Duration;
@@ -55,6 +56,7 @@ public class AdminMapActivity extends AppCompatActivity
     private SelectableContent.Preview preview;
     private final Selector.SelectionListener selectionListener = AdminMapActivity.this::onSelection;
     private AddMarkerDialog addMarkerDialog;
+    private Score score;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +74,9 @@ public class AdminMapActivity extends AppCompatActivity
             return;
         }
 
-        mapMarkers = MapMarkers.getFromSave(SavePlatform.getSave());
+        GameSave gameSave = SavePlatform.getSave();
+
+        mapMarkers = MapMarkers.getFromSave(gameSave);
 
         // Get selectors to make sure they get relevant selections.
         AcceptAllSelector.getAcceptAllSelector(R.id.inspectAllSelector,
@@ -84,14 +88,14 @@ public class AdminMapActivity extends AppCompatActivity
         ViewGroup selectableView = findViewById(R.id.selected_preview);
         preview.configure(this, selectableView, true);
 
-        Clock clock = new Clock(AdminMapActivity.this, AdminMapActivity.this,
-                R.color.onPrimaryContainer);
+        Clock clock = new Clock(gameSave);
         clock.setTime(Duration.ofSeconds(2678));
+        clock.updateDisplay(AdminMapActivity.this, R.color.onPrimaryContainer);
 
-        Score score = new Score(5, R.id.scoreLayout,
-                AdminMapActivity.this, AdminMapActivity.this,
+        score = new Score(gameSave);
+        score.updateDisplay(5, R.id.scoreLayout, AdminMapActivity.this,
                 R.color.onPrimaryContainer);
-        score.setValue(4678);
+
         locationUpdater = new LocationUpdater(AdminMapActivity.this);
     }
 
@@ -194,6 +198,10 @@ public class AdminMapActivity extends AppCompatActivity
         addMarkerDialog = new AddMarkerDialog(this, mapMarkers, locationUpdater,
                 R.id.pacManMapFrame);
         addMarkerDialog.show(getSupportFragmentManager(), "AddMarker");
+
+        // TODO remove temp code.
+        Random random = new Random();
+        score.setValue(random.nextInt());
     }
 
     /**

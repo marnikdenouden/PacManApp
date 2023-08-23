@@ -44,7 +44,7 @@ public enum Number {
      * @return Number of the value modulo 10 is given
      */
     static Number getNumber(int value) {
-        switch(value % 10) {
+        switch(Math.abs(value) % 10) {
             case 0:
                 return Number.ZERO;
             case 1:

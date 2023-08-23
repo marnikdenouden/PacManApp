@@ -77,7 +77,6 @@
             android:layout_height="24dp"
             android:layout_marginStart="72dp"
             android:layout_marginEnd="16dp"
-            android:text="Time"
             app:srcCompat="@drawable/icon_time"
             app:tint="?attr/colorOnPrimaryContainer"
             app:layout_constraintBottom_toBottomOf="@id/clock"
@@ -85,11 +84,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/clock" />
 
-        <include
+        <Chronometer
             android:id="@+id/clock"
-            layout="@layout/clock"
             android:layout_width="0dp"
-            android:layout_height="20sp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="16dp"

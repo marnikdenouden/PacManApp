@@ -1,48 +1,72 @@
 package com.example.pacmanapp.displays;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.storage.GameSave;
 
 import org.jetbrains.annotations.NotNull;
 
 public class Score {
-    Digit[] digits;
+    private final static String TAG = "Score";
+    private final static int scoreValueId = R.id.scoreValue;
+    private final PlayValues playValues;
+    private Digit[] digits;
 
     /**
      * Create score with various specified values.
-     *
-     * @param maxDigits int max amount of digits for score to use
-     * @param scoreLayoutId int id of the layout to place digits in
-     * @param context Context to create score with
-     * @param activity Activity to create score in
-     * @param colorId int color id to use for score
      */
-    public Score(int maxDigits, int scoreLayoutId, @NotNull Context context,
-                 @NotNull AppCompatActivity activity, int colorId) {
-        LinearLayout scoreLayout = activity.findViewById(scoreLayoutId);
-        if (scoreLayout == null) {
-            throw new NullPointerException("scoreLayoutId did not provide a valid score layout.");
-        }
-
-        createDigits(maxDigits, scoreLayout, context, colorId);
+    public Score(@NotNull GameSave gameSave) {
+        playValues = PlayValues.getFromSave(gameSave);
     }
 
     /**
-     * Create score with various specified values.
+     * Set value of the score to display.
      *
-     * @param maxDigits int max amount of digits for score to use
-     * @param scoreLayout Linear layout to place digits in
-     * @param context Context to create score with
-     * @param colorId int color id to use for score
+     * @param value Value to set score to
      */
-    public Score(int maxDigits, @NotNull LinearLayout scoreLayout,
-                 @NotNull Context context, int colorId) {
-        createDigits(maxDigits, scoreLayout, context, colorId);
+    public void setValue(int value) {
+        playValues.setValue(scoreValueId, value);
+    }
+
+    /**
+     * Update the score display with the specified values.
+     *
+     * @param maxDigits Max digits to display in the score, will be cut of if larger
+     * @param activity Activity to update the score display in
+     * @param scoreLayoutId Id of the linear layout to add score in
+     * @param colorId color id to use for the digits
+     */
+    public void updateDisplay(int maxDigits, int scoreLayoutId,
+                              @NotNull AppCompatActivity activity, int colorId) {
+        LinearLayout scoreLayout = activity.requireViewById(scoreLayoutId);
+        if (scoreLayout == null) {
+            throw new NullPointerException("scoreLayoutId did not provide a valid score layout.");
+        }
+        updateDisplay(maxDigits, scoreLayout, activity, colorId);
+    }
+
+    /**
+     * Update the score display with the specified values.
+     *
+     * @param maxDigits Max digits to display in the score, will be cut of if larger
+     * @param scoreLayout Linear layout to add digits to
+     * @param context Context to create digits views with
+     * @param colorId color id to use for the digits
+     */
+    public void updateDisplay(int maxDigits, @NotNull LinearLayout scoreLayout,
+                              @NotNull Context context, int colorId) {
+        // Only create the display digits once for a score.
+        if (digits == null) {
+            createDisplayDigits(maxDigits, scoreLayout, context, colorId);
+        }
+        long scoreValue = playValues.getValue(scoreValueId, 0);
+        setDisplayValue((int) scoreValue);
     }
 
     /**
@@ -52,8 +76,8 @@ public class Score {
      * @param scoreLayout Layout that the score is contained in
      * @param context Context to set digits with
      */
-    private void createDigits(int maxDigits, @NotNull LinearLayout scoreLayout,
-                              @NotNull Context context, int color) {
+    private void createDisplayDigits(int maxDigits, @NotNull LinearLayout scoreLayout,
+                                     @NotNull Context context, int color) {
         digits = new Digit[maxDigits];
 
         for (int i = 0; i < maxDigits; i++) {
@@ -69,11 +93,17 @@ public class Score {
     }
 
     /**
-     * Set value of the score to display.
+     * Set the display value of the digits to the specified value.
      *
-     * @param value Value to set score to
+     * @pre display digits are created for this score.
+     * @param value Value to display with the created digits.
      */
-    public void setValue(int value) {
+    private void setDisplayValue(int value) {
+        if (digits == null) {
+            Log.w(TAG, "Can not set display value without created digits.");
+            return;
+        }
+
         for (Digit digit : digits) {
             if (value == 0) {
                 digit.setVisible(false);
@@ -84,4 +114,5 @@ public class Score {
             value = value / 10;
         }
     }
+
 }
