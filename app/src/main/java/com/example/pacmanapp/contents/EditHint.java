@@ -156,7 +156,7 @@ public class EditHint implements Content {
             content = hint;
 
             if (!key.equals("")) {
-                content = new HiddenHint(hint, EditHint.this.hintProvider, key);
+                content = new LockedContent(hint, EditHint.this.hintProvider, key);
             }
         }
 

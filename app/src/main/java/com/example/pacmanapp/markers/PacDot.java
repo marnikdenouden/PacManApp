@@ -8,7 +8,7 @@ import android.view.View;
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.contents.Content;
 import com.example.pacmanapp.contents.EditHint;
-import com.example.pacmanapp.contents.HiddenHint;
+import com.example.pacmanapp.contents.LockedContent;
 import com.example.pacmanapp.contents.Hint;
 import com.example.pacmanapp.contents.Information;
 import com.example.pacmanapp.map.MapPosition;
@@ -44,7 +44,7 @@ public class PacDot extends Marker implements Selectable, Character.Visitable {
         contentList.add(new EditHint(this));
         Fruit fruit = new Fruit(Fruit.FruitType.CHERRY);
         Hint hint = new Hint.HintBuilder(fruit).setHintText("This is a secret hint to the Cherry").build();
-        contentList.add(new HiddenHint(hint, this, "key"));
+        contentList.add(new LockedContent(hint, this, "key"));
     }
 
     @Override

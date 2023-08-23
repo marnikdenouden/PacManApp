@@ -17,22 +17,22 @@ import com.example.pacmanapp.selection.Selectable;
 
 import org.jetbrains.annotations.NotNull;
 
-public class HiddenHint implements Content {
+public class LockedContent implements Content {
 
     private boolean locked = true;
     private final String key;
-    private final Hint hint;
+    private final Content content;
     private final Selectable hintProvider;
 
     /**
-     * Constructs a hidden hint content that reveals hint after key is entered.
+     * Constructs a lock view that reveals content after key is entered.
      *
-     * @param hint Hint that will be revealed after entering the key
+     * @param content Content that will be revealed after entering the key
      * @param hintProvider Selectable that displays the clues for the key
      * @param key Key that will unlock the hint
      */
-    public HiddenHint(Hint hint, Selectable hintProvider, String key) {
-        this.hint = hint;
+    public LockedContent(Content content, Selectable hintProvider, String key) {
+        this.content = content;
         this.hintProvider = hintProvider;
         this.key = key;
     }
@@ -41,11 +41,11 @@ public class HiddenHint implements Content {
     public View addView(@NotNull AppCompatActivity activity,
                         @NonNull ViewGroup viewGroup, boolean editable) {
         if (editable) {
-            return hint.addEditView(activity, viewGroup);
+            return content.addView(activity, viewGroup, true);
         }
 
         if (!locked) {
-            return hint.addInfoView(activity, viewGroup);
+            return content.addView(activity, viewGroup, false);
         }
 
         return addLockView(activity, viewGroup);
@@ -60,29 +60,29 @@ public class HiddenHint implements Content {
      * @return View view that was added to the specified view group
      */
     View addLockView(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup) {
-        View hintView = LayoutInflater.from(viewGroup.getContext())
+        View lockView = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.content_lock, viewGroup, false);
 
-        EditText keyTextView = hintView.findViewById(R.id.key_input);
+        EditText keyTextView = lockView.findViewById(R.id.key_input);
         Util.TextListener textListener = (String text) -> {
             if (key.equals(text)) {
                 locked = false;
-                viewGroup.removeView(hintView);
-                hint.addInfoView(activity, viewGroup);
+                viewGroup.removeView(lockView);
+                content.addView(activity, viewGroup, false);
                 keyTextView.setEnabled(false); // TODO could use some more juice
                 keyTextView.getRootView().clearFocus();
             }
         };
         Util.configureEditText(keyTextView, "", textListener);
 
-        ImageView iconImageView = hintView.findViewById(R.id.lock_icon);
-        Drawable iconImage = ResourcesCompat.getDrawable(hintView.getResources(),
-                hintProvider.getIconId(), hintView.getContext().getTheme());
+        ImageView iconImageView = lockView.findViewById(R.id.lock_icon);
+        Drawable iconImage = ResourcesCompat.getDrawable(lockView.getResources(),
+                hintProvider.getIconId(), lockView.getContext().getTheme());
         iconImageView.setImageDrawable(iconImage);
         iconImageView.setOnClickListener(view -> InspectActivity.open(activity, hintProvider));
 
-        viewGroup.addView(hintView);
-        return hintView;
+        viewGroup.addView(lockView);
+        return lockView;
     }
 
 }
