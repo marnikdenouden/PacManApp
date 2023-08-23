@@ -138,7 +138,7 @@ public class Marker implements Serializable {
             return;
         }
         imageView.setImageDrawable(drawable);
-        tryAnimate(animate); // TODO problem, when marker is created and wants to adjust drawable with animated drawable, then try animate has a problem.
+        tryAnimate(animate);
     }
 
     /**

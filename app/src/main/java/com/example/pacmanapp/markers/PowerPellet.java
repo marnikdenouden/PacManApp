@@ -2,16 +2,19 @@ package com.example.pacmanapp.markers;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.location.Location;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.contents.Content;
 import com.example.pacmanapp.selection.Selectable;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressLint("ViewConstructor")
-public class PowerPellet extends Marker implements Selectable {
+public class PowerPellet extends Marker implements Selectable, Character.Visitable {
     private static final long serialVersionUID = 1L;
     private final static int drawableId =  R.drawable.power_pellet;
     private final static int markerId = R.id.powerpellet;
@@ -65,5 +68,10 @@ public class PowerPellet extends Marker implements Selectable {
     @Override
     public List<Content> getContent() {
         return new ArrayList<>();
+    }
+
+    @Override
+    public void visit(@NotNull Character character, @NotNull Location location) {
+        // TODO implement method
     }
 }

@@ -185,14 +185,14 @@ public class PlayMapActivity extends AppCompatActivity
      */
     private void loadPacMan() {
         // Remove all characters, except a single pacman, from the map markers collection
-        Collection<Marker> currentCharacters =
+        Collection<Character> currentCharacters =
                 mapMarkers.getMarkersWithClass(R.id.pacManMapFrame, Character.class);
         boolean foundPacMan = false;
-        for (Marker marker: currentCharacters) {
-            if (marker instanceof PacMan && !foundPacMan) {
+        for (Character character: currentCharacters) {
+            if (character instanceof PacMan && !foundPacMan) {
                 foundPacMan = true;
             } else {
-                mapMarkers.removeMarker(marker);
+                mapMarkers.removeMarker(character);
             }
         }
 

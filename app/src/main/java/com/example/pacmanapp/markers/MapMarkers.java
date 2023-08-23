@@ -89,7 +89,7 @@ public class MapMarkers extends SaveObject implements Serializable {
      * @param markerClass Class to check if a marker from the collection is an instance of
      * @return Truth assignment, if there exists a marker that is an instance of the specified class
      */
-    public boolean hasMarkerWithClass(int frameId, Class<? extends Marker> markerClass) {
+    public boolean hasMarkerWithClass(int frameId, Class<?> markerClass) {
         for (Marker marker: getMapCollection(frameId)) {
             if (markerClass.isInstance(marker)) {
                 return true;
@@ -105,12 +105,12 @@ public class MapMarkers extends SaveObject implements Serializable {
      * @param markerClass Class of markers to get
      * @return Collection of map markers with the specified class for the specified frame id
      */
-    public Collection<Marker> getMarkersWithClass(int frameId,
-                                                  Class<? extends Marker> markerClass) {
-        Collection<Marker> markers = new HashSet<>();
+    public <MarkerType> Collection<MarkerType> getMarkersWithClass(int frameId,
+                                                  Class<MarkerType> markerClass) {
+        Collection<MarkerType> markers = new HashSet<>();
         for (Marker marker: getMapCollection(frameId)) {
             if (markerClass.isInstance(marker)) {
-                markers.add(marker);
+                markers.add(markerClass.cast(marker));
             }
         }
         return markers;

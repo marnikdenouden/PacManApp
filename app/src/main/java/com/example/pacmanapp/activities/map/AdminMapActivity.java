@@ -227,14 +227,14 @@ public class AdminMapActivity extends AppCompatActivity
      */
     private void loadGhost() {
         // Remove all characters, except a single ghost, from the map markers collection
-        Collection<Marker> currentCharacters =
+        Collection<Character> currentCharacters =
                 mapMarkers.getMarkersWithClass(R.id.pacManMapFrame, Character.class);
         boolean foundGhost = false;
-        for (Marker marker: currentCharacters) {
-            if (marker instanceof Ghost && !foundGhost) {
+        for (Character character: currentCharacters) {
+            if (character instanceof Ghost && !foundGhost) {
                 foundGhost = true;
             } else {
-                mapMarkers.removeMarker(marker);
+                mapMarkers.removeMarker(character);
             }
         }
 

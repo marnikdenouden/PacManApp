@@ -7,11 +7,15 @@ import android.util.Log;
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.location.LocationObserver;
 import com.example.pacmanapp.map.MapPosition;
+import com.example.pacmanapp.storage.GameSave;
+import com.example.pacmanapp.storage.SaveManager;
+import com.example.pacmanapp.storage.SavePlatform;
 import com.google.android.gms.location.LocationResult;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 public abstract class Character extends Marker implements Serializable, LocationObserver {
     private static final long serialVersionUID = 1L;
@@ -41,10 +45,13 @@ public abstract class Character extends Marker implements Serializable, Location
     /**
      * Move the character to a new target location.
      *
-     * @param latitude Latitude of the target location
-     * @param longitude Longitude of the target location
+     * @param location Location that character moves to
      */
-    public void move(double latitude, double longitude) {
+    public void move(@NotNull Location location) {
+        // Get the latitude and longitude from the location
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+
         // Get the map location for the specified values
         MapPosition mapPosition =
                 MapPosition.getPosition(getFrameId(), latitude, longitude, getWidth(), getHeight());
@@ -57,7 +64,23 @@ public abstract class Character extends Marker implements Serializable, Location
         setRotation(getDirection(targetX, targetY));
 
         // Animate the character to the target position
-        Runnable relocate = () -> place(latitude, longitude);
+        Runnable relocate = () -> {
+            place(location);
+
+            // Check to ensure there is a save to use
+            if (!SavePlatform.hasSave()) {
+                Log.w(TAG, "Could not get current save from save platform when moving character");
+                return;
+            }
+
+            // Notify Visitable markers that character has moved
+            MapMarkers mapMarkers = MapMarkers.getFromSave(SavePlatform.getSave());
+            Collection<Visitable> visitableMarkers =
+                    mapMarkers.getMarkersWithClass(getFrameId(), Visitable.class);
+            for (Visitable visitableMarker: visitableMarkers) {
+                visitableMarker.visit(this, location);
+            }
+        };
 
         getImageView().animate().x(targetX).y(targetY).withEndAction(relocate)
                 .setDuration(getContext().getResources().getInteger(R.integer.moveAnimationTime))
@@ -101,8 +124,19 @@ public abstract class Character extends Marker implements Serializable, Location
 
     @Override
     public void onLocationUpdate(@NotNull Location location) {
-        move(location.getLatitude(), location.getLongitude());
+        move(location);
         Log.i(TAG, "Moving character with new location update");
+    }
+
+    public interface Visitable {
+        /**
+         * Called when character has moved to specified location.
+         *
+         * @param character Character that has moved to location
+         * @param location Location that character has moved to
+         */
+        void visit(@NotNull Character character, @NotNull Location location);
+
     }
 
 }
