@@ -58,7 +58,8 @@ public class FruitStorage extends SaveObject implements Serializable {
             return;
         }
 
-        for (Fruit fruit: fruitCollection) {
+        Collection<Fruit> fruits = new HashSet<>(fruitCollection);
+        for (Fruit fruit: fruits) {
             removeFruit(fruit);
         }
 

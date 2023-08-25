@@ -18,6 +18,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.selection.SelectionCrier;
 import com.example.pacmanapp.selection.selectables.Fruit;
 
 import java.util.Objects;

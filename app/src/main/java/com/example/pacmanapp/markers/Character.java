@@ -3,10 +3,13 @@ package com.example.pacmanapp.markers;
 import android.content.Context;
 import android.location.Location;
 import android.util.Log;
+import android.view.View;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.location.LocationObserver;
 import com.example.pacmanapp.map.MapPosition;
+import com.example.pacmanapp.selection.Selectable;
+import com.example.pacmanapp.selection.SelectionCrier;
 import com.example.pacmanapp.storage.GameSave;
 import com.example.pacmanapp.storage.SaveManager;
 import com.example.pacmanapp.storage.SavePlatform;
@@ -20,6 +23,7 @@ import java.util.Collection;
 public abstract class Character extends Marker implements Serializable, LocationObserver {
     private static final long serialVersionUID = 1L;
     private final static String TAG = "Character";
+    private transient Location lastLocation;
 
     //>>> Constructors for character <<<//
 
@@ -74,12 +78,13 @@ public abstract class Character extends Marker implements Serializable, Location
             }
 
             // Notify Visitable markers that character has moved
-            MapMarkers mapMarkers = MapMarkers.getFromSave(SavePlatform.getSave());
-            Collection<Visitable> visitableMarkers =
-                    mapMarkers.getMarkersWithClass(getFrameId(), Visitable.class);
-            for (Visitable visitableMarker: visitableMarkers) {
-                visitableMarker.visit(this, location);
-            }
+//            MapMarkers mapMarkers = MapMarkers.getFromSave(SavePlatform.getSave());
+//            Collection<Visitable> visitableMarkers =
+//                    mapMarkers.getMarkersWithClass(getFrameId(), Visitable.class);
+//            for (Visitable visitableMarker: visitableMarkers) {
+//                visitableMarker.visit(this, location);
+//            } TODO improve visit dynamics in the implementation
+            lastLocation = location;
         };
 
         getImageView().animate().x(targetX).y(targetY).withEndAction(relocate)
@@ -126,6 +131,22 @@ public abstract class Character extends Marker implements Serializable, Location
     public void onLocationUpdate(@NotNull Location location) {
         move(location);
         Log.i(TAG, "Moving character with new location update");
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (lastLocation == null) {
+            Log.i(TAG, "Last location is null, so can't on click visit markers yet");
+            return;
+        }
+
+        super.onClick(view);
+        MapMarkers mapMarkers = MapMarkers.getFromSave(SavePlatform.getSave());
+        Collection<Visitable> visitableMarkers =
+                mapMarkers.getMarkersWithClass(getFrameId(), Visitable.class);
+        for (Visitable visitableMarker: visitableMarkers) {
+            visitableMarker.visit(this, lastLocation);
+        }
     }
 
     public interface Visitable {

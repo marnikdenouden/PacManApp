@@ -20,7 +20,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.pacmanapp.R;
-import com.example.pacmanapp.contents.EditHint;
+import com.example.pacmanapp.contents.HintEdit;
 import com.example.pacmanapp.contents.Util;
 import com.example.pacmanapp.selection.NextSelectionSelector;
 import com.example.pacmanapp.selection.Selectable;
@@ -32,12 +32,12 @@ import org.jetbrains.annotations.NotNull;
 public class EditHintDialog extends DialogFragment {
     private final static String TAG = "EditHintDialog";
     private final AppCompatActivity activity;
-    private final EditHint.HintEditor hintEditor;
+    private final HintEdit.HintEditor hintEditor;
 
     public EditHintDialog(@NotNull AppCompatActivity activity,
-                          @NotNull EditHint editHint) {
+                          @NotNull HintEdit hintEdit) {
         this.activity = activity;
-        this.hintEditor = editHint.getHintEditor();
+        this.hintEditor = hintEdit.getHintEditor();
     }
 
     @NonNull
