@@ -79,7 +79,7 @@ public class PlayMapActivity extends AppCompatActivity
         mapMarkers = MapMarkers.getFromSave(gameSave);
 
         ViewGroup mapFrame = findViewById(R.id.pacManMapFrame);
-        MapArea.createMap(MapType.PacMan, mapFrame);
+        MapArea.createMap(MapType.PACMAN_FRANSEBAAN, mapFrame);
 
         Clock clock = new Clock(gameSave);
         clock.updateDisplay(PlayMapActivity.this, R.color.onPrimaryContainer);

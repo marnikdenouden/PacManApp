@@ -66,7 +66,7 @@ public class AdminMapActivity extends AppCompatActivity
         NavigationBar.configure(this, PageType.ADMIN_MAP);
 
         ViewGroup mapFrame = findViewById(R.id.pacManMapFrame);
-        MapArea.createMap(MapType.PacMan, mapFrame);
+        MapArea.createMap(MapType.PACMAN_FRANSEBAAN, mapFrame);
 
         if (!SavePlatform.hasSave()) {
             Navigate.navigate(this, SaveActivity.class);

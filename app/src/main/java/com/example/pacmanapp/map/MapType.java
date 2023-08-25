@@ -5,10 +5,10 @@ import android.content.Context;
 import com.example.pacmanapp.R;
 import com.google.android.material.color.MaterialColors;
 
-import org.jetbrains.annotations.NotNull;
-
 public enum MapType {
-    PacMan(R.drawable.map, R.color.white, R.color.black, R.dimen.defaultMapSize, R.dimen.defaultMapSize,
+    PACMAN_GERARDUS(R.drawable.map_gerardus, R.color.white, R.color.black, R.dimen.defaultMapSize, R.dimen.defaultMapSize,
+            51.424203344, -0.0084914531, 5.48382758497, 0.013472188),
+    PACMAN_FRANSEBAAN(R.drawable.map_fransebaan, R.color.white, R.color.black, R.dimen.defaultMapSize, R.dimen.defaultMapSize,
             51.424203344, -0.0084914531, 5.48382758497, 0.013472188);
 
     private final int drawable;
