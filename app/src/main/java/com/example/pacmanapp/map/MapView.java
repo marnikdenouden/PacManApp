@@ -49,7 +49,7 @@ public class MapView extends androidx.appcompat.widget.AppCompatImageView {
                 mapType.getDrawable(), getContext().getTheme());
         if (drawable == null) {
             Log.e(TAG, "Could not set drawable for map, as drawable of map type " +
-                    mapType.name() + " is null");
+                    mapType + " is null");
             return;
         }
         drawable.setTint(mapType.getLineColor(getContext()));

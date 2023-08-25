@@ -100,11 +100,18 @@ public class PlayMapActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
+
+        locationUpdater.stopLocationUpdates();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        // TODO When going back to old map activity location updates do not work.
+        if (locationUpdater.isRequestingLocationUpdates()) {
+            locationUpdater.startLocationUpdates();
+        }
     }
 
     @Override
@@ -115,10 +122,6 @@ public class PlayMapActivity extends AppCompatActivity
         // and new one created on next location update.
         loadPacMan();
         mapMarkers.loadMap(this, R.id.pacManMapFrame);
-
-        if (locationUpdater.isRequestingLocationUpdates()) {
-            locationUpdater.startLocationUpdates();
-        }
 
         // Call on selection with currently selected to load in preview
         Selectable selectable = selector.getSelected();
@@ -134,7 +137,6 @@ public class PlayMapActivity extends AppCompatActivity
     protected void onStop() {
         super.onStop();
         MapArea.getMapArea(this, R.id.pacManMapFrame).removeMarkers();
-        locationUpdater.stopLocationUpdates();
         selector.removeOnSelectionListener(selectionListener);
     }
 

@@ -62,12 +62,16 @@ public class AddMarkerDialog extends DialogFragment {
      * Add marker to the map markers given to this dialog.
      */
     private void addMarker() {
-        if (marker != null) {
-            mapMarkers.addMarker(marker);
-            Toast.makeText(getContext(), "Added new " + marker.getClass().getSimpleName(),
+        if (marker == null) {
+            Toast.makeText(getContext(), "No marker selected to be created",
                     Toast.LENGTH_SHORT).show();
-            dismiss();
+            return;
         }
+
+        mapMarkers.addMarker(marker);
+        Toast.makeText(getContext(), "Added new " + marker.getClass().getSimpleName(),
+                Toast.LENGTH_SHORT).show();
+        dismiss();
     }
 
     /**

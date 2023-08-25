@@ -53,7 +53,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_bar"
         app:layout_constraintEnd_toStartOf="@id/clearButton"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -66,9 +66,12 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/createButton" />
 
+    <include
+        android:id="@+id/bottom_bar"
+        layout="@layout/navigation_bar_inverse" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

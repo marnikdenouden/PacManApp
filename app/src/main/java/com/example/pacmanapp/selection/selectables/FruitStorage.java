@@ -1,5 +1,7 @@
 package com.example.pacmanapp.selection.selectables;
 
+import android.util.Log;
+
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.storage.GameSave;
 import com.example.pacmanapp.storage.SaveObject;
@@ -7,6 +9,7 @@ import com.example.pacmanapp.storage.SaveObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -23,7 +26,7 @@ public class FruitStorage extends SaveObject implements Serializable {
      */
     public FruitStorage(GameSave gameSave) {
         super(fruitStorageId, gameSave);
-        fruitCollection = new HashSet<>();
+        fruitCollection = new ArrayList<>();
     }
 
     /**
@@ -33,6 +36,8 @@ public class FruitStorage extends SaveObject implements Serializable {
      */
     public void addFruit(@NotNull Fruit fruit) {
         fruitCollection.add(fruit);
+
+        Log.i(TAG, "Added a fruit with type " + fruit.getFruitType().toString());
     }
 
     /**
@@ -42,6 +47,22 @@ public class FruitStorage extends SaveObject implements Serializable {
      */
     public void removeFruit(@NotNull Fruit fruit) {
         fruitCollection.remove(fruit);
+    }
+
+    /**
+     * Clear all the fruits from the storage.
+     */
+    public void clearFruits() {
+        if (fruitCollection.isEmpty()) {
+            Log.i(TAG, "Fruit storage is already cleared");
+            return;
+        }
+
+        for (Fruit fruit: fruitCollection) {
+            removeFruit(fruit);
+        }
+
+        Log.i(TAG, "Removed all fruits");
     }
 
     /**

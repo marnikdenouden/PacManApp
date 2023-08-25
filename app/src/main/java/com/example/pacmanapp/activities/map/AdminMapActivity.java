@@ -108,10 +108,6 @@ public class AdminMapActivity extends AppCompatActivity
         loadGhost();
         mapMarkers.loadMap(this, R.id.pacManMapFrame);
 
-        if (locationUpdater.isRequestingLocationUpdates()) {
-            locationUpdater.startLocationUpdates();
-        }
-
         // Call on selection with currently selected to load in preview
         Selectable selectable = selector.getSelected();
         if (!(selectable instanceof Blank)) {
@@ -126,7 +122,6 @@ public class AdminMapActivity extends AppCompatActivity
     protected void onStop() {
         super.onStop();
         SavePlatform.save();
-        locationUpdater.stopLocationUpdates();
         selector.removeOnSelectionListener(selectionListener);
         MapArea.getMapArea(this, R.id.pacManMapFrame).removeMarkers();
     }
@@ -134,11 +129,17 @@ public class AdminMapActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
+
+        locationUpdater.stopLocationUpdates();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (locationUpdater.isRequestingLocationUpdates()) {
+            locationUpdater.startLocationUpdates();
+        }
     }
 
     // Location permission setup. //

@@ -67,7 +67,7 @@
             android:scaleY="0.9"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/settingsOption"
+            app:layout_constraintEnd_toStartOf="@id/fruitsOption"
             app:layout_constraintStart_toEndOf="@id/editOption"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/icon_background"
@@ -81,14 +81,14 @@
             android:scaleY="1.3"
             android:background="@color/transparent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/settingsOption"
+            app:layout_constraintEnd_toStartOf="@id/fruitsOption"
             app:layout_constraintStart_toEndOf="@id/editOption"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/icon_map"
             app:tint="?attr/colorSurfaceInverse" />
 
         <ImageView
-            android:id="@+id/pageMarkerSettings"
+            android:id="@+id/pageMarkerFruits"
             android:visibility="invisible"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -100,10 +100,10 @@
             app:layout_constraintStart_toEndOf="@id/mapOption"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/icon_background"
-            app:tint="@color/navigation_settings_color" />
+            app:tint="@color/navigation_fruits_color" />
 
         <ImageButton
-            android:id="@+id/settingsOption"
+            android:id="@+id/fruitsOption"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scaleX="1.3"
@@ -113,7 +113,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/mapOption"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/icon_settings"
+            app:srcCompat="@drawable/icon_fruits"
             app:tint="?attr/colorSurfaceInverse" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
