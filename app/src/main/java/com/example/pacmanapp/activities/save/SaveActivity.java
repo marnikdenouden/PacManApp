@@ -1,24 +1,21 @@
 package com.example.pacmanapp.activities.save;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.selection.SelectableContent;
 import com.example.pacmanapp.storage.SaveManager;
 import com.example.pacmanapp.storage.SavePlatform;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class SaveActivity extends AppCompatActivity {
     private final static String TAG = "SaveActivity";
     private SaveManager saveManager;
-    private Map<String, SaveButton> saveButtonMap;
+    private Saves saves;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,6 +23,9 @@ public class SaveActivity extends AppCompatActivity {
         setContentView(R.layout.activity_saves);
 
         saveManager = SaveManager.getInstance(getApplicationContext());
+
+        saves = new Saves(saveManager, SaveActivity.this);
+        updateSaveList();
 
         Button createButton = findViewById(R.id.createButton);
         createButton.setOnClickListener(view -> new CreateSaveDialog(this)
@@ -48,95 +48,55 @@ public class SaveActivity extends AppCompatActivity {
         SavePlatform.setSaveManager(saveManager);
     }
 
-    private SaveManager getSaveManager() {
-        return saveManager;
-    }
-
     /**
      * Update saves list.
      */
     private void updateSaveList() {
-        saveButtonMap = new HashMap<>();
-        LinearLayout savesList = findViewById(R.id.savesList);
-        savesList.removeAllViews();
-        for (String saveName: getSaveManager().getSaveNames()) {
-            saveButtonMap.put(saveName, addSaveButton(saveName, savesList));
-        }
-        markSelectedSaveButton(true);
-    }
-
-    /**
-     * Mark the save button that is selected by calling set loaded.
-     */
-    private void markSelectedSaveButton(boolean loaded) {
-        if (!getSaveManager().hasCurrentSave()) {
-            return;
-        }
-        String loadedSaveName = getSaveManager().getCurrentSave().getSaveName();
-        SaveButton saveButton = saveButtonMap.get(loadedSaveName);
-        if (saveButton != null) {
-            saveButton.setLoaded(loaded);
+        ViewGroup viewGroup = findViewById(R.id.content_scroll_view);
+        SelectableContent.setContent(this, viewGroup, saves, true);
+        if (saveManager.hasCurrentSave()) {
+            saves.markSelected(saveManager.getCurrentSave().getSaveName());
         }
     }
 
     /**
-     * Add save button to saves list.
+     * Create a save with the specified save name.
      *
-     * @param saveName Save name of save button
-     * @param savesList Save list to add new button to
+     * @param saveName Save name to create save for
      */
-    SaveButton addSaveButton(String saveName, LinearLayout savesList) {
-        SaveButton saveButton = new SaveButton(saveName, this);
-        saveButton.setOnClickListener(view -> new SaveDialog(saveName, this)
-                .show(getSupportFragmentManager(), "SaveDialog"));
-        savesList.addView(saveButton);
-        return saveButton;
-    }
-
-    // TODO add java doc comments
     void createSave(String saveName) {
-        getSaveManager().setCurrentSave(saveName);
+        saveManager.setCurrentSave(saveName);
         updateSaveList();
     }
 
+    /**
+     * Load the save with the specified save name.
+     *
+     * @param saveName Save name to load save for
+     */
     void loadSave(String saveName) {
-        // Mark currently selected to not be loaded
-        markSelectedSaveButton(false);
-        // Load the save name to be the new selected
-        getSaveManager().loadSave(saveName);
-        // Mark new selected to be loaded
-        markSelectedSaveButton(true);
+        // Mark the content with save name as selected
+        saves.markSelected(saveName);
+        // Load the save name to be the current save
+        saveManager.loadSave(saveName);
     }
 
+    /**
+     * Remove the save with the specified save name.
+     *
+     * @param saveName Save name to remove save for
+     */
     void removeSave(String saveName) {
-        getSaveManager().removeSave(saveName);
+        saveManager.removeSave(saveName);
         updateSaveList();
     }
 
+    /**
+     * Clear all saves stored in the save manager.
+     */
     void clearSaves() {
-        getSaveManager().clearSaves();
+        saveManager.clearSaves();
         updateSaveList();
-    }
-
-    @SuppressLint({"AppCompatCustomView", "ViewConstructor"})
-    public static class SaveButton extends Button {
-
-        public SaveButton(String saveName, AppCompatActivity currentActivity) {
-            super(currentActivity.getApplicationContext());
-            setLoaded(false);
-            setText(saveName);
-        }
-
-        public void setLoaded(boolean loaded) {
-            if (loaded) {
-                setBackgroundColor(getResources().getColor(R.color.cyan_base,
-                        getContext().getTheme()));
-            } else {
-                setBackgroundColor(getResources().getColor(R.color.white_base,
-                        getContext().getTheme()));
-            }
-        }
-
     }
 
 }

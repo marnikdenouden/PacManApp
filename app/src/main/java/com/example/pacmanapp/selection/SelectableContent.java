@@ -17,6 +17,7 @@ import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.edit.EditActivity;
 import com.example.pacmanapp.activities.inspect.InspectActivity;
 import com.example.pacmanapp.contents.Content;
+import com.example.pacmanapp.contents.ContentContainer;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -112,21 +113,22 @@ public class SelectableContent {
      *
      * @param activity Activity that is active
      * @param viewGroup ViewGroup that selectable data is contained in
-     * @param selectable Selectable to set content for
+     * @param contentContainer ContentContainer to set content from
      * @param editable Truth assignment, if content should be editable
      */
-    private static void setContent(@NotNull AppCompatActivity activity,
-                                   @NotNull ViewGroup viewGroup, @NotNull Selectable selectable,
-                                   boolean editable) {
+    public static void setContent(@NotNull AppCompatActivity activity,
+                                   @NotNull ViewGroup viewGroup,
+                                   @NotNull ContentContainer contentContainer, boolean editable) {
         LinearLayout linearLayoutContent = viewGroup.findViewById(R.id.selectable_content);
         if (linearLayoutContent == null) {
-            Log.i(TAG, "No content container found to add content to for selectable "
-                    + selectable.getLabel() + " activity of class " + activity.getLocalClassName());
+            Log.i(TAG, "No content layout found to add content to for content container "
+                    + contentContainer.getClass().getSimpleName() + " activity of class "
+                    + activity.getLocalClassName());
             return;
         }
         linearLayoutContent.removeAllViews();
 
-        for (Content content: selectable.getContent()) {
+        for (Content content: contentContainer.getContent()) {
             content.addView(activity, linearLayoutContent, editable);
         }
     }
