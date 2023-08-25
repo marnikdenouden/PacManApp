@@ -12,7 +12,7 @@ import com.example.pacmanapp.selection.Selectable;
 
 import org.jetbrains.annotations.NotNull;
 
-public class EditHint implements Content {
+public class HintEdit implements Content {
     private Content content;
     private final Selectable hintProvider;
     private String hintText = "";
@@ -30,7 +30,7 @@ public class EditHint implements Content {
      *
      * @param hintProvider Selectable that provides the hint and any clues to the optional key
      */
-    public EditHint(@NotNull Selectable hintProvider) {
+    public HintEdit(@NotNull Selectable hintProvider) {
         this.hintProvider = hintProvider;
         // Assume the hint provider is the same as the target so hint provider is never null.
         this.hintTarget = hintProvider;
@@ -72,9 +72,9 @@ public class EditHint implements Content {
          * Create a new hint editor based on the current values of the edit hint.
          */
         private HintEditor() {
-            hintText = EditHint.this.hintText;
-            key = EditHint.this.key;
-            hintTarget = EditHint.this.hintTarget;
+            hintText = HintEdit.this.hintText;
+            key = HintEdit.this.key;
+            hintTarget = HintEdit.this.hintTarget;
         }
 
         /**
@@ -144,19 +144,19 @@ public class EditHint implements Content {
          * Finish editing the hint and save it in the edit hint content.
          */
         public void save() {
-            EditHint.this.hintText = hintText;
-            EditHint.this.key = key;
-            EditHint.this.hintTarget = hintTarget;
+            HintEdit.this.hintText = hintText;
+            HintEdit.this.key = key;
+            HintEdit.this.hintTarget = hintTarget;
 
-            Hint.HintBuilder hintBuilder = new Hint.HintBuilder(hintTarget);
+            HintBuilder hintBuilder = new HintBuilder(hintTarget);
             if (!hintText.equals("")) {
                 hintBuilder.setHintText(hintText);
             }
-            Hint hint = hintBuilder.build();
+            Content hint = hintBuilder.build();
             content = hint;
 
             if (!key.equals("")) {
-                content = new LockedContent(hint, EditHint.this.hintProvider, key);
+                content = new LockedContent(hint, HintEdit.this.hintProvider, key);
             }
         }
 

@@ -1,6 +1,8 @@
 package com.example.pacmanapp.contents;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
@@ -18,23 +21,23 @@ import com.example.pacmanapp.selection.Selectable;
 
 import org.jetbrains.annotations.NotNull;
 
-public class Hint implements Content {
-    private static final String TAG = "ContentHint";
+public class HintImage implements Content {
+    private static final String TAG = "HintImage";
     private final int iconId;
     private final String label;
     private final Selectable hintTarget;
-    private String hint;
+    private Bitmap bitmap;
 
     /**
      * Constructor of hint that is used by the hint builder.
      *
      * @param hintBuilder Hint builder that has hint data
      */
-    private Hint(HintBuilder hintBuilder) {
+    HintImage(HintBuilder hintBuilder) {
         iconId = hintBuilder.hintTarget.getIconId();
         label = hintBuilder.hintTarget.getLabel();
         hintTarget = hintBuilder.hintTarget;
-        hint = hintBuilder.hintText;
+        bitmap = hintBuilder.bitmap;
     }
 
     @Override
@@ -59,8 +62,8 @@ public class Hint implements Content {
         View hintView = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.content_hint_text, viewGroup, false);
 
-        TextView hintInfoTextView = hintView.findViewById(R.id.hint_text);
-        hintInfoTextView.setText(hint);
+//        TextView hintInfoTextView = hintView.findViewById(R.id.hint_text);
+//        hintInfoTextView.setText(hint); // TODO add actual images
 
         TextView labelTextView = hintView.findViewById(R.id.hint_label);
         labelTextView.setText(label);
@@ -87,9 +90,9 @@ public class Hint implements Content {
         View hintView = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.content_hint_text_edit, viewGroup, false);
 
-        EditText hintEditTextView = hintView.findViewById(R.id.hint_text);
-        Util.TextListener textListener = (String text) -> hint = text;
-        Util.configureEditText(hintEditTextView, hint, textListener);
+//        EditText hintEditTextView = hintView.findViewById(R.id.hint_text);
+//        Util.TextListener textListener = (String text) -> hint = text;
+//        Util.configureEditText(hintEditTextView, hint, textListener);
 
         TextView labelTextView = hintView.findViewById(R.id.hint_label);
         labelTextView.setText(label);
@@ -103,40 +106,4 @@ public class Hint implements Content {
         viewGroup.addView(hintView);
         return hintView;
     }
-
-    public static class HintBuilder {
-        private String hintText;
-        private final Selectable hintTarget;
-
-        /**
-         * Hint builder that can be created with a selectable.
-         *
-         * @param hintTarget Selectable to create hint for.
-         */
-        public HintBuilder(Selectable hintTarget) {
-            hintText = "";
-            this.hintTarget = hintTarget;
-        }
-
-        /**
-         * Add a hint string to the hint builder.
-         *
-         * @param hintText Hint that will be added to hint builder
-         * @return HintBuilder that be continued
-         */
-        public HintBuilder setHintText(@NotNull String hintText) {
-            this.hintText = hintText;
-            return this;
-        }
-
-        /**
-         * Finish hint building and get the created hint.
-         *
-         * @return Hint that was created by the hint builder
-         */
-        public Hint build() {
-            return new Hint(this);
-        }
-    }
-
 }
