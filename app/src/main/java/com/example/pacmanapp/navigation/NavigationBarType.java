@@ -9,7 +9,7 @@ import com.example.pacmanapp.R;
 public enum NavigationBarType {
     ADMIN(R.layout.navigation_bar_admin, R.layout.navigation_bar_admin_inverse,
             R.id.admin_navigation_bar,
-            new PageType[] {PageType.EDIT, PageType.ADMIN_MAP, PageType.ADMIN_SETTINGS}),
+            new PageType[] {PageType.EDIT, PageType.ADMIN_MAP, PageType.FRUITS}),
     PLAY(R.layout.navigation_bar_play, R.layout.navigation_bar_play_inverse,
             R.id.play_navigation_bar,
             new PageType[] {PageType.INSPECT, PageType.MAP, PageType.SETTINGS});

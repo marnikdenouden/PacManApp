@@ -40,6 +40,10 @@
             android:exported="false">
         </activity>
         <activity
+            android:name=".activities.general.FruitActivity"
+            android:exported="false">
+        </activity>
+        <activity
             android:name=".activities.save.SaveActivity"
             android:exported="false">
         </activity>

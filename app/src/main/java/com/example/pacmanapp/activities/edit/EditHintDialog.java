@@ -4,11 +4,13 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,10 +22,15 @@ import androidx.fragment.app.DialogFragment;
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.contents.EditHint;
 import com.example.pacmanapp.contents.Util;
+import com.example.pacmanapp.selection.NextSelectionSelector;
+import com.example.pacmanapp.selection.Selectable;
+import com.example.pacmanapp.selection.Selector;
+import com.example.pacmanapp.selection.selectables.BlankInspect;
 
 import org.jetbrains.annotations.NotNull;
 
 public class EditHintDialog extends DialogFragment {
+    private final static String TAG = "EditHintDialog";
     private final AppCompatActivity activity;
     private final EditHint.HintEditor hintEditor;
 
@@ -51,11 +58,21 @@ public class EditHintDialog extends DialogFragment {
         Drawable iconImage = ResourcesCompat.getDrawable(editHintView.getResources(),
                 hintEditor.getHintTarget().getIconId(), editHintView.getContext().getTheme());
         iconImageView.setImageDrawable(iconImage);
-        iconImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO should be a way to select a fruit as hint target.
-            }
+
+        iconImageView.setOnClickListener(view -> {
+            Selector selector = NextSelectionSelector.getNextSelectionSelector(
+                    R.id.editHintNextSelectionSelector, new BlankInspect(getResources()));
+
+            // Take the next selected selectable as the hint target of this hint.
+            selector.addOnSelectionListener((Selectable hintTarget) -> {
+                Log.i(TAG, "Selected hint target " + hintTarget.getLabel() + " for hint");
+                hintEditor.setHintTarget(hintTarget);
+                hintEditor.save();
+            });
+
+            Toast.makeText(getContext(), "Select any selectable to have the hint be for",
+                    Toast.LENGTH_LONG).show();
+            dismiss();
         });
 
         TextView labelTextView = editHintView.findViewById(R.id.hint_label);

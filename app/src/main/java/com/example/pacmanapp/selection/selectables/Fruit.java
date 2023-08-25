@@ -1,5 +1,7 @@
 package com.example.pacmanapp.selection.selectables;
 
+import androidx.annotation.NonNull;
+
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.contents.Content;
 import com.example.pacmanapp.selection.Selectable;
@@ -34,6 +36,15 @@ public class Fruit implements Selectable {
         return new ArrayList<>();
     }
 
+    /**
+     * Get the fruit type of the fruit.
+     *
+     * @return Fruit type of the fruit
+     */
+    public FruitType getFruitType() {
+        return fruitType;
+    }
+
     public enum FruitType {
         CHERRY("Cherry", R.drawable.fruit_1_cherry, 100),
         STRAWBERRY("Strawberry", R.drawable.fruit_2_strawberry, 300),
@@ -52,6 +63,30 @@ public class Fruit implements Selectable {
             this.label = label;
             this.drawableId = drawableId;
             this.points = value;
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return label;
+        }
+
+        /**
+         * Get the drawable id of this fruit type.
+         *
+         * @return Drawable id of fruit type
+         */
+        public int getDrawableId() {
+            return drawableId;
+        }
+
+        /**
+         * Get the default point value of the fruit type.
+         *
+         * @return default point value int of fruit type
+         */
+        public int getPoints() {
+            return points;
         }
     }
 }

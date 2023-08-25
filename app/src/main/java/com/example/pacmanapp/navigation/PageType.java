@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.edit.EditActivity;
+import com.example.pacmanapp.activities.general.FruitActivity;
 import com.example.pacmanapp.activities.inspect.InspectActivity;
 import com.example.pacmanapp.activities.map.AdminMapActivity;
 import com.example.pacmanapp.activities.map.PlayMapActivity;
+import com.example.pacmanapp.activities.save.SaveActivity;
 import com.example.pacmanapp.activities.settings.AdminSettingsActivity;
 import com.example.pacmanapp.activities.settings.PlaySettingsActivity;
 
@@ -16,7 +18,8 @@ public enum PageType {
     SETTINGS(R.id.settingsOption, R.id.pageMarkerSettings, PlaySettingsActivity.class),
     EDIT(R.id.editOption, R.id.pageMarkerEdit, EditActivity.class),
     ADMIN_MAP(R.id.mapOption, R.id.pageMarkerMap, AdminMapActivity.class),
-    ADMIN_SETTINGS(R.id.settingsOption, R.id.pageMarkerSettings, AdminSettingsActivity.class);
+    ADMIN_SETTINGS(R.id.settingsOption, R.id.pageMarkerSettings, AdminSettingsActivity.class),
+    FRUITS(R.id.fruitsOption, R.id.pageMarkerFruits, FruitActivity.class);
 
     private final int buttonId;
     private final int markerId;

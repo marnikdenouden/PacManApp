@@ -15,7 +15,7 @@ public class NextSelectionSelector extends Selector {
     }
 
     /**
-     * get the next selection selector for the specified id.
+     * Get the next selection selector for the specified id.
      *
      * @param id Id to get next selection selector for
      * @param selectable Selectable that will be selected as default

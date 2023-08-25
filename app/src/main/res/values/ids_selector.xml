@@ -2,4 +2,5 @@
 <resources>
     <item type="id" name="inspectAllSelector" />
     <item type="id" name="editAllSelector" />
+    <item type="id" name="editHintNextSelectionSelector" />
 </resources>

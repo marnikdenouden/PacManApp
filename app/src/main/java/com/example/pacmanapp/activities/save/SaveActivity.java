@@ -24,7 +24,7 @@ public class SaveActivity extends AppCompatActivity {
 
         saveManager = SaveManager.getInstance(getApplicationContext());
 
-        saves = new Saves(saveManager, SaveActivity.this);
+        saves = new Saves(saveManager, this);
         updateSaveList();
 
         Button createButton = findViewById(R.id.createButton);

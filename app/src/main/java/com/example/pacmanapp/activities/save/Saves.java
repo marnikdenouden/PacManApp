@@ -48,7 +48,7 @@ public class Saves implements ContentContainer {
      * @param saveName Save name to create save button for
      * @return Selectable button content created for the specified save name
      */
-    public SelectableButtonContent createSaveButton(String saveName) {
+    private SelectableButtonContent createSaveButton(String saveName) {
         Runnable onSaveButtonClick = () -> new SaveDialog(saveName, saveActivity)
                 .show(saveActivity.getSupportFragmentManager(), "SaveDialog");
         SelectableButtonContent saveButton =
