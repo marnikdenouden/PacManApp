@@ -66,7 +66,7 @@ public class PlayMapActivity extends AppCompatActivity
 
         preview = new SelectableContent.Preview(new BlankInspect(getResources()));
         ViewGroup viewGroup = findViewById(R.id.selected_preview);
-        preview.addView(this, viewGroup, false);
+        preview.configure(this, viewGroup, false);
 
         if (!SavePlatform.hasSave()) {
             Navigate.navigate(this, SaveActivity.class);
