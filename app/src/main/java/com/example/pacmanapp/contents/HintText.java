@@ -30,7 +30,7 @@ public class HintText implements Content {
      *
      * @param hintBuilder Hint builder that has hint data
      */
-    HintText(HintBuilder hintBuilder) {
+    HintText(@NotNull HintBuilder hintBuilder) {
         iconId = hintBuilder.hintTarget.getIconId();
         label = hintBuilder.hintTarget.getLabel();
         hintTarget = hintBuilder.hintTarget;

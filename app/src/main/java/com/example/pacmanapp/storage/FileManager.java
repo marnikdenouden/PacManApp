@@ -2,13 +2,17 @@ package com.example.pacmanapp.storage;
 
 import android.util.Log;
 
+import androidx.annotation.WorkerThread;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 
-public class FileManager {
+public class FileManager implements Serializable {
+    private static final long serialVersionUID = 1L;
     private static final String TAG = "FileManager";
     private final File directory;
 
@@ -41,6 +45,15 @@ public class FileManager {
     public void removeFile(File file) {
         if (!file.delete()) {
             Log.w(TAG, "Could not delete file with name " + file.getName());
+        }
+    }
+
+    /**
+     * Delete all the files in the file manager directory.
+     */
+    public void clearFiles() {
+        for (File file: getFiles()) {
+            removeFile(file);
         }
     }
 
@@ -79,6 +92,7 @@ public class FileManager {
      * @param file File to save data in
      * @param fileData File data to store in the file
      */
+    @WorkerThread
     public static void saveFileData(File file, byte[] fileData) {
         try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
             fileOutputStream.write(fileData);
@@ -95,6 +109,7 @@ public class FileManager {
      * @param file File to load the data from
      * @return Byte array data from the specified file
      */
+    @WorkerThread
     public static byte[] loadFileData(File file) {
         try (FileInputStream fileInputStream = new FileInputStream(file)) {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -109,5 +124,14 @@ public class FileManager {
             exception.printStackTrace();
             throw new RuntimeException();
         }
+    }
+
+    /**
+     * Get the directory of the file manager.
+     *
+     * @return directory File of the file manager
+     */
+    public File getDirectory() {
+        return directory;
     }
 }

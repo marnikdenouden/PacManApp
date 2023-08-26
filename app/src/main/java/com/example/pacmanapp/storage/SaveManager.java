@@ -3,6 +3,8 @@ package com.example.pacmanapp.storage;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.annotation.WorkerThread;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -12,25 +14,31 @@ public class SaveManager {
     private static final String TAG = "SaveManager";
     private static SaveManager instance;
     private final FileManager fileManager;
+    private final File imageDirectory;
     private GameSave currentSave;
 
     /**
      * Create a save manager for a specified context.
      *
-     * @param context Context to load current save in
+     * @param context Context to get files directory with
      */
     private SaveManager(Context context) {
         File saveDirectory = new File(context.getFilesDir(), "saves");
         fileManager = new FileManager(saveDirectory);
+        imageDirectory = new File(context.getFilesDir(), "images");
     }
 
 // TODO on loading a new save the selection should be reset somehow? Maybe make what is selected part of the save.
+
+    // TODO ensure that laod save and save save are called in worker threads, maybe it requires loading display in UI.
+
 
     /**
      * Load a game save with the specified save name and load it in the given context.
      *
      * @param saveName Save name to load game save for
      */
+    @WorkerThread
     public void loadSave(@NotNull String saveName) {
         File file = fileManager.getFile(saveName);
         byte[] data = FileManager.loadFileData(file);
@@ -53,6 +61,7 @@ public class SaveManager {
      *
      * @pre save manager has a current save set
      */
+    @WorkerThread
     public void saveCurrentSave() {
         if (!hasCurrentSave()) {
             Log.e(TAG, "Could not save current save, because current save was not yet set.");
@@ -76,13 +85,14 @@ public class SaveManager {
      * @param saveName New save name to name the created save
      * @pre !hasSave(saveName)
      */
+    @WorkerThread
     private void createSave(@NotNull String saveName) {
         if (fileManager.hasFile(saveName)) {
             Log.w(TAG, "Could not create save with name \"" + saveName +
                     "\" as a save with this name already exists.");
             return;
         }
-        currentSave = new GameSave(saveName);
+        currentSave = new GameSave(saveName, imageDirectory);
         Log.i(TAG, "Created save with save name " + saveName);
     }
 
@@ -101,6 +111,7 @@ public class SaveManager {
      *
      * @param saveName Save name to load or create current save for
      */
+    @WorkerThread
     public void setCurrentSave(@NotNull String saveName) {
         if (hasSave(saveName)) {
             loadSave(saveName);
@@ -120,7 +131,7 @@ public class SaveManager {
             return; // Files is already empty.
         }
         for (File saveFile : files) {
-            fileManager.removeFile(saveFile);
+            removeSave(saveFile.getName());
         }
         Log.i(TAG, "Removed all saves");
     }
@@ -131,6 +142,12 @@ public class SaveManager {
      * @param saveName Save name to remove from the save directory
      */
     public void removeSave(@NotNull String saveName) {
+        ImageManager imageManager = new ImageManager(saveName, imageDirectory);
+        imageManager.clearFiles();
+        if (!imageManager.getDirectory().delete()) {
+            Log.w(TAG, "Could not image manager directory file with name " +
+                    imageManager.getDirectory().getName() + " for save " + saveName);
+        }
         File saveFile = fileManager.getFile(saveName);
         fileManager.removeFile(saveFile);
         Log.i(TAG, "Removed save with save name " + saveName);

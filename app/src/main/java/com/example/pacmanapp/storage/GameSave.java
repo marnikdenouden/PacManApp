@@ -2,8 +2,13 @@ package com.example.pacmanapp.storage;
 
 import android.util.Log;
 
+import androidx.annotation.WorkerThread;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -17,10 +22,19 @@ public class GameSave implements Serializable {
     private final String saveName;
 
     private static final String TAG = "GameSave";
+    private final ImageStorage imageStorage;
     private final Collection<SaveObject> saveObjects;
 
-    GameSave(String saveName) {
+    /**
+     * Create a game save for a specified save name.
+     *
+     * @param saveName Save name to identify save with
+     * @param imageDirectory Image directory to save images in
+     */
+    @WorkerThread
+    GameSave(@NotNull String saveName, @NotNull File imageDirectory) {
         this.saveName = saveName;
+        this.imageStorage = new ImageStorage(saveName, imageDirectory);
         saveObjects = new HashSet<>();
     }
 
@@ -110,6 +124,15 @@ public class GameSave implements Serializable {
             Log.d(TAG, "Game save read from object input stream: \n" + gameSave);
             return gameSave;
         }
+    }
+
+    /**
+     * Get the image storage of this save.
+     *
+     * @return Image storage of this save
+     */
+    public ImageStorage getImageStorage() {
+        return imageStorage;
     }
 
 }

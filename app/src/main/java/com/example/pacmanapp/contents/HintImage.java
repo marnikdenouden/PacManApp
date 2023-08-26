@@ -2,11 +2,9 @@ package com.example.pacmanapp.contents;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +16,7 @@ import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.edit.EditActivity;
 import com.example.pacmanapp.activities.inspect.InspectActivity;
 import com.example.pacmanapp.selection.Selectable;
+import com.example.pacmanapp.storage.SavePlatform;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -26,23 +25,25 @@ public class HintImage implements Content {
     private final int iconId;
     private final String label;
     private final Selectable hintTarget;
-    private Bitmap bitmap;
+    private final String imageId;
+    private transient Bitmap image;
 
     /**
      * Constructor of hint that is used by the hint builder.
      *
      * @param hintBuilder Hint builder that has hint data
      */
-    HintImage(HintBuilder hintBuilder) {
+    HintImage(@NotNull HintBuilder hintBuilder) {
         iconId = hintBuilder.hintTarget.getIconId();
         label = hintBuilder.hintTarget.getLabel();
         hintTarget = hintBuilder.hintTarget;
-        bitmap = hintBuilder.bitmap;
+        imageId = hintBuilder.hintImageId;
     }
 
     @Override
     public View addView(@NotNull AppCompatActivity activity,
                         @NotNull ViewGroup viewGroup, boolean editable) {
+        image = SavePlatform.getSave().getImageStorage().getImage(imageId);
         if (editable) {
             return addEditView(activity, viewGroup);
         } else {
@@ -60,10 +61,10 @@ public class HintImage implements Content {
      */
     View addInfoView(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup) {
         View hintView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.content_hint_text, viewGroup, false);
+                .inflate(R.layout.content_hint_image, viewGroup, false);
 
-//        TextView hintInfoTextView = hintView.findViewById(R.id.hint_text);
-//        hintInfoTextView.setText(hint); // TODO add actual images
+        ImageView hintEditImageView = hintView.findViewById(R.id.hint_image);
+        hintEditImageView.setImageBitmap(image);
 
         TextView labelTextView = hintView.findViewById(R.id.hint_label);
         labelTextView.setText(label);
@@ -88,11 +89,10 @@ public class HintImage implements Content {
      */
     View addEditView(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup) {
         View hintView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.content_hint_text_edit, viewGroup, false);
+                .inflate(R.layout.content_hint_image, viewGroup, false);
 
-//        EditText hintEditTextView = hintView.findViewById(R.id.hint_text);
-//        Util.TextListener textListener = (String text) -> hint = text;
-//        Util.configureEditText(hintEditTextView, hint, textListener);
+        ImageView hintEditImageView = hintView.findViewById(R.id.hint_image);
+        hintEditImageView.setImageBitmap(image);
 
         TextView labelTextView = hintView.findViewById(R.id.hint_label);
         labelTextView.setText(label);

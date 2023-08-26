@@ -1,5 +1,6 @@
 package com.example.pacmanapp.contents;
 
+import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.edit.EditHintDialog;
 import com.example.pacmanapp.selection.Selectable;
+import com.example.pacmanapp.storage.SavePlatform;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +18,7 @@ public class HintEdit implements Content {
     private Content content;
     private final Selectable hintProvider;
     private String hintText = "";
+    private String hintImageId;
     private String key = "";
     private Selectable hintTarget;
 
@@ -65,6 +68,7 @@ public class HintEdit implements Content {
 
     public class HintEditor {
         private String hintText = "";
+        private String hintImageId;
         private String key = "";
         private Selectable hintTarget;
 
@@ -73,6 +77,7 @@ public class HintEdit implements Content {
          */
         private HintEditor() {
             hintText = HintEdit.this.hintText;
+            hintImageId = HintEdit.this.hintImageId;
             key = HintEdit.this.key;
             hintTarget = HintEdit.this.hintTarget;
         }
@@ -93,6 +98,34 @@ public class HintEdit implements Content {
          */
         public String getHintText() {
             return hintText;
+        }
+
+        /**
+         * Set the hint image.
+         *
+         * @param image Bitmap image for the hint to display
+         * @param imageId String that uniquely identifies the image
+         */
+        public void setHintImage(@NotNull String imageId, @NotNull Bitmap image) {
+            this.hintImageId = imageId;
+            SavePlatform.getSave().getImageStorage().saveImage(imageId, image);
+        }
+
+        /**
+         * Remove the hint image.
+         */
+        public void removeHintImage() {
+            SavePlatform.getSave().getImageStorage().removeImage(hintImageId);
+            this.hintImageId = null;
+        }
+
+        /**
+         * Get hint image that is displayed in the edit hint.
+         *
+         * @return hintImage Bitmap that is displayed in the edit hint
+         */
+        public Bitmap getHintImage() {
+            return SavePlatform.getSave().getImageStorage().getImage(hintImageId);
         }
 
         /**
@@ -145,13 +178,20 @@ public class HintEdit implements Content {
          */
         public void save() {
             HintEdit.this.hintText = hintText;
+            HintEdit.this.hintImageId = hintImageId;
             HintEdit.this.key = key;
             HintEdit.this.hintTarget = hintTarget;
 
             HintBuilder hintBuilder = new HintBuilder(hintTarget);
+
             if (!hintText.equals("")) {
                 hintBuilder.setHintText(hintText);
             }
+
+            if (hintImageId != null) {
+                hintBuilder.setHintImage(hintImageId);
+            }
+
             Content hint = hintBuilder.build();
             content = hint;
 

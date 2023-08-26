@@ -3,12 +3,13 @@ package com.example.pacmanapp.contents;
 import android.graphics.Bitmap;
 
 import com.example.pacmanapp.selection.Selectable;
+import com.example.pacmanapp.storage.SavePlatform;
 
 import org.jetbrains.annotations.NotNull;
 
 public class HintBuilder {
     String hintText;
-    Bitmap bitmap;
+    String hintImageId;
     final Selectable hintTarget;
 
     /**
@@ -16,7 +17,7 @@ public class HintBuilder {
      *
      * @param hintTarget Selectable to create hint for.
      */
-    public HintBuilder(Selectable hintTarget) {
+    public HintBuilder(@NotNull Selectable hintTarget) {
         hintText = "";
         this.hintTarget = hintTarget;
     }
@@ -33,11 +34,26 @@ public class HintBuilder {
     }
 
     /**
+     * Add a hint image id to the hint builder.
+     *
+     * @param hintImageId String id that will be added to hint builder
+     * @return HintBuilder that be continued
+     */
+    public HintBuilder setHintImage(@NotNull String hintImageId) {
+        this.hintImageId = hintImageId;
+        return this;
+    }
+
+
+    /**
      * Finish hint building and get the created hint.
      *
      * @return Hint that was created by the hint builder
      */
     public Content build() {
+        if (hintImageId != null) {
+            return new HintImage(this);
+        }
         return new HintText(this);
     }
 }

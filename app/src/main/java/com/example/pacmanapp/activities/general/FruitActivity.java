@@ -52,7 +52,7 @@ public class FruitActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        SaveManager.getInstance(this).saveCurrentSave();
+        SavePlatform.save();
     }
 
     /**

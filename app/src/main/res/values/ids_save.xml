@@ -4,4 +4,5 @@
     <item type="id" name="mapMarkers" />
     <item type="id" name="fruitStorage" />
     <item type="id" name="gameSettings" />
+    <item type="id" name="imageManager" />
 </resources>

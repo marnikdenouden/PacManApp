@@ -9,7 +9,7 @@ public abstract class SaveObject implements Serializable {
     /**
      * Create a save object that is added to the save manager for the specified save name.
      *
-     * @param gameSave Save to add the save object to the current save of.
+     * @param gameSave Save to add the save object to
      */
     public SaveObject(int saveObjectId, GameSave gameSave) {
         this.saveObjectId = saveObjectId;
