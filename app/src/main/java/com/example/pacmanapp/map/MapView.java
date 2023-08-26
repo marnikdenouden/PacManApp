@@ -52,6 +52,7 @@ public class MapView extends androidx.appcompat.widget.AppCompatImageView {
                     mapType + " is null");
             return;
         }
+        drawable.setFilterBitmap(false);
         drawable.setTint(mapType.getLineColor(getContext()));
         setImageDrawable(drawable);
     }

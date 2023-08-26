@@ -99,6 +99,7 @@ public class Ghost extends Character implements Serializable, LocationObserver {
         Drawable drawableBase = direction.getDrawableGhostBase(context, frameIndex);
 
         assert drawableBase != null;
+        drawableBase.setFilterBitmap(false); // TODO do this for all the pixel art images and reduce the size of them.
         drawableBase.setTintMode(PorterDuff.Mode.SRC_ATOP);
         drawableBase.setTint(color);
 

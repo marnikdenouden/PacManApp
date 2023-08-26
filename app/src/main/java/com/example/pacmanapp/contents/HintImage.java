@@ -72,6 +72,8 @@ public class HintImage implements Content {
         ImageView iconImageView = hintView.findViewById(R.id.hint_icon);
         Drawable iconImage = ResourcesCompat.getDrawable(hintView.getResources(), iconId,
                 hintView.getContext().getTheme());
+        assert iconImage != null;
+        iconImage.setFilterBitmap(false);
         iconImageView.setImageDrawable(iconImage);
         iconImageView.setOnClickListener(view -> InspectActivity.open(activity, hintTarget));
 
@@ -100,6 +102,7 @@ public class HintImage implements Content {
         ImageView iconImageView = hintView.findViewById(R.id.hint_icon);
         Drawable iconImage = ResourcesCompat.getDrawable(hintView.getResources(), iconId,
                 hintView.getContext().getTheme());
+        iconImage.setFilterBitmap(false);
         iconImageView.setImageDrawable(iconImage);
         iconImageView.setOnClickListener(view -> EditActivity.open(activity, hintTarget));
 

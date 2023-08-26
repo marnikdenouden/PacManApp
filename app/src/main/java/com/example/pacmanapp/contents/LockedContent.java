@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +28,13 @@ public class LockedContent implements Content {
     private final String key;
     private final Content content;
     private final Selectable hintProvider;
+
+    // Set in add lock view
+    private EditText keyTextView;
+    private AppCompatActivity activity;
+    private ViewGroup viewGroup;
+    private View lockView;
+    private String keyInput = "";
 
     /**
      * Constructs a lock view that reveals content after key is entered.
@@ -64,29 +72,15 @@ public class LockedContent implements Content {
      * @return View view that was added to the specified view group
      */
     View addLockView(@NotNull AppCompatActivity activity, @NotNull ViewGroup viewGroup) {
-        View lockView = LayoutInflater.from(viewGroup.getContext())
+        this.activity = activity;
+        this.viewGroup = viewGroup;
+
+        lockView = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.content_lock, viewGroup, false);
 
-        EditText keyTextView = lockView.findViewById(R.id.key_input);
+        keyTextView = lockView.findViewById(R.id.key_input);
         Util.TextListener textListener = (String text) -> {
-            if (key.equals(text)) {
-                locked = false;
-                viewGroup.removeView(lockView);
-                content.addView(activity, viewGroup, false);
-                keyTextView.setEnabled(false); // TODO could use some more juice
-                int pointsToAdd = 0;
-                if (hintProvider instanceof PacDot) {
-                    pointsToAdd = 50;
-                }
-                if (hintProvider instanceof Fruit) {
-                    Fruit fruit = (Fruit) hintProvider;
-                    pointsToAdd = fruit.getFruitType().getPoints();
-                }
-                new Score(SavePlatform.getSave()).addValue(pointsToAdd);
-                keyTextView.getRootView().clearFocus();
-            } else {
-                new Score(SavePlatform.getSave()).addValue(-10);
-            }
+            keyInput = text;
         };
         Util.configureEditText(keyTextView, "", textListener);
 
@@ -96,8 +90,38 @@ public class LockedContent implements Content {
         iconImageView.setImageDrawable(iconImage);
         iconImageView.setOnClickListener(view -> InspectActivity.open(activity, hintProvider));
 
+        ImageView keyButton = lockView.findViewById(R.id.key_button);
+        keyButton.setOnClickListener(view -> checkKey());
+
         viewGroup.addView(lockView);
         return lockView;
+    }
+
+    /**
+     * Check the last key input for being the correct key.
+     *
+     * @pre add lock view was called
+     */
+    public void checkKey() {
+        if (key.equals(keyInput)) {
+            locked = false;
+            viewGroup.removeView(lockView);
+            content.addView(activity, viewGroup, false);
+            keyTextView.setEnabled(false); // TODO could use some more juice
+            int pointsToAdd = 0;
+            if (hintProvider instanceof PacDot) {
+                pointsToAdd = 50;
+            }
+            if (hintProvider instanceof Fruit) {
+                Fruit fruit = (Fruit) hintProvider;
+                pointsToAdd = fruit.getFruitType().getPoints();
+            }
+            new Score(SavePlatform.getSave()).addValue(pointsToAdd);
+            keyTextView.getRootView().clearFocus();
+        } else {
+            new Score(SavePlatform.getSave()).addValue(-10);
+            Toast.makeText(activity, "Incorrect key, reducing your score now", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }
