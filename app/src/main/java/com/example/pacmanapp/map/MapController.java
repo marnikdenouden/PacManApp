@@ -76,17 +76,11 @@ public class MapController extends View {
                 int xVelocity = (int) velocityTracker.getXVelocity();
                 int yVelocity = (int) velocityTracker.getYVelocity();
 
-                // Set the bound values of the map area
-                int leftBound = 0;
-                int rightBound = getRightBound();
-                int topBound = 0;
-                int bottomBound = getBottomBound();
-
                 // Fling the map area with the computed values
                 mapArea.scroller.fling(
                         getScrollX(event), getScrollY(event),
                         -xVelocity, -yVelocity,
-                        leftBound, rightBound, topBound, bottomBound,
+                        getLeftBound(), getRightBound(), getTopBound(), getBottomBound(),
                         maxOvershootValue, maxOvershootValue);
 
                 // Invalidate the map area to ensure it gets updated
@@ -123,11 +117,8 @@ public class MapController extends View {
      * @return scrollX that has been computed with the motion event for hte map area
      */
     private int getScrollX(MotionEvent event) {
-        int leftBound = 0;
-        int rightBound = getRightBound();
-
         float moveX = lastRawX - event.getRawX();
-        return (int) Math.max(leftBound, Math.min(mapArea.getScrollX() + moveX, rightBound));
+        return (int) Math.max(getLeftBound(), Math.min(mapArea.getScrollX() + moveX, getRightBound()));
     }
 
     /**
@@ -136,11 +127,9 @@ public class MapController extends View {
      * @return scrollY that has been computed with the motion event for hte map area
      */
     private int getScrollY(MotionEvent event) {
-        int topBound = 0;
-        int bottomBound = getBottomBound();
-
         float moveY = lastRawY - event.getRawY();
-        return (int) Math.max(topBound, Math.min(mapArea.getScrollY() + moveY, bottomBound));
+        return (int) Math.max(getTopBound(),
+                Math.min(mapArea.getScrollY() + moveY, getBottomBound()));
     }
 
     /**
@@ -160,6 +149,24 @@ public class MapController extends View {
      */
     private int getBottomBound() {
         int mapHeight = mapArea.getMapView().getHeight();
-        return mapHeight - mapArea.getHeight();
+        return mapHeight - mapArea.getHeight() +128; // 128 adjusts for overlap with bottom area
+    }
+
+    /**
+     * Get the left bound for the current map area.
+     *
+     * @return leftBound value for the map area.
+     */
+    private int getLeftBound() {
+        return 0;
+    }
+
+    /**
+     * Get the top bound for the current map area.
+     *
+     * @return topBound value for the map area.
+     */
+    private int getTopBound() {
+        return -128; // 128 adjusts for overlap with top area
     }
 }
