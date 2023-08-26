@@ -6,11 +6,12 @@ import com.example.pacmanapp.R;
 import com.google.android.material.color.MaterialColors;
 
 public enum MapType {
-//    PACMAN_GERARDUS(R.drawable.map_gerardus, R.color.white, R.color.black, R.dimen.defaultMapSize, R.dimen.defaultMapSize,
-//            51.424203344, -0.0084914531, 5.48382758497, 0.013472188),
+    PACMAN_GERARDUS(R.drawable.map_gerardus, R.color.white, R.color.black, R.dimen.defaultMapSize, R.dimen.defaultMapSize,
+            51.424203344, -0.0084914531, 5.48382758497, 0.013472188),
     PACMAN_FRANSEBAAN(R.drawable.map_fransebaan, R.color.white, R.color.black, R.dimen.defaultMapSize, R.dimen.defaultMapSize,
-            51.491565, 51.478610-51.491565, 5.4358, 5.4516-5.4358);
-
+            51.491565, -0.012955,  5.4357 -0.0018, (5.4515-5.4357) + 0.0042);
+    // franse baan: 5.4366
+    //juist 5.4357
     private final int drawable;
     private final int backgroundColor;
     private final int lineColor;
