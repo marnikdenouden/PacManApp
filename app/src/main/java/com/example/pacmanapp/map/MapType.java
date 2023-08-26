@@ -9,7 +9,7 @@ public enum MapType {
 //    PACMAN_GERARDUS(R.drawable.map_gerardus, R.color.white, R.color.black, R.dimen.defaultMapSize, R.dimen.defaultMapSize,
 //            51.424203344, -0.0084914531, 5.48382758497, 0.013472188),
     PACMAN_FRANSEBAAN(R.drawable.map_fransebaan, R.color.white, R.color.black, R.dimen.defaultMapSize, R.dimen.defaultMapSize,
-            51.491565, 51.478610-51.491565, 5.435934, 5.451532-5.435934);
+            51.491565, 51.478610-51.491565, 5.4358, 5.4516-5.4358);
 
     private final int drawable;
     private final int backgroundColor;
