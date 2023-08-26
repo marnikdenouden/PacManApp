@@ -26,6 +26,16 @@ public class Score {
     }
 
     /**
+     * Add a value to the score.
+     *
+     * @param value int to add to the current score value
+     */
+    public void addValue(int value) {
+        long currentValue = playValues.getValue(scoreValueId, 0);
+        setValue((int) currentValue + value);
+    }
+
+    /**
      * Set value of the score to display.
      *
      * @param value Value to set score to

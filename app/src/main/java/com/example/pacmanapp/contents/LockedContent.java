@@ -13,7 +13,11 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.inspect.InspectActivity;
+import com.example.pacmanapp.displays.Score;
+import com.example.pacmanapp.markers.PacDot;
 import com.example.pacmanapp.selection.Selectable;
+import com.example.pacmanapp.selection.selectables.Fruit;
+import com.example.pacmanapp.storage.SavePlatform;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -70,7 +74,18 @@ public class LockedContent implements Content {
                 viewGroup.removeView(lockView);
                 content.addView(activity, viewGroup, false);
                 keyTextView.setEnabled(false); // TODO could use some more juice
+                int pointsToAdd = 0;
+                if (hintProvider instanceof PacDot) {
+                    pointsToAdd = 50;
+                }
+                if (hintProvider instanceof Fruit) {
+                    Fruit fruit = (Fruit) hintProvider;
+                    pointsToAdd = fruit.getFruitType().getPoints();
+                }
+                new Score(SavePlatform.getSave()).addValue(pointsToAdd);
                 keyTextView.getRootView().clearFocus();
+            } else {
+                new Score(SavePlatform.getSave()).addValue(-10);
             }
         };
         Util.configureEditText(keyTextView, "", textListener);

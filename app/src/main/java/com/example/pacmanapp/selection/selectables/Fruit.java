@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.contents.Content;
+import com.example.pacmanapp.contents.Information;
+import com.example.pacmanapp.contents.LockedContent;
 import com.example.pacmanapp.selection.Selectable;
 
 import java.util.ArrayList;
@@ -11,9 +13,13 @@ import java.util.List;
 
 public class Fruit implements Selectable {
     private final FruitType fruitType;
+    private final List<Content> contentList;
 
     public Fruit(FruitType fruitType) {
         this.fruitType = fruitType;
+        contentList = new ArrayList<>();
+        contentList.add(new LockedContent(new Information("Well done you get " +
+                fruitType.getPoints() + " points"), this, ""));
     }
 
     @Override
@@ -33,7 +39,7 @@ public class Fruit implements Selectable {
 
     @Override
     public List<Content> getContent() {
-        return new ArrayList<>();
+        return contentList;
     }
 
     /**

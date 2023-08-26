@@ -199,10 +199,6 @@ public class AdminMapActivity extends AppCompatActivity
         addMarkerDialog = new AddMarkerDialog(this, mapMarkers, locationUpdater,
                 R.id.pacManMapFrame);
         addMarkerDialog.show(getSupportFragmentManager(), "AddMarker");
-
-        // TODO remove temp code.
-        Random random = new Random();
-        score.setValue(random.nextInt());
     }
 
     /**

@@ -41,11 +41,8 @@ public class PacDot extends Marker implements Selectable, Character.Visitable {
     public PacDot(int frameId, double latitude, double longitude, @NotNull Context context) {
         super(frameId, latitude, longitude, drawableId, markerId, context);
         contentList = new ArrayList<>();
-        contentList.add(new Information("Location hints"));
+        contentList.add(new Information("Hint to key"));
         contentList.add(new HintEdit(this));
-        Fruit fruit = new Fruit(Fruit.FruitType.CHERRY);
-        Content hint = new HintBuilder(fruit).setHintText("This is a secret hint to the Cherry").build();
-        contentList.add(new LockedContent(hint, this, "key"));
     }
 
     @Override
