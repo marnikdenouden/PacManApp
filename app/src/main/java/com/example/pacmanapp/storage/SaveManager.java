@@ -49,7 +49,7 @@ public class SaveManager {
         try {
             currentSave = GameSave.getGameSaveFromData(data);
             Clock clock = new Clock(currentSave);
-            clock.setTime(Duration.ofSeconds(5400));
+            clock.setTime(Duration.ofSeconds(9000));
             Score score = new Score(currentSave);
             score.setValue(0);
         } catch (IOException ioException) {

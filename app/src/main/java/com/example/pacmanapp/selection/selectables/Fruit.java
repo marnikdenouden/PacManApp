@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.contents.Content;
+import com.example.pacmanapp.contents.HintEdit;
 import com.example.pacmanapp.contents.Information;
 import com.example.pacmanapp.contents.LockedContent;
 import com.example.pacmanapp.selection.Selectable;
@@ -18,8 +19,11 @@ public class Fruit implements Selectable {
     public Fruit(FruitType fruitType) {
         this.fruitType = fruitType;
         contentList = new ArrayList<>();
-        contentList.add(new LockedContent(new Information("Well done you get " +
-                fruitType.getPoints() + " points"), this, ""));
+        HintEdit hintEdit = new HintEdit(this);
+        HintEdit.HintEditor hintEditor = hintEdit.getHintEditor();
+        hintEditor.setHintText("Well done you get " + fruitType.getPoints() + " points");
+        hintEditor.save();
+        contentList.add(hintEdit);
     }
 
     @Override
@@ -52,11 +56,11 @@ public class Fruit implements Selectable {
     }
 
     public enum FruitType {
-        CHERRY("Cherry", R.drawable.fruit_1_cherry, 100),
+        CHERRY("Cherry", R.drawable.fruit_1_cherry, 200),
         STRAWBERRY("Strawberry", R.drawable.fruit_2_strawberry, 300),
-        ORANGE("Orange", R.drawable.fruit_3_orange, 500),
+        ORANGE("Orange", R.drawable.fruit_3_orange, 400),
         APPLE("Apple", R.drawable.fruit_4_apple, 700),
-        MELON("Melon", R.drawable.fruit_5_melon, 1000),
+        MELON("Melon", R.drawable.fruit_5_melon, 500),
         GALAXIAN("Galaxian", R.drawable.fruit_6_galaxian, 2000),
         BELL("Bell", R.drawable.fruit_7_bell, 3000),
         KEY("Key", R.drawable.fruit_8_key, 5000);
