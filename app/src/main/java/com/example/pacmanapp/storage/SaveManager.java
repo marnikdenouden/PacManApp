@@ -5,10 +5,14 @@ import android.util.Log;
 
 import androidx.annotation.WorkerThread;
 
+import com.example.pacmanapp.displays.Clock;
+import com.example.pacmanapp.displays.Score;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 
 public class SaveManager {
     private static final String TAG = "SaveManager";
@@ -44,6 +48,10 @@ public class SaveManager {
         byte[] data = FileManager.loadFileData(file);
         try {
             currentSave = GameSave.getGameSaveFromData(data);
+            Clock clock = new Clock(currentSave);
+            clock.setTime(Duration.ofSeconds(5400));
+            Score score = new Score(currentSave);
+            score.setValue(0);
         } catch (IOException ioException) {
             Log.w(TAG, "Could not load game save for save name \"" + saveName +
                     "\" as IO exception occurred.");

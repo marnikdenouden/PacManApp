@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,12 +18,14 @@ public class Score {
     private final static int scoreValueId = R.id.scoreValue;
     private final PlayValues playValues;
     private Digit[] digits;
+    private final Clock clock;
 
     /**
      * Create score with various specified values.
      */
     public Score(@NotNull GameSave gameSave) {
         playValues = PlayValues.getFromSave(gameSave);
+        clock = new Clock(gameSave);
     }
 
     /**
@@ -41,7 +44,9 @@ public class Score {
      * @param value Value to set score to
      */
     public void setValue(int value) {
-        playValues.setValue(scoreValueId, value);
+        if (!clock.getTimeLeft().isZero()) {
+            playValues.setValue(scoreValueId, value);
+        }
     }
 
     /**

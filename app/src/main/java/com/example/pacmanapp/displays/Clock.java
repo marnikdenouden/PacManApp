@@ -59,15 +59,22 @@ public class Clock {
         chronometer.setTextColor(color);
         chronometer.setCountDown(true);
 
+        chronometer.setBase(SystemClock.elapsedRealtime() + getTimeLeft().toMillis());
+        chronometer.start();
+    }
+
+    /**
+     * Get the time left on the clock.
+     *
+     * @return timeLeft Duration that is left on the clock
+     */
+    public Duration getTimeLeft() {
         long startTime = playValues.getValue(startTimeId, 0);
         long timeDuration = playValues.getValue(timeDurationId, 0);
         long currentTime = SystemClock.elapsedRealtime();
 
         long elapsedTime = currentTime - startTime;
-        long displayTime = Math.max(0, timeDuration - elapsedTime);
-
-        chronometer.setBase(SystemClock.elapsedRealtime() + displayTime);
-        chronometer.start();
+        return Duration.ofMillis(Math.max(0, timeDuration - elapsedTime));
     }
 
 }

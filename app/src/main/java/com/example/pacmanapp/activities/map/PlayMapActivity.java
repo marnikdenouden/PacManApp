@@ -100,18 +100,11 @@ public class PlayMapActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-
-        locationUpdater.stopLocationUpdates();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        // TODO When going back to old map activity location updates do not work.
-        if (locationUpdater.isRequestingLocationUpdates()) {
-            locationUpdater.startLocationUpdates();
-        }
     }
 
     @Override
@@ -131,6 +124,11 @@ public class PlayMapActivity extends AppCompatActivity
 
         // Add selection listener to selector to update selection preview
         selector.addOnSelectionListener(selectionListener);
+
+        // TODO When going back to old map activity location updates do not work.
+        if (locationUpdater.isRequestingLocationUpdates()) {
+            locationUpdater.startLocationUpdates();
+        }
     }
 
     @Override
@@ -138,6 +136,8 @@ public class PlayMapActivity extends AppCompatActivity
         super.onStop();
         MapArea.getMapArea(this, R.id.pacManMapFrame).removeMarkers();
         selector.removeOnSelectionListener(selectionListener);
+
+        locationUpdater.stopLocationUpdates();
     }
 
     // Location permission setup. //

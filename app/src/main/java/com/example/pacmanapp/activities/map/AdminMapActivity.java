@@ -31,7 +31,6 @@ import com.example.pacmanapp.markers.Character;
 import com.example.pacmanapp.markers.Ghost;
 import com.example.pacmanapp.markers.GhostType;
 import com.example.pacmanapp.markers.MapMarkers;
-import com.example.pacmanapp.markers.Marker;
 import com.example.pacmanapp.navigation.Navigate;
 import com.example.pacmanapp.navigation.NavigationBar;
 import com.example.pacmanapp.navigation.PageType;
@@ -42,7 +41,6 @@ import com.example.pacmanapp.selection.Selector;
 import com.example.pacmanapp.storage.GameSave;
 import com.example.pacmanapp.storage.SavePlatform;
 
-import java.time.Duration;
 import java.util.Collection;
 import java.util.Random;
 
@@ -89,7 +87,6 @@ public class AdminMapActivity extends AppCompatActivity
         preview.configure(this, selectableView, true);
 
         Clock clock = new Clock(gameSave);
-        clock.setTime(Duration.ofSeconds(2678));
         clock.updateDisplay(AdminMapActivity.this, R.color.onPrimaryContainer);
 
         score = new Score(gameSave);
@@ -116,6 +113,10 @@ public class AdminMapActivity extends AppCompatActivity
 
         // Add selection listener to selector to update selection preview
         selector.addOnSelectionListener(selectionListener);
+
+        if (locationUpdater.isRequestingLocationUpdates()) {
+            locationUpdater.startLocationUpdates();
+        }
     }
 
     @Override
@@ -124,22 +125,17 @@ public class AdminMapActivity extends AppCompatActivity
         SavePlatform.save();
         selector.removeOnSelectionListener(selectionListener);
         MapArea.getMapArea(this, R.id.pacManMapFrame).removeMarkers();
+        locationUpdater.stopLocationUpdates();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
-        locationUpdater.stopLocationUpdates();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        if (locationUpdater.isRequestingLocationUpdates()) {
-            locationUpdater.startLocationUpdates();
-        }
     }
 
     // Location permission setup. //
