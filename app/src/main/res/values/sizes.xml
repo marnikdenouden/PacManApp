@@ -12,6 +12,7 @@
             <dimen name="ghostMarkerSize">16dp</dimen>
 
     <dimen name="topBarHeight">64dp</dimen>
+    <dimen name="areaStrokeSize">4dp</dimen>
     <dimen name="roundRadius">36dp</dimen>
     <dimen name="negativeRoundRadius">-36dp</dimen>
 </resources>

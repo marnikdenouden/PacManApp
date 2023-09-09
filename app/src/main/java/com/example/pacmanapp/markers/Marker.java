@@ -215,6 +215,7 @@ public class Marker implements Serializable {
     public void onClick(View view) {
         if (this instanceof Selectable) {
             SelectionCrier.getInstance().select((Selectable) this);
+            // TODO Display marker as selected and set on next selection listener to remove selected look.
         }
     }
 

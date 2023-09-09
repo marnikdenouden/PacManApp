@@ -7,7 +7,8 @@
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".activities.map.PlayMapActivity"
-    android:id="@+id/playMapLayout">
+    android:background="?attr/colorSurface"
+    android:id="@+id/layout">
 
     <FrameLayout
         android:id="@+id/pacManMapFrame"
@@ -27,7 +28,7 @@
         android:minHeight="160dp"
         android:layout_marginBottom="@dimen/negativeRoundRadius"
         android:background="@drawable/drawable_left_bottom_round_corner"
-        android:backgroundTint="?attr/colorPrimaryVariant"
+        android:backgroundTint="?attr/colorSurfaceVariant"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,16 +45,17 @@
 
         <TextView
             android:id="@+id/score_text"
-            android:layout_width="80dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            app:layout_constraintHorizontal_bias="1.0"
             android:text="Score"
             android:textAlignment="textEnd"
             android:textAppearance="@style/text_bold_extra"
-            android:textColor="?attr/colorOnPrimaryContainer"
+            android:textColor="?attr/colorOnSurfaceVariant"
             app:layout_constraintBottom_toBottomOf="@id/score"
-            app:layout_constraintEnd_toStartOf="@id/score"
+            app:layout_constraintEnd_toStartOf="@id/guidelineStartValues"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/score" />
 
@@ -63,24 +65,25 @@
             android:layout_width="0dp"
             android:layout_height="20sp"
             android:layout_marginBottom="16dp"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="8dp"
             app:layout_constraintBottom_toTopOf="@id/clock"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/score_text"
+            app:layout_constraintStart_toEndOf="@id/guidelineStartValues"
             app:layout_constraintTop_toBottomOf="@id/top_bar" />
 
         <ImageView
             android:id="@+id/time_icon"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginStart="72dp"
+            android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            app:layout_constraintHorizontal_bias="1.0"
             app:srcCompat="@drawable/icon_time"
-            app:tint="?attr/colorOnPrimaryContainer"
+            app:tint="?attr/colorOnSurfaceVariant"
             app:layout_constraintBottom_toBottomOf="@id/clock"
-            app:layout_constraintEnd_toStartOf="@id/clock"
+            app:layout_constraintEnd_toStartOf="@id/guidelineStartValues"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/clock" />
 
@@ -89,13 +92,21 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="16dp"
+            android:textColor="?attr/colorOnSurfaceVariant"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/time_icon"
+            app:layout_constraintStart_toEndOf="@id/guidelineStartValues"
             app:layout_constraintTop_toBottomOf="@id/score" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineStartValues"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.33" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -106,7 +117,7 @@
         android:minHeight="160dp"
         android:layout_marginTop="@dimen/negativeRoundRadius"
         android:background="@drawable/drawable_right_up_round_corner"
-        android:backgroundTint="?attr/colorSurfaceInverse"
+        android:backgroundTint="?attr/colorSurfaceVariant"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -128,7 +139,7 @@
             <TextView
                 android:id="@id/selectable_label"
                 android:textAppearance="@style/text_title_small"
-                android:textColor="?attr/colorOnSurfaceInverse"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -146,6 +157,7 @@
                 android:id="@id/selectable_icon"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
+                app:tint="?attr/colorPrimary"
                 app:layout_constraintBottom_toBottomOf="@id/selectable_label"
                 app:layout_constraintEnd_toStartOf="@id/selectable_label"
                 app:layout_constraintStart_toStartOf="parent"
@@ -154,7 +166,7 @@
             <TextView
                 android:id="@id/selectable_description"
                 android:textAppearance="@style/text_description"
-                android:textColor="?attr/colorOnSurfaceInverse"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="This is a description of what ever is selected in this activity. So that could be a marker, but maybe that could also be something else."
@@ -167,7 +179,7 @@
 
         <include
             android:id="@+id/bottom_bar"
-            layout="@layout/navigation_bar" />
+            layout="@layout/navigation_bar_inverse" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

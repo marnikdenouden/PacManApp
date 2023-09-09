@@ -118,6 +118,7 @@ public class LockedContent implements Content {
             }
             new Score(SavePlatform.getSave()).addValue(pointsToAdd);
             keyTextView.getRootView().clearFocus();
+            SavePlatform.save(); // TODO Check the places where save should be called.
         } else {
             new Score(SavePlatform.getSave()).addValue(-10);
             Toast.makeText(activity, "Incorrect key, reducing your score now", Toast.LENGTH_SHORT).show();
