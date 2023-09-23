@@ -18,7 +18,6 @@ import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.inspect.InspectActivity;
 import com.example.pacmanapp.map.MapManager;
 import com.example.pacmanapp.map.MapPosition;
-import com.example.pacmanapp.navigation.Navigate;
 import com.example.pacmanapp.selection.Selectable;
 import com.example.pacmanapp.selection.SelectionCrier;
 

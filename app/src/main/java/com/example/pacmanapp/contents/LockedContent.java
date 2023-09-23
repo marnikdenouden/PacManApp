@@ -30,10 +30,10 @@ public class LockedContent implements Content {
     private final Selectable hintProvider;
 
     // Set in add lock view
-    private EditText keyTextView;
-    private AppCompatActivity activity;
-    private ViewGroup viewGroup;
-    private View lockView;
+    private transient EditText keyTextView;
+    private transient AppCompatActivity activity;
+    private transient ViewGroup viewGroup;
+    private transient View lockView;
     private String keyInput = "";
 
     /**
@@ -82,7 +82,7 @@ public class LockedContent implements Content {
         Util.TextListener textListener = (String text) -> {
             keyInput = text;
         };
-        Util.configureEditText(keyTextView, "", textListener);
+        Util.configureEditText(keyTextView, keyInput, textListener);
 
         ImageView iconImageView = lockView.findViewById(R.id.lock_icon);
         Drawable iconImage = ResourcesCompat.getDrawable(lockView.getResources(),

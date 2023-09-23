@@ -76,7 +76,10 @@ public enum NumberSmall {
      * @return Drawable for the number
      */
     private Drawable getDrawable(Context context) {
-        return AppCompatResources.getDrawable(context, drawableId);
+        Drawable drawable = AppCompatResources.getDrawable(context, drawableId);
+        assert drawable != null;
+        drawable.setFilterBitmap(false);
+        return drawable;
     }
 
     /**

@@ -1,5 +1,12 @@
 package com.example.pacmanapp.contents;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 
@@ -44,7 +53,6 @@ public class Util {
      * @param activity Activity to add the content with button in
      * @param viewGroup ViewGroup to add the content with button layout to
      * @param editable Truth assignment, if content should be editable
-     * @param label String to put on the button
      * @param content Content to add button to
      * @param onClickListener OnClickListener for the button to use
      *
@@ -68,4 +76,5 @@ public class Util {
     public interface TextListener {
         void afterTextChanged(String text);
     }
+
 }

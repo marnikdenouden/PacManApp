@@ -8,7 +8,6 @@ import com.example.pacmanapp.activities.general.FruitActivity;
 import com.example.pacmanapp.activities.inspect.InspectActivity;
 import com.example.pacmanapp.activities.map.AdminMapActivity;
 import com.example.pacmanapp.activities.map.PlayMapActivity;
-import com.example.pacmanapp.activities.save.SaveActivity;
 import com.example.pacmanapp.activities.settings.AdminSettingsActivity;
 import com.example.pacmanapp.activities.settings.PlaySettingsActivity;
 

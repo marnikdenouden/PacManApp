@@ -51,7 +51,6 @@ public class Digit {
         for (Number number: Number.values()) {
             Drawable drawable = number.getDrawable(context);
             int color = context.getResources().getColor(colorId, context.getTheme());
-            drawable.setFilterBitmap(false);
             drawable.setTint(color);
             numberDrawableMap.put(number, drawable);
         }

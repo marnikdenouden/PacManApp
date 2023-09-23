@@ -1,9 +1,6 @@
 package com.example.pacmanapp.contents;
 
-import android.graphics.Bitmap;
-
 import com.example.pacmanapp.selection.Selectable;
-import com.example.pacmanapp.storage.SavePlatform;
 
 import org.jetbrains.annotations.NotNull;
 

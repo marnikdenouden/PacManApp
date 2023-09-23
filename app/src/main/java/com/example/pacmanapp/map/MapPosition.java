@@ -166,4 +166,6 @@ public class MapPosition {
         return new MapPosition(positionX, positionY);
     }
 
+    // TODO add (static?) method to get rough geo location, so map x&y position can be converted to it.
+
 }

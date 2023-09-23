@@ -2,6 +2,7 @@ package com.example.pacmanapp.contents;
 
 import android.graphics.Bitmap;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;

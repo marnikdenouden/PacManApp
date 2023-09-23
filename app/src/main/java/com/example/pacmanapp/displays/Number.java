@@ -1,12 +1,20 @@
 package com.example.pacmanapp.displays;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.contents.Util;
+
+import org.jetbrains.annotations.NotNull;
 
 public enum Number {
     ZERO(R.drawable.number_0),
@@ -20,9 +28,9 @@ public enum Number {
     EIGHT(R.drawable.number_8),
     NINE(R.drawable.number_9);
 
-    static private String TAG = "Number";
+    static private final String TAG = "Number";
 
-    int drawableId;
+    final int drawableId;
     Number(int drawableId) {
         this.drawableId = drawableId;
     }
@@ -33,8 +41,12 @@ public enum Number {
      * @param context Context in which to find drawable
      * @return Drawable for the number
      */
+    @NotNull
     Drawable getDrawable(Context context) {
-        return AppCompatResources.getDrawable(context, drawableId);
+        Drawable drawable = AppCompatResources.getDrawable(context, drawableId);
+        assert drawable != null;
+        drawable.setFilterBitmap(false);
+        return drawable;
     }
 
     /**
