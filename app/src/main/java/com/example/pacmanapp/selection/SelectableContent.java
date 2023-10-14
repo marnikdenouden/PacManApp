@@ -111,6 +111,8 @@ public class SelectableContent {
     /**
      * Set content for selectable.
      *
+     * Requires the content container to contain a linear layout with the selectable content id.
+     *
      * @param activity Activity that is active
      * @param viewGroup ViewGroup that selectable data is contained in
      * @param contentContainer ContentContainer to set content from

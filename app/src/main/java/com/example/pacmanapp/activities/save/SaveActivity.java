@@ -3,6 +3,7 @@ package com.example.pacmanapp.activities.save;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +35,15 @@ public class SaveActivity extends AppCompatActivity {
         Button clearButton = findViewById(R.id.clearButton);
         clearButton.setOnClickListener(view -> new ClearSavesDialog(this)
                 .show(getSupportFragmentManager(), "ClearSave"));
+
+        Button continueButton = findViewById(R.id.continueButton);
+        continueButton.setOnClickListener(view -> {
+            if (saveManager.hasCurrentSave()) {
+                finish();
+            } else {
+                Toast.makeText(this, "No save selected", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
