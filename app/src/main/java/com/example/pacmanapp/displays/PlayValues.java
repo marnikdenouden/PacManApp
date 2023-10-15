@@ -4,12 +4,14 @@ import com.example.pacmanapp.R;
 import com.example.pacmanapp.storage.GameSave;
 import com.example.pacmanapp.storage.SaveObject;
 
+import java.time.Duration;
 import java.util.HashMap;
 public class PlayValues extends SaveObject {
     private final static String TAG = "PlayValues";
     private static final long serialVersionUID = 1L;
     private final HashMap<Integer, Long> playValues;
     private static final int playValuesId = R.id.playValues;
+    private final GameSave gameSave;
 
     /**
      * Create a save object for play values that can be serialized.
@@ -18,6 +20,7 @@ public class PlayValues extends SaveObject {
      */
     public PlayValues(GameSave gameSave) {
         super(playValuesId, gameSave);
+        this.gameSave = gameSave;
         playValues = new HashMap<>();
     }
 
@@ -67,6 +70,16 @@ public class PlayValues extends SaveObject {
         PlayValues playValues = new PlayValues(gameSave);
         gameSave.addSaveObject(playValues);
         return playValues;
+    }
+
+    /**
+     * Resets the game values that are intended to be reset when starting to play the game save.
+     */
+    public void resetValues() {
+        Clock clock = new Clock(gameSave);
+        clock.setTime(Duration.ofSeconds(9000));
+        Score score = new Score(gameSave);
+        score.setValue(0);
     }
 
 }

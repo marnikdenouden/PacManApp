@@ -18,12 +18,14 @@ import com.example.pacmanapp.contents.Content;
 import com.example.pacmanapp.contents.ContentContainer;
 import com.example.pacmanapp.contents.Information;
 import com.example.pacmanapp.displays.NumberSmall;
+import com.example.pacmanapp.displays.PlayValues;
 import com.example.pacmanapp.navigation.Navigate;
 import com.example.pacmanapp.navigation.NavigationBar;
 import com.example.pacmanapp.navigation.NavigationBarType;
 import com.example.pacmanapp.selection.SelectableContent;
 import com.example.pacmanapp.storage.GameSave;
 import com.example.pacmanapp.storage.SaveManager;
+import com.example.pacmanapp.storage.SavePlatform;
 
 import java.sql.Array;
 import java.util.ArrayList;
@@ -59,14 +61,12 @@ public class StartActivity extends AppCompatActivity implements Navigate.BaseAct
      * Update the previewed save content with the current save.
      */
     private void updatePreviewSave() {
-        SaveManager saveManager = SaveManager.getInstance(this);
-
-        if (!saveManager.hasCurrentSave()) {
-            saves();
+        if (!SavePlatform.hasSave()) {
+            Navigate.navigate(StartActivity.this, SaveActivity.class);
             return;
         }
 
-        GameSave gameSave = saveManager.getCurrentSave();
+        GameSave gameSave = SavePlatform.getSave();
         ContentContainer previewSaveContent = new PreviewSaveContent(gameSave, this);
 
         ConstraintLayout constraintLayout = findViewById(R.id.SelectedSaveLayout);
@@ -74,17 +74,21 @@ public class StartActivity extends AppCompatActivity implements Navigate.BaseAct
     }
 
     /**
-     * Method to use in save preview dialog to play the current save.
+     * Play the game save.
+     *
+     * @param gameSave Game save to play.
      */
-    public void play() {
+    void play(GameSave gameSave) {
+        PlayValues.getFromSave(gameSave).resetValues();
         Navigate.navigate(StartActivity.this, PlayMapActivity.class);
-        NavigationBar.setNavigationBarType(NavigationBarType.PLAY);
+        finish();
     }
 
     /**
-     * Method to use in save preview dialog to select a different save.
+     * Change the game save.
      */
-    public void saves() {
+    void changeSave() {
         Navigate.navigate(StartActivity.this, SaveActivity.class);
     }
+
 }

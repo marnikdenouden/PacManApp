@@ -48,10 +48,6 @@ public class SaveManager {
         byte[] data = FileManager.loadFileData(file);
         try {
             currentSave = GameSave.getGameSaveFromData(data);
-            Clock clock = new Clock(currentSave);
-            clock.setTime(Duration.ofSeconds(9000));
-            Score score = new Score(currentSave);
-            score.setValue(0);
         } catch (IOException ioException) {
             Log.w(TAG, "Could not load game save for save name \"" + saveName +
                     "\" as IO exception occurred.");

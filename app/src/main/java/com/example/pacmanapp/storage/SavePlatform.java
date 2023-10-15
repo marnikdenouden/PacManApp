@@ -2,6 +2,14 @@ package com.example.pacmanapp.storage;
 
 import android.util.Log;
 
+import com.example.pacmanapp.displays.Clock;
+import com.example.pacmanapp.displays.PlayValues;
+import com.example.pacmanapp.displays.Score;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.time.Duration;
+
 public class SavePlatform {
     private final static String TAG = "SavePlatform";
     private static SaveManager saveManager;
@@ -16,21 +24,21 @@ public class SavePlatform {
     }
 
     /**
-     * Check if the save platform has a save.
-     *
-     * @return Truth assignment, if save platform has a save loaded
-     */
-    public static boolean hasSave() {
-        return saveManager != null && saveManager.hasCurrentSave();
-    }
-
-    /**
      * Save the current save.
      *
      * @pre save manager was set
      */
     public static void save() {
         saveManager.saveCurrentSave();
+    }
+
+    /**
+     * Check if the save platform has a save.
+     *
+     * @return Truth assignment, if save platform has a save loaded
+     */
+    public static boolean hasSave() {
+        return saveManager != null && saveManager.hasCurrentSave();
     }
 
     /**

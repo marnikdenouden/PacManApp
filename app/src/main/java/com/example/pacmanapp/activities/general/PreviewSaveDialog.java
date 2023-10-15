@@ -9,14 +9,18 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.activities.save.SaveActivity;
+import com.example.pacmanapp.navigation.Navigate;
 import com.example.pacmanapp.storage.GameSave;
+
+import org.jetbrains.annotations.NotNull;
 
 public class PreviewSaveDialog  extends DialogFragment {
     private final static String TAG = "PreviewSaveDialog";
     private final StartActivity activity;
     private final GameSave gameSave;
 
-    PreviewSaveDialog(StartActivity startActivity, GameSave gameSave) {
+    PreviewSaveDialog(@NotNull StartActivity startActivity, @NotNull GameSave gameSave) {
         this.activity = startActivity;
         this.gameSave = gameSave;
     }
@@ -25,9 +29,9 @@ public class PreviewSaveDialog  extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.DialogTheme);
-        builder.setTitle("What do you want to do with save " + gameSave.getSaveName() + "?");
-        builder.setPositiveButton("Play", (dialogInterface, i) -> activity.play())
-                .setNeutralButton("Change", (dialogInterface, i) -> activity.saves())
+        builder.setTitle("Choose action for game save \" " + gameSave.getSaveName() + "\"?");
+        builder.setPositiveButton("Play", (dialogInterface, i) -> activity.play(gameSave))
+                .setNeutralButton("Change", (dialogInterface, i) -> activity.changeSave())
                 .setNegativeButton("Cancel", (dialogInterface, i) -> dismiss());
         return builder.create();
     }
