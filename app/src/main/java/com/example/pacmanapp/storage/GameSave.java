@@ -91,6 +91,7 @@ public class GameSave implements Serializable {
      *
      * @return SaveName String of this game save
      */
+    @NotNull
     public String getSaveName() {
         return saveName;
     }

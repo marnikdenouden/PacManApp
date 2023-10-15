@@ -66,8 +66,8 @@ public class StartActivity extends AppCompatActivity implements Navigate.BaseAct
             return;
         }
 
-        String saveName = saveManager.getCurrentSave().getSaveName();
-        ContentContainer previewSaveContent = new PreviewSaveContent(saveName);
+        GameSave gameSave = saveManager.getCurrentSave();
+        ContentContainer previewSaveContent = new PreviewSaveContent(gameSave, this);
 
         ConstraintLayout constraintLayout = findViewById(R.id.SelectedSaveLayout);
         SelectableContent.setContent(this, constraintLayout, previewSaveContent, false);
