@@ -4,6 +4,8 @@ import com.example.pacmanapp.R;
 import com.example.pacmanapp.storage.GameSave;
 import com.example.pacmanapp.storage.SaveObject;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.time.Duration;
 import java.util.HashMap;
 public class PlayValues extends SaveObject {
@@ -11,16 +13,14 @@ public class PlayValues extends SaveObject {
     private static final long serialVersionUID = 1L;
     private final HashMap<Integer, Long> playValues;
     private static final int playValuesId = R.id.playValues;
-    private final GameSave gameSave;
 
     /**
      * Create a save object for play values that can be serialized.
      *
      * @param gameSave Save to add play values to
      */
-    public PlayValues(GameSave gameSave) {
+    public PlayValues(@NotNull GameSave gameSave) {
         super(playValuesId, gameSave);
-        this.gameSave = gameSave;
         playValues = new HashMap<>();
     }
 
@@ -63,7 +63,7 @@ public class PlayValues extends SaveObject {
      * @param gameSave Save to get map marker from
      * @return Play values from the specified game save
      */
-    public static PlayValues getFromSave(GameSave gameSave) {
+    public static PlayValues getFromSave(@NotNull GameSave gameSave) {
         if (gameSave.hasSaveObject(playValuesId)) {
             return (PlayValues) gameSave.getSaveObject(playValuesId);
         }
@@ -73,9 +73,9 @@ public class PlayValues extends SaveObject {
     }
 
     /**
-     * Resets the game values that are intended to be reset when starting to play the game save.
+     * Resets the game values of the specified game save.
      */
-    public void resetValues() {
+    public static void resetValues(GameSave gameSave) {
         Clock clock = new Clock(gameSave);
         clock.setTime(Duration.ofSeconds(9000));
         Score score = new Score(gameSave);

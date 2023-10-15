@@ -27,6 +27,8 @@ import com.example.pacmanapp.storage.GameSave;
 import com.example.pacmanapp.storage.SaveManager;
 import com.example.pacmanapp.storage.SavePlatform;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,8 +80,8 @@ public class StartActivity extends AppCompatActivity implements Navigate.BaseAct
      *
      * @param gameSave Game save to play.
      */
-    void play(GameSave gameSave) {
-        PlayValues.getFromSave(gameSave).resetValues();
+    void play(@NotNull GameSave gameSave) {
+        PlayValues.resetValues(gameSave);
         Navigate.navigate(StartActivity.this, PlayMapActivity.class);
         finish();
     }

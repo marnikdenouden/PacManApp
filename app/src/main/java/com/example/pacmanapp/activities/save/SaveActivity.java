@@ -39,6 +39,7 @@ public class SaveActivity extends AppCompatActivity {
         Button continueButton = findViewById(R.id.continueButton);
         continueButton.setOnClickListener(view -> {
             if (saveManager.hasCurrentSave()) {
+                SavePlatform.setSaveManager(saveManager);
                 finish();
             } else {
                 Toast.makeText(this, "No save selected", Toast.LENGTH_SHORT).show();

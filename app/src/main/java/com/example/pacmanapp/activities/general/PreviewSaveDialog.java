@@ -9,8 +9,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.pacmanapp.R;
-import com.example.pacmanapp.activities.save.SaveActivity;
-import com.example.pacmanapp.navigation.Navigate;
 import com.example.pacmanapp.storage.GameSave;
 
 import org.jetbrains.annotations.NotNull;
