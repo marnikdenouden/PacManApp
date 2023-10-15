@@ -2,14 +2,6 @@ package com.example.pacmanapp.storage;
 
 import android.util.Log;
 
-import com.example.pacmanapp.displays.Clock;
-import com.example.pacmanapp.displays.PlayValues;
-import com.example.pacmanapp.displays.Score;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.time.Duration;
-
 public class SavePlatform {
     private final static String TAG = "SavePlatform";
     private static SaveManager saveManager;
