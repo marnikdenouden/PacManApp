@@ -23,7 +23,7 @@ public class SaveActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saves);
 
-        saveManager = SaveManager.getInstance(getApplicationContext());
+        saveManager = SavePlatform.setup(getApplicationContext());
 
         saves = new Saves(saveManager, this);
         updateSaveList();
@@ -38,8 +38,7 @@ public class SaveActivity extends AppCompatActivity {
 
         Button continueButton = findViewById(R.id.continueButton);
         continueButton.setOnClickListener(view -> {
-            if (saveManager.hasCurrentSave()) {
-                SavePlatform.setSaveManager(saveManager);
+            if (SavePlatform.hasSave()) {
                 finish();
             } else {
                 Toast.makeText(this, "No save selected", Toast.LENGTH_SHORT).show();
@@ -53,20 +52,14 @@ public class SaveActivity extends AppCompatActivity {
         updateSaveList();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        SavePlatform.setSaveManager(saveManager);
-    }
-
     /**
      * Update saves list.
      */
     private void updateSaveList() {
         ViewGroup viewGroup = findViewById(R.id.content_scroll_view);
         SelectableContent.setContent(this, viewGroup, saves, true);
-        if (saveManager.hasCurrentSave()) {
-            saves.markSelected(saveManager.getCurrentSave().getSaveName());
+        if (SavePlatform.hasSave()) {
+            saves.markSelected(SavePlatform.getSave().getSaveName());
         }
     }
 
@@ -76,7 +69,7 @@ public class SaveActivity extends AppCompatActivity {
      * @param saveName Save name to create save for
      */
     void createSave(String saveName) {
-        saveManager.setCurrentSave(saveName);
+        SavePlatform.load(saveName); // TODO what is difference between create and load
         updateSaveList();
     }
 
@@ -88,8 +81,8 @@ public class SaveActivity extends AppCompatActivity {
     void loadSave(String saveName) {
         // Mark the content with save name as selected
         saves.markSelected(saveName);
-        // Load the save name to be the current save
-        saveManager.loadSave(saveName);
+        // Load the save name on to the save platform
+        SavePlatform.load(saveName);
     }
 
     /**

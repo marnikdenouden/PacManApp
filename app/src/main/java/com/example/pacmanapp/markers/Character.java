@@ -8,12 +8,7 @@ import android.view.View;
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.location.LocationObserver;
 import com.example.pacmanapp.map.MapPosition;
-import com.example.pacmanapp.selection.Selectable;
-import com.example.pacmanapp.selection.SelectionCrier;
-import com.example.pacmanapp.storage.GameSave;
-import com.example.pacmanapp.storage.SaveManager;
 import com.example.pacmanapp.storage.SavePlatform;
-import com.google.android.gms.location.LocationResult;
 
 import org.jetbrains.annotations.NotNull;
 

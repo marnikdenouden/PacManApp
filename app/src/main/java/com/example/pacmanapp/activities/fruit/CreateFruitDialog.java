@@ -1,4 +1,4 @@
-package com.example.pacmanapp.activities.general;
+package com.example.pacmanapp.activities.fruit;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -18,7 +18,6 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.pacmanapp.R;
-import com.example.pacmanapp.selection.SelectionCrier;
 import com.example.pacmanapp.selection.selectables.Fruit;
 
 import java.util.Objects;

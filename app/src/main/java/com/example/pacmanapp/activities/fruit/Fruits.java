@@ -1,4 +1,4 @@
-package com.example.pacmanapp.activities.general;
+package com.example.pacmanapp.activities.fruit;
 
 import com.example.pacmanapp.activities.save.SaveDialog;
 import com.example.pacmanapp.contents.ButtonContent;

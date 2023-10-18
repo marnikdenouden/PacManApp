@@ -4,6 +4,8 @@ import android.util.Log;
 
 import androidx.annotation.WorkerThread;
 
+import com.example.pacmanapp.displays.PlayValues;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
@@ -20,10 +22,10 @@ public class GameSave implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final String saveName;
-
     private static final String TAG = "GameSave";
     private final ImageStorage imageStorage;
     private final Collection<SaveObject> saveObjects;
+    private boolean isPlaying = false;
 
     /**
      * Create a game save for a specified save name.
@@ -36,6 +38,30 @@ public class GameSave implements Serializable {
         this.saveName = saveName;
         this.imageStorage = new ImageStorage(saveName, imageDirectory);
         saveObjects = new HashSet<>();
+    }
+
+    /**
+     * Start the game save to be playing.
+     */
+    void play() {
+        PlayValues.resetValues(this);
+        isPlaying = true;
+    }
+
+    /**
+     * Check if the game save is playing.
+     *
+     * @return Truth assignment, if the current game save is being played
+     */
+    boolean isPlaying() {
+        return isPlaying;
+    }
+
+    /**
+     * Stop the game save from playing.
+     */
+    void quit() {
+        isPlaying = false;
     }
 
     /**

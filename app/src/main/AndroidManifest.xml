@@ -15,7 +15,7 @@
         android:theme="@style/Theme.PacManApp"
         tools:targetApi="31">
         <activity
-            android:name=".activities.general.StartActivity"
+            android:name=".activities.start.StartActivity"
             android:exported="true"
             android:screenOrientation="sensorPortrait" >
             <intent-filter>
@@ -46,7 +46,7 @@
             android:screenOrientation="sensorPortrait">
         </activity>
         <activity
-            android:name=".activities.general.FruitActivity"
+            android:name=".activities.fruit.FruitActivity"
             android:exported="false"
             android:screenOrientation="sensorPortrait">
         </activity>

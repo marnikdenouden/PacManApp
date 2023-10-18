@@ -5,21 +5,16 @@ import android.util.Log;
 
 import androidx.annotation.WorkerThread;
 
-import com.example.pacmanapp.displays.Clock;
-import com.example.pacmanapp.displays.Score;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.Duration;
 
 public class SaveManager {
     private static final String TAG = "SaveManager";
     private static SaveManager instance;
     private final FileManager fileManager;
     private final File imageDirectory;
-    private GameSave currentSave;
 
     /**
      * Create a save manager for a specified context.
@@ -43,11 +38,25 @@ public class SaveManager {
      * @param saveName Save name to load game save for
      */
     @WorkerThread
-    public void loadSave(@NotNull String saveName) {
+    GameSave loadSave(@NotNull String saveName) {
         File file = fileManager.getFile(saveName);
         byte[] data = FileManager.loadFileData(file);
+        return load(data, saveName);
+    }
+
+    /**
+     * Load the game save from file data.
+     *
+     * @param data Data to load game save from
+     * @param saveName Name of the save for error handling
+     * @return GameSave from the data, if successful
+     */
+    @WorkerThread
+    public static GameSave load(@NotNull byte[] data, String saveName) {
         try {
-            currentSave = GameSave.getGameSaveFromData(data);
+            GameSave gameSave = GameSave.getGameSaveFromData(data);
+            Log.i(TAG, "Loaded save with save name \"" + saveName + "\"");
+            return gameSave;
         } catch (IOException ioException) {
             Log.w(TAG, "Could not load game save for save name \"" + saveName +
                     "\" as IO exception occurred.");
@@ -57,30 +66,38 @@ public class SaveManager {
                     "\" as class was not found.");
             classNotFoundException.printStackTrace();
         }
-        Log.i(TAG, "Loaded save with save name " + saveName);
+        return null; // TODO add better exception return case.
     }
 
     /**
-     * Save the current save to its save file.
+     * Save the specified game save to the save files.
      *
-     * @pre save manager has a current save set
+     * @param gameSave Game save to save
      */
     @WorkerThread
-    public void saveCurrentSave() {
-        if (!hasCurrentSave()) {
-            Log.e(TAG, "Could not save current save, because current save was not yet set.");
-            return;
-        }
-        File saveFile = fileManager.getFile(currentSave.getSaveName());
+    public void save(@NotNull GameSave gameSave) {
+        File saveFile = fileManager.getFile(gameSave.getSaveName());
+        save(gameSave, saveFile);
+        Log.i(TAG, "Saved current save with name \"" + gameSave.getSaveName() + "\"");
+    }
+
+    /**
+     * Tries to save the game save data to the specified save file.
+     *
+     * @param gameSave data to save in save file
+     * @param saveFile file to save data in
+     */
+    @WorkerThread
+    public static void save(@NotNull GameSave gameSave, @NotNull File saveFile) {
         try {
-            byte[] saveData = currentSave.getByteArray();
+            byte[] saveData = gameSave.getByteArray();
             FileManager.saveFileData(saveFile, saveData);
         } catch (IOException ioException) {
-            Log.w(TAG, "Could not save current game save with save name \"" +
-                    currentSave.getSaveName() + "\" as IO exception occurred.");
+            Log.e(TAG, "Could not save game data for game save \"" +
+                    gameSave.getSaveName() + "\" in file \"" + saveFile.getName() +
+                    "\" as IO exception occurred.");
             ioException.printStackTrace();
         }
-        Log.i(TAG, "Saved current save with name " + currentSave.getSaveName());
     }
 
     /**
@@ -88,16 +105,22 @@ public class SaveManager {
      *
      * @param saveName New save name to name the created save
      * @pre !hasSave(saveName)
+     *
+     * @return gameSave save that has been created
      */
     @WorkerThread
-    private void createSave(@NotNull String saveName) {
-        if (fileManager.hasFile(saveName)) {
+    GameSave createSave(@NotNull String saveName) {
+        if (hasSave(saveName)) {
             Log.w(TAG, "Could not create save with name \"" + saveName +
                     "\" as a save with this name already exists.");
-            return;
+            return null;
         }
-        currentSave = new GameSave(saveName, imageDirectory);
-        Log.i(TAG, "Created save with save name " + saveName);
+        GameSave gameSave = new GameSave(saveName, imageDirectory);
+
+        save(gameSave);
+
+        Log.i(TAG, "Created save with save name \"" + saveName + "\"");
+        return gameSave;
     }
 
     /**
@@ -108,22 +131,6 @@ public class SaveManager {
      */
     public boolean hasSave(@NotNull String saveName) {
         return fileManager.hasFile(saveName);
-    }
-
-    /**
-     * Load or create the current save to the specified save name.
-     *
-     * @param saveName Save name to load or create current save for
-     */
-    @WorkerThread
-    public void setCurrentSave(@NotNull String saveName) {
-        if (hasSave(saveName)) {
-            loadSave(saveName);
-        } else {
-            createSave(saveName);
-        }
-        saveCurrentSave();
-        Log.i(TAG, "Set current save to be " + saveName);
     }
 
     /**
@@ -149,12 +156,12 @@ public class SaveManager {
         ImageManager imageManager = new ImageManager(saveName, imageDirectory);
         imageManager.clearFiles();
         if (!imageManager.getDirectory().delete()) {
-            Log.w(TAG, "Could not image manager directory file with name " +
-                    imageManager.getDirectory().getName() + " for save " + saveName);
+            Log.w(TAG, "Could not image manager directory file with name \"" +
+                    imageManager.getDirectory().getName() + "\" for save \"" + saveName + "\"");
         }
         File saveFile = fileManager.getFile(saveName);
         fileManager.removeFile(saveFile);
-        Log.i(TAG, "Removed save with save name " + saveName);
+        Log.i(TAG, "Removed save with save name \"" + saveName + "\"");
     }
 
     /**
@@ -169,31 +176,6 @@ public class SaveManager {
             saveNames[i] = files[i].getName();
         }
         return saveNames;
-    }
-
-    /**
-     * Check if a current save is set.
-     *
-     * @return Truth assignment, if current save is set
-     * A save can be set by either loading or creating a game save successfully
-     */
-    public boolean hasCurrentSave() {
-        return currentSave != null;
-    }
-
-    /**
-     * Get the current save of this save manager.
-     *
-     * @pre save manager has a current save
-     * @return Game save currently loaded
-     * @throws NullPointerException When pre condition is violated
-     */
-    public GameSave getCurrentSave() {
-        if (!hasCurrentSave()) {
-            throw new NullPointerException("Current save is null, before accessing " +
-                    "the current save please load or create a save for the save manager.");
-        }
-        return currentSave;
     }
 
     /**

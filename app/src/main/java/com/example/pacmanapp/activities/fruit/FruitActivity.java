@@ -1,4 +1,4 @@
-package com.example.pacmanapp.activities.general;
+package com.example.pacmanapp.activities.fruit;
 
 import android.os.Bundle;
 import android.view.ViewGroup;
@@ -6,22 +6,15 @@ import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 
 import com.example.pacmanapp.R;
-import com.example.pacmanapp.activities.save.ClearSavesDialog;
-import com.example.pacmanapp.activities.save.CreateSaveDialog;
-import com.example.pacmanapp.contents.ButtonContent;
 import com.example.pacmanapp.navigation.NavigationBar;
 import com.example.pacmanapp.navigation.PageType;
 import com.example.pacmanapp.selection.SelectableContent;
 import com.example.pacmanapp.selection.SelectionCrier;
 import com.example.pacmanapp.selection.selectables.Fruit;
 import com.example.pacmanapp.selection.selectables.FruitStorage;
-import com.example.pacmanapp.storage.SaveManager;
 import com.example.pacmanapp.storage.SavePlatform;
-
-import java.util.Map;
 
 public class FruitActivity extends AppCompatActivity {
     private FruitStorage fruitStorage;

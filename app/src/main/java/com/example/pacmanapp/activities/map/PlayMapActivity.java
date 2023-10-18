@@ -26,7 +26,6 @@ import com.example.pacmanapp.map.MapArea;
 import com.example.pacmanapp.map.MapType;
 import com.example.pacmanapp.markers.Character;
 import com.example.pacmanapp.markers.MapMarkers;
-import com.example.pacmanapp.markers.Marker;
 import com.example.pacmanapp.markers.PacMan;
 import com.example.pacmanapp.navigation.Navigate;
 import com.example.pacmanapp.navigation.NavigationBar;
@@ -38,7 +37,6 @@ import com.example.pacmanapp.selection.Selector;
 import com.example.pacmanapp.storage.GameSave;
 import com.example.pacmanapp.storage.SavePlatform;
 
-import java.time.Duration;
 import java.util.Collection;
 
 public class PlayMapActivity extends AppCompatActivity

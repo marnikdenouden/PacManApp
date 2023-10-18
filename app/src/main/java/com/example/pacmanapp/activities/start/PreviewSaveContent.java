@@ -1,4 +1,4 @@
-package com.example.pacmanapp.activities.general;
+package com.example.pacmanapp.activities.start;
 
 import com.example.pacmanapp.contents.ButtonContent;
 import com.example.pacmanapp.contents.Content;

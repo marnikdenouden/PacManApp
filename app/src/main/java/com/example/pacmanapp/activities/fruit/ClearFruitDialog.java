@@ -1,4 +1,4 @@
-package com.example.pacmanapp.activities.general;
+package com.example.pacmanapp.activities.fruit;
 
 import android.app.Dialog;
 import android.os.Bundle;

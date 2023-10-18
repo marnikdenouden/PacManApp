@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.edit.EditActivity;
-import com.example.pacmanapp.activities.general.FruitActivity;
+import com.example.pacmanapp.activities.fruit.FruitActivity;
 import com.example.pacmanapp.activities.inspect.InspectActivity;
 import com.example.pacmanapp.activities.map.AdminMapActivity;
 import com.example.pacmanapp.activities.map.PlayMapActivity;

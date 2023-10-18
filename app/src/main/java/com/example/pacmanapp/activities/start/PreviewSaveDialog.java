@@ -1,4 +1,4 @@
-package com.example.pacmanapp.activities.general;
+package com.example.pacmanapp.activities.start;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -28,7 +28,7 @@ public class PreviewSaveDialog  extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.DialogTheme);
         builder.setTitle("Choose action for game save \" " + gameSave.getSaveName() + "\"?");
-        builder.setPositiveButton("Play", (dialogInterface, i) -> activity.play(gameSave))
+        builder.setPositiveButton("Play", (dialogInterface, i) -> activity.play())
                 .setNeutralButton("Change", (dialogInterface, i) -> activity.changeSave())
                 .setNegativeButton("Cancel", (dialogInterface, i) -> dismiss());
         return builder.create();
