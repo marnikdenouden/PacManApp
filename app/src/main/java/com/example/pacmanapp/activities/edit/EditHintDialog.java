@@ -28,12 +28,11 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.contents.HintEdit;
-import com.example.pacmanapp.contents.Util;
+import com.example.pacmanapp.general.Util;
 import com.example.pacmanapp.selection.NextSelectionSelector;
 import com.example.pacmanapp.selection.Selectable;
 import com.example.pacmanapp.selection.Selector;
 import com.example.pacmanapp.selection.selectables.BlankInspect;
-import com.example.pacmanapp.storage.SavePlatform;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -133,11 +132,7 @@ public class EditHintDialog extends DialogFragment {
                     Bitmap bitmap = MediaStore.Images.Media
                             .getBitmap(context.getContentResolver(), imageUri);
                     String imageId = imageUri.getLastPathSegment();
-                    Thread thread = new Thread(() -> {
-                        hintEditor.setHintImage(imageId, bitmap);
-                        SavePlatform.save();
-                    });
-                    thread.start();
+                    hintEditor.setHintImage(imageId, bitmap);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -1,6 +1,7 @@
 package com.example.pacmanapp.activities.save;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
@@ -61,6 +62,7 @@ public class SaveActivity extends AppCompatActivity {
         if (SavePlatform.hasSave()) {
             saves.markSelected(SavePlatform.getSave().getSaveName());
         }
+        Log.d(TAG, "Updated save list");
     }
 
     /**
@@ -69,8 +71,7 @@ public class SaveActivity extends AppCompatActivity {
      * @param saveName Save name to create save for
      */
     void createSave(String saveName) {
-        SavePlatform.load(saveName); // TODO what is difference between create and load
-        updateSaveList();
+        SavePlatform.load(saveName, this::updateSaveList); // TODO what is difference between create and load
     }
 
     /**
@@ -82,7 +83,7 @@ public class SaveActivity extends AppCompatActivity {
         // Mark the content with save name as selected
         saves.markSelected(saveName);
         // Load the save name on to the save platform
-        SavePlatform.load(saveName);
+        SavePlatform.load(saveName, () -> {});
     }
 
     /**

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.edit.EditHintDialog;
+import com.example.pacmanapp.general.Util;
 import com.example.pacmanapp.selection.Selectable;
 import com.example.pacmanapp.storage.SavePlatform;
 
@@ -108,7 +109,7 @@ public class HintEdit implements Content {
          */
         public void setHintImage(@NotNull String imageId, @NotNull Bitmap image) {
             this.hintImageId = imageId;
-            SavePlatform.getSave().getImageStorage().saveImage(imageId, image);
+            SavePlatform.getSave().getImageStorage().saveImage(imageId, image, SavePlatform::save);
         }
 
         /**

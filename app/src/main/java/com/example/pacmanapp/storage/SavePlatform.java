@@ -1,7 +1,13 @@
 package com.example.pacmanapp.storage;
 
+import static java.lang.Thread.sleep;
+
 import android.content.Context;
 import android.util.Log;
+
+import androidx.annotation.WorkerThread;
+
+import com.example.pacmanapp.general.Util;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -90,15 +96,19 @@ public class SavePlatform {
             return;
         }
 
-        if (!isPlaying) {
+        new Thread(() -> {
+            if (!isPlaying) {
             saveManager.save(currentSave);
-        }
-        storeCurrentSave();
+            }
+            storeCurrentSave();
+        }).start();
+
     }
 
     /**
      * Store the current save in the save platform files.
      */
+    @WorkerThread
     private static void storeCurrentSave() {
         SaveManager.save(currentSave, currentSaveFile);
     }
@@ -119,15 +129,17 @@ public class SavePlatform {
             return;
         }
 
-        // Sanity save, so you can restore the save exactly from before you started to play it.
-        save();
+        new Thread(() -> {
+            // Sanity save, so you can restore the save exactly from before you started to play it.
+            save();
 
-        currentSave.play();
-        updateIsPlaying();
-        storeCurrentSave();
+            currentSave.play();
+            updateIsPlaying();
+            storeCurrentSave();
 
-        Log.i(TAG, "Started to play current save with name \"" +
-                currentSave.getSaveName() + "\"");
+            Log.i(TAG, "Started to play current save with name \"" +
+                    currentSave.getSaveName() + "\"");
+        }).start();
     }
 
     /**
@@ -159,7 +171,7 @@ public class SavePlatform {
 
         // Replace the finished played save by a freshly loaded one, if it still exits
         if (saveManager.hasSave(currentSave.getSaveName())) {
-            load(currentSave.getSaveName());
+            load(currentSave.getSaveName(), () -> {});
         } else {
             currentSave = null;
         }
@@ -198,19 +210,26 @@ public class SavePlatform {
      * @pre Save platform is setup
      * @param saveName Save name to load on to the platform.
      */
-    public static void load(@NotNull String saveName) {
+    public static void load(@NotNull String saveName, Runnable onFinishLoading) {
         if (hasInvalidSetup()) {
             return;
         }
 
-        if (saveManager.hasSave(saveName)) {
-            currentSave = saveManager.loadSave(saveName);
-        } else {
-            currentSave = saveManager.createSave(saveName);
-        }
-        updateIsPlaying();
-        storeCurrentSave();
-        Log.i(TAG, "Set current save to be " + saveName);
+        new Thread(() -> {
+            if (saveManager.hasSave(saveName)) {
+                currentSave = saveManager.loadSave(saveName);
+            } else {
+                currentSave = saveManager.createSave(saveName);
+            }
+
+            updateIsPlaying();
+            storeCurrentSave();
+            Log.i(TAG, "Set current save to be " + saveName);
+
+            if (onFinishLoading != null) {
+                Util.runOnUiThread(onFinishLoading);
+            }
+        }).start();
     }
 
     /**

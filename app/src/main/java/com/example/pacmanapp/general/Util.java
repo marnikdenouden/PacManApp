@@ -1,4 +1,4 @@
-package com.example.pacmanapp.contents;
+package com.example.pacmanapp.general;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,6 +8,8 @@ import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -22,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.contents.Content;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -75,6 +78,15 @@ public class Util {
 
     public interface TextListener {
         void afterTextChanged(String text);
+    }
+
+    /**
+     * Adds the runnable to a que on the main Ui thread.
+     *
+     * @param runnable Runnable to eventually run on the Ui thread
+     */
+    public static void runOnUiThread(@NotNull Runnable runnable) {
+        new Handler(Looper.getMainLooper()).post(runnable);
     }
 
 }

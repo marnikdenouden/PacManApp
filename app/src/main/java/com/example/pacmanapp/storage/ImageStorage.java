@@ -1,11 +1,10 @@
 package com.example.pacmanapp.storage;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 
 import androidx.annotation.WorkerThread;
 
-import com.example.pacmanapp.R;
+import com.example.pacmanapp.general.Util;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -52,10 +51,16 @@ public class ImageStorage implements Serializable {
      * @param image Bitmap image to store
      */
     @WorkerThread
-    public void saveImage(String imageId, Bitmap image) {
+    public void saveImage(@NotNull String imageId, @NotNull Bitmap image, Runnable onFinishSaving) {
         imageMap.put(imageId, image);
         File imageFile = imageManager.getFile(imageId);
-        ImageManager.saveFileImage(imageFile, image);
+
+        new Thread(() -> {
+            ImageManager.saveFileImage(imageFile, image);
+            if (onFinishSaving != null) {
+                Util.runOnUiThread(onFinishSaving);
+            }
+        }).start();
     }
 
     /**

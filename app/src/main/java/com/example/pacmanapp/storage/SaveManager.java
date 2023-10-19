@@ -27,11 +27,6 @@ public class SaveManager {
         imageDirectory = new File(context.getFilesDir(), "images");
     }
 
-// TODO on loading a new save the selection should be reset somehow? Maybe make what is selected part of the save.
-
-    // TODO ensure that laod save and save save are called in worker threads, maybe it requires loading display in UI.
-
-
     /**
      * Load a game save with the specified save name and load it in the given context.
      *
@@ -66,7 +61,7 @@ public class SaveManager {
                     "\" as class was not found.");
             classNotFoundException.printStackTrace();
         }
-        return null; // TODO add better exception return case.
+        return null;
     }
 
     /**

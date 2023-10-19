@@ -1,18 +1,12 @@
 package com.example.pacmanapp.displays;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.example.pacmanapp.R;
-import com.example.pacmanapp.contents.Util;
 
 import org.jetbrains.annotations.NotNull;
 
