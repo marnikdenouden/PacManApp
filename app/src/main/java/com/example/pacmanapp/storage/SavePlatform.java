@@ -1,7 +1,5 @@
 package com.example.pacmanapp.storage;
 
-import static java.lang.Thread.sleep;
-
 import android.content.Context;
 import android.util.Log;
 
