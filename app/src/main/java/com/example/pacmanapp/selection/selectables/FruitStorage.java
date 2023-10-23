@@ -5,19 +5,19 @@ import android.util.Log;
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.storage.GameSave;
 import com.example.pacmanapp.storage.SaveObject;
+import com.example.pacmanapp.storage.SavePlatform;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.List;
 
 public class FruitStorage extends SaveObject implements Serializable {
     private final static String TAG = "FruitStorage";
     private static final long serialVersionUID = 1L;
     private static final int fruitStorageId = R.id.fruitStorage;
-    private final Collection<Fruit> fruitCollection;
+    private final List<Fruit> fruitList;
 
     /**
      * Create a fruit storage that is added to the save manager for the specified save name.
@@ -26,7 +26,7 @@ public class FruitStorage extends SaveObject implements Serializable {
      */
     public FruitStorage(GameSave gameSave) {
         super(fruitStorageId, gameSave);
-        fruitCollection = new ArrayList<>();
+        fruitList = new ArrayList<>();
     }
 
     /**
@@ -35,7 +35,7 @@ public class FruitStorage extends SaveObject implements Serializable {
      * @param fruit Fruit to add to the storage.
      */
     public void addFruit(@NotNull Fruit fruit) {
-        fruitCollection.add(fruit);
+        fruitList.add(fruit);
 
         Log.i(TAG, "Added a fruit with type " + fruit.getFruitType().toString());
     }
@@ -46,19 +46,19 @@ public class FruitStorage extends SaveObject implements Serializable {
      * @param fruit Fruit to remove from storage.
      */
     public void removeFruit(@NotNull Fruit fruit) {
-        fruitCollection.remove(fruit);
+        fruitList.remove(fruit);
     }
 
     /**
      * Clear all the fruits from the storage.
      */
     public void clearFruits() {
-        if (fruitCollection.isEmpty()) {
+        if (fruitList.isEmpty()) {
             Log.i(TAG, "Fruit storage is already cleared");
             return;
         }
 
-        Collection<Fruit> fruits = new HashSet<>(fruitCollection);
+        List<Fruit> fruits = new ArrayList<>(fruitList);
         for (Fruit fruit: fruits) {
             removeFruit(fruit);
         }
@@ -67,12 +67,12 @@ public class FruitStorage extends SaveObject implements Serializable {
     }
 
     /**
-     * Get a collection of the fruits in the storage.
+     * Get a list of the fruits in the storage.
      *
-     * @return Collection of the fruits in the storage
+     * @return List of the fruits in the storage
      */
-    public Collection<Fruit> getFruitCollection() {
-        return new HashSet<>(fruitCollection);
+    public List<Fruit> getFruitList() {
+        return new ArrayList<>(fruitList);
     }
 
     /**

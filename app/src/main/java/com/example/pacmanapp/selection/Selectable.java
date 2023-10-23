@@ -1,12 +1,10 @@
 package com.example.pacmanapp.selection;
 
-import com.example.pacmanapp.contents.Content;
-import com.example.pacmanapp.contents.ContentContainer;
+import com.example.pacmanapp.contents.Container;
 
 import java.io.Serializable;
-import java.util.List;
 
-public interface Selectable extends Serializable, ContentContainer {
+public interface Selectable extends Serializable, Container {
     String getLabel();
 
     int getIconId();

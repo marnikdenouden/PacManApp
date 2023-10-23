@@ -2,6 +2,8 @@ package com.example.pacmanapp.selection.selectables;
 
 import android.content.res.Resources;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.contents.Content;
 import com.example.pacmanapp.contents.Information;
@@ -24,7 +26,7 @@ public class InfoInspect extends BlankInspect {
     }
 
     @Override
-    public List<Content> getContent() {
+    public List<Content> getContent(@NotNull AppCompatActivity activity, boolean editable) {
         List<Content> contentList = new ArrayList<>();
         String infoText = resources.getString(R.string.selectable_inspect_information);
         Content content = new Information(infoText);

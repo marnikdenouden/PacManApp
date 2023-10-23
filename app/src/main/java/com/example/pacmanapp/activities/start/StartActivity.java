@@ -11,7 +11,7 @@ import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.map.AdminMapActivity;
 import com.example.pacmanapp.activities.map.PlayMapActivity;
 import com.example.pacmanapp.activities.save.SaveActivity;
-import com.example.pacmanapp.contents.ContentContainer;
+import com.example.pacmanapp.contents.Content;
 import com.example.pacmanapp.navigation.Navigate;
 import com.example.pacmanapp.navigation.NavigationBar;
 import com.example.pacmanapp.navigation.NavigationBarType;
@@ -60,7 +60,7 @@ public class StartActivity extends AppCompatActivity implements Navigate.BaseAct
         }
 
         GameSave gameSave = SavePlatform.getSave();
-        ContentContainer previewSaveContent = new PreviewSaveContent(gameSave, this);
+        Content previewSaveContent = new PreviewSaveContent(gameSave);
 
         ConstraintLayout constraintLayout = findViewById(R.id.SelectedSaveLayout);
         SelectableContent.setContent(this, constraintLayout, previewSaveContent, false);

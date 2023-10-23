@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.contents.Content;
 import com.example.pacmanapp.selection.Selectable;
@@ -66,7 +68,7 @@ public class PowerPellet extends Marker implements Selectable, Character.Visitab
     }
 
     @Override
-    public List<Content> getContent() {
+    public List<Content> getContent(@NotNull AppCompatActivity activity, boolean editable) {
         return new ArrayList<>();
     }
 

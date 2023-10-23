@@ -1,13 +1,14 @@
 package com.example.pacmanapp.selection.selectables;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.contents.Content;
 import com.example.pacmanapp.contents.HintEdit;
-import com.example.pacmanapp.contents.Information;
-import com.example.pacmanapp.contents.LockedContent;
 import com.example.pacmanapp.selection.Selectable;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,7 @@ public class Fruit implements Selectable {
     }
 
     @Override
-    public List<Content> getContent() {
+    public List<Content> getContent(@NotNull AppCompatActivity activity, boolean editable) {
         return contentList;
     }
 

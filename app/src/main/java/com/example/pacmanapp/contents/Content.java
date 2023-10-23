@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 public interface Content extends Serializable {
     /**
-     * Add a hint view to the provided view group.
+     * Add a content view to the provided view group.
      *
      * @param activity Activity that the view is being added in
      * @param viewGroup View group to insert hint view in

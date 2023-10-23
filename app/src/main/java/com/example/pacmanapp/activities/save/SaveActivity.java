@@ -26,8 +26,7 @@ public class SaveActivity extends AppCompatActivity {
 
         saveManager = SavePlatform.setup(getApplicationContext());
 
-        saves = new Saves(saveManager, this);
-        updateSaveList();
+        saves = new Saves(saveManager);
 
         Button createButton = findViewById(R.id.createButton);
         createButton.setOnClickListener(view -> new CreateSaveDialog(this)
@@ -59,9 +58,6 @@ public class SaveActivity extends AppCompatActivity {
     private void updateSaveList() {
         ViewGroup viewGroup = findViewById(R.id.content_scroll_view);
         SelectableContent.setContent(this, viewGroup, saves, true);
-        if (SavePlatform.hasSave()) {
-            saves.markSelected(SavePlatform.getSave().getSaveName());
-        }
         Log.d(TAG, "Updated save list");
     }
 

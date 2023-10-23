@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
@@ -17,6 +16,7 @@ import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.edit.EditActivity;
 import com.example.pacmanapp.activities.inspect.InspectActivity;
 import com.example.pacmanapp.contents.Content;
+import com.example.pacmanapp.contents.Container;
 import com.example.pacmanapp.contents.ContentContainer;
 
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +37,9 @@ public class SelectableContent {
         setIcon(activity, viewGroup, selectable, editable);
         setLabel(activity, viewGroup, selectable);
         setDescription(activity, viewGroup, selectable);
-        setContent(activity, viewGroup, selectable, editable);
+        ContentContainer contentContainer =
+                new ContentContainer(selectable.getContent(activity, editable));
+        setContent(activity, viewGroup, contentContainer, editable);
     }
 
     /**
@@ -115,24 +117,22 @@ public class SelectableContent {
      *
      * @param activity Activity that is active
      * @param viewGroup ViewGroup that selectable data is contained in
-     * @param contentContainer ContentContainer to set content from
+     * @param content Content to set
      * @param editable Truth assignment, if content should be editable
      */
     public static void setContent(@NotNull AppCompatActivity activity,
-                                   @NotNull ViewGroup viewGroup,
-                                   @NotNull ContentContainer contentContainer, boolean editable) {
+                                  @NotNull ViewGroup viewGroup,
+                                  @NotNull Content content, boolean editable) {
         LinearLayout linearLayoutContent = viewGroup.findViewById(R.id.selectable_content);
         if (linearLayoutContent == null) {
-            Log.i(TAG, "No content layout found to add content to for content container "
-                    + contentContainer.getClass().getSimpleName() + " activity of class "
+            Log.i(TAG, "No content layout found to add content to for content "
+                    + content.getClass().getSimpleName() + " activity of class "
                     + activity.getLocalClassName());
             return;
         }
         linearLayoutContent.removeAllViews();
 
-        for (Content content: contentContainer.getContent()) {
-            content.addView(activity, linearLayoutContent, editable);
-        }
+        content.addView(activity, linearLayoutContent, editable);
     }
 
     public static class Preview implements Content {

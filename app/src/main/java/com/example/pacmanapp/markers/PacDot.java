@@ -5,17 +5,15 @@ import android.content.Context;
 import android.location.Location;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.contents.Content;
-import com.example.pacmanapp.contents.HintBuilder;
 import com.example.pacmanapp.contents.HintEdit;
-import com.example.pacmanapp.contents.LockedContent;
-import com.example.pacmanapp.contents.HintText;
 import com.example.pacmanapp.contents.Information;
 import com.example.pacmanapp.map.MapPosition;
 import com.example.pacmanapp.selection.Selectable;
 import com.example.pacmanapp.selection.SelectionCrier;
-import com.example.pacmanapp.selection.selectables.Fruit;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -67,7 +65,7 @@ public class PacDot extends Marker implements Selectable, Character.Visitable {
     }
 
     @Override
-    public List<Content> getContent() {
+    public List<Content> getContent(@NotNull AppCompatActivity activity, boolean editable) {
         return contentList;
     }
 
