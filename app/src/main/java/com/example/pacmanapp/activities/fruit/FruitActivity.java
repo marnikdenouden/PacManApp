@@ -16,7 +16,7 @@ import com.example.pacmanapp.selection.selectables.Fruit;
 import com.example.pacmanapp.selection.selectables.FruitStorage;
 import com.example.pacmanapp.storage.SavePlatform;
 
-public class FruitActivity extends AppCompatActivity {
+public class FruitActivity extends AppCompatActivity implements FruitConstructor {
     private FruitStorage fruitStorage;
     private Fruits fruits;
 // TODO fix that dialogs crash app when creating from saved instance state and maybe start using saved instance state?
@@ -34,7 +34,7 @@ public class FruitActivity extends AppCompatActivity {
         updateFruitList();
 
         Button createButton = findViewById(R.id.createButton);
-        createButton.setOnClickListener(view -> new CreateFruitDialog(this)
+        createButton.setOnClickListener(view -> new CreateFruitDialog()
                 .show(getSupportFragmentManager(), "CreateFruit"));
 
         Button clearButton = findViewById(R.id.clearButton);
@@ -61,7 +61,7 @@ public class FruitActivity extends AppCompatActivity {
      *
      * @param fruitType Fruit type to create fruit with
      */
-    void createFruit(Fruit.FruitType fruitType) {
+    public void createFruit(Fruit.FruitType fruitType) {
         Fruit fruit = new Fruit(fruitType);
         fruitStorage.addFruit(new Fruit(fruitType));
         SelectionCrier.getInstance().select(fruit);

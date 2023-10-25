@@ -202,7 +202,7 @@ public class HintEdit implements Content {
         }
 
         // TODO it requires a lot to update the content from within, maybe this can be simplified and reworked overall?
-        //  Maybe add a content storage that you can get from selectables. Instead of just returning a lost of content.
+        //  Maybe add a content storage that you can get from selectables. Instead of just returning a list of content.
         public void updateLastAddedView() {
             int index = viewGroup.indexOfChild(view);
             viewGroup.removeView(view);

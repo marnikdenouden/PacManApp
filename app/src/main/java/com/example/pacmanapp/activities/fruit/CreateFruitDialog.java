@@ -16,32 +16,63 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.selection.selectables.Fruit;
 
-import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 public class CreateFruitDialog extends DialogFragment {
-    private final static String TAG = "CreateSaveDialog";
-    private final FruitActivity activity;
+    private final static String TAG = "CreateFruitDialog";
+    private FruitConstructor fruitConstructor;
     private Fruit.FruitType selectedFruitType;
 
-    CreateFruitDialog(FruitActivity fruitActivity) {
-        this.activity = fruitActivity;
+    /**
+     * Construct a create fruit dialog, requires fruit activity parent.
+     *  Requires activity to implement fruit constructor interface.
+     */
+    public CreateFruitDialog() {
+
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.DialogTheme);
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext(), R.style.DialogTheme);
         builder.setView(R.layout.dialog_create_fruit);
         builder.setTitle("Select fruit type to add");
         builder.setPositiveButton("Confirm", (dialogInterface, i) -> createFruit())
                 .setNegativeButton("Cancel", (dialogInterface, i) -> dismiss());
         Dialog dialog = builder.create();
         dialog.setOnShowListener(dialogInterface -> addFruitTypeOptions());
+        restoreInstanceState(savedInstanceState);
+        updateDialog(dialog);
         return dialog;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        FragmentActivity parentActivity = getActivity();
+        if (parentActivity instanceof FruitConstructor) {
+            this.fruitConstructor = (FruitConstructor) parentActivity;
+        } else {
+            Log.w(TAG, "Dialog started with an activity that is not an fruit constructor");
+            dismiss();
+        }
+    }
+
+    /**
+     * Update the dialog with the current values.
+     *
+     * @param dialog Dialog to update view for
+     */
+    private void updateDialog(@NotNull Dialog dialog) {
+        if (selectedFruitType != null) {
+            dialog.setTitle("Add " + selectedFruitType + "?");
+        }
     }
 
     /**
@@ -84,9 +115,39 @@ public class CreateFruitDialog extends DialogFragment {
      *
      * @param fruitType Fruit type selected in dialog
      */
-    private void selectFruitType(Fruit.FruitType fruitType) {
+    private void selectFruitType(@Nullable Fruit.FruitType fruitType) {
         selectedFruitType = fruitType;
-        Objects.requireNonNull(getDialog()).setTitle("Add " + fruitType + "?");
+        updateDialog(requireDialog());
+        Log.d(TAG, "Updated dialog title with current fruit type");
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (selectedFruitType != null) {
+            outState.putString("fruitType", selectedFruitType.name());
+        }
+
+        Log.d(TAG, "Saved instance state");
+    }
+
+    /**
+     * Restore instance state.
+     *
+     * @param savedInstanceState Save instance state to restore
+     */
+    private void restoreInstanceState(@Nullable Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            return;
+        }
+
+        if (savedInstanceState.containsKey("fruitType")) {
+            String fruitName = savedInstanceState.getString("fruitType");
+            selectedFruitType = Fruit.FruitType.valueOf(fruitName);
+        }
+
+        Log.d(TAG, "Restored instance state");
     }
 
     /**
@@ -99,7 +160,7 @@ public class CreateFruitDialog extends DialogFragment {
             return;
         }
 
-        activity.createFruit(selectedFruitType);
+        fruitConstructor.createFruit(selectedFruitType);
         dismiss();
     }
 
