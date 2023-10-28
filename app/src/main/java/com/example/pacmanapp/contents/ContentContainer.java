@@ -9,10 +9,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContentContainer implements Container, Content {
+public class ContentContainer implements Container, Content, Serializable {
+    private static final long serialVersionUID = 1L;
+    private final static String TAG = "ContentContainer";
+
     private List<Content> contentList = new ArrayList<>();
 
     @Override

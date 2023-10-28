@@ -25,13 +25,4 @@ public class InfoEdit extends BlankEdit {
         return resources.getString(R.string.selectable_edit_title);
     }
 
-    @Override
-    public List<Content> getContent(@NotNull AppCompatActivity activity, boolean editable) {
-        List<Content> contentList = new ArrayList<>();
-        String infoText = resources.getString(R.string.selectable_edit_information);
-        Content content = new Information(infoText);
-        contentList.add(content);
-        return contentList;
-    }
-
 }

@@ -4,11 +4,14 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
 import android.view.View;
+import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.contents.Content;
+import com.example.pacmanapp.contents.ContentContainer;
 import com.example.pacmanapp.contents.HintEdit;
 import com.example.pacmanapp.contents.Information;
 import com.example.pacmanapp.map.MapPosition;
@@ -26,7 +29,7 @@ public class PacDot extends Marker implements Selectable, Character.Visitable {
     private static final long serialVersionUID = 1L;
     private final static int drawableId = R.drawable.pac_dot;
     private final static int markerId = R.id.pacdot;
-    private final List<Content> contentList;
+    private final ContentContainer content;
 
     /**
      * Pac-dot marker to display on the map and use.
@@ -38,9 +41,10 @@ public class PacDot extends Marker implements Selectable, Character.Visitable {
      */
     public PacDot(int frameId, double latitude, double longitude, @NotNull Context context) {
         super(frameId, latitude, longitude, drawableId, markerId, context);
-        contentList = new ArrayList<>();
+        List<Content> contentList = new ArrayList<>();
         contentList.add(new Information("Hint to key"));
         contentList.add(new HintEdit(this));
+        content = new ContentContainer(contentList);
     }
 
     @Override
@@ -65,11 +69,6 @@ public class PacDot extends Marker implements Selectable, Character.Visitable {
     }
 
     @Override
-    public List<Content> getContent(@NotNull AppCompatActivity activity, boolean editable) {
-        return contentList;
-    }
-
-    @Override
     public void visit(@NotNull Character character, @NotNull Location location) {
         float mapDistance = distanceTo(character);
         float realDistance = distanceTo(location.getLatitude(), location.getLongitude());
@@ -82,5 +81,15 @@ public class PacDot extends Marker implements Selectable, Character.Visitable {
         if (xDistance < (character.getWidth() / 2) && yDistance < (character.getHeight() / 2)) {
             SelectionCrier.getInstance().select(this);
         }
+    }
+
+    @Override
+    public View addView(@NonNull AppCompatActivity activity, @NonNull ViewGroup viewGroup, boolean editable) {
+        return content.addView(activity, viewGroup, editable);
+    }
+
+    @Override
+    public List<Content> getContent(@NonNull AppCompatActivity activity, boolean editable) {
+        return content.getContent(activity, editable);
     }
 }

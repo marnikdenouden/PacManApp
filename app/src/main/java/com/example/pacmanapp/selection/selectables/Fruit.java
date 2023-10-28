@@ -1,30 +1,22 @@
 package com.example.pacmanapp.selection.selectables;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
-import com.example.pacmanapp.contents.Content;
+import com.example.pacmanapp.contents.ContentContainer;
 import com.example.pacmanapp.contents.HintEdit;
 import com.example.pacmanapp.selection.Selectable;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class Fruit implements Selectable {
+public class Fruit extends ContentContainer implements Selectable {
     private final FruitType fruitType;
-    private final List<Content> contentList;
 
     public Fruit(FruitType fruitType) {
         this.fruitType = fruitType;
-        contentList = new ArrayList<>();
         HintEdit hintEdit = new HintEdit(this);
         HintEdit.HintEditor hintEditor = hintEdit.getHintEditor();
         hintEditor.setHintText("Well done you get " + fruitType.getPoints() + " points");
         hintEditor.save();
-        contentList.add(hintEdit);
+        addContent(hintEdit);
     }
 
     @Override
@@ -40,11 +32,6 @@ public class Fruit implements Selectable {
     @Override
     public String getDescription() {
         return "Finding this fruit will reward you with " + fruitType.points + " points.";
-    }
-
-    @Override
-    public List<Content> getContent(@NotNull AppCompatActivity activity, boolean editable) {
-        return contentList;
     }
 
     /**

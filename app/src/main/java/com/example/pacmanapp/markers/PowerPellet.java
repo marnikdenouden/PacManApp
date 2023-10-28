@@ -3,11 +3,15 @@ package com.example.pacmanapp.markers;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
+import android.view.View;
+import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.contents.Content;
+import com.example.pacmanapp.contents.ContentContainer;
 import com.example.pacmanapp.selection.Selectable;
 
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +24,7 @@ public class PowerPellet extends Marker implements Selectable, Character.Visitab
     private static final long serialVersionUID = 1L;
     private final static int drawableId =  R.drawable.power_pellet;
     private final static int markerId = R.id.powerpellet;
+    private final ContentContainer content;
 
     /**
      * PowerPellet marker to display on the map and use.
@@ -31,6 +36,8 @@ public class PowerPellet extends Marker implements Selectable, Character.Visitab
      */
     public PowerPellet(int frameId, double latitude, double longitude, Context context) {
         super(frameId, latitude, longitude, drawableId, markerId, context);
+        List<Content> contentList = new ArrayList<>();
+        content = new ContentContainer(contentList);
     }
 
     /**
@@ -68,8 +75,13 @@ public class PowerPellet extends Marker implements Selectable, Character.Visitab
     }
 
     @Override
-    public List<Content> getContent(@NotNull AppCompatActivity activity, boolean editable) {
-        return new ArrayList<>();
+    public View addView(@NonNull AppCompatActivity activity, @NonNull ViewGroup viewGroup, boolean editable) {
+        return content.addView(activity, viewGroup, editable);
+    }
+
+    @Override
+    public List<Content> getContent(@NonNull AppCompatActivity activity, boolean editable) {
+        return content.getContent(activity, editable);
     }
 
     @Override

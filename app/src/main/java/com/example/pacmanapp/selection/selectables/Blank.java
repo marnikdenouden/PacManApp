@@ -3,12 +3,18 @@ package com.example.pacmanapp.selection.selectables;
 import android.content.res.Resources;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.contents.Content;
+import com.example.pacmanapp.contents.ContentContainer;
 import com.example.pacmanapp.selection.Selectable;
 
-public abstract class Blank implements Selectable {
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+
+public abstract class Blank extends ContentContainer implements Selectable {
     final Resources resources;
 
-    public Blank(Resources resources) {
+    public Blank(@NotNull Resources resources) {
         this.resources = resources;
     }
 
