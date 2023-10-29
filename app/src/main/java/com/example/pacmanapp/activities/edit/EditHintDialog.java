@@ -89,7 +89,7 @@ public class EditHintDialog extends DialogFragment {
         iconImageView.setImageDrawable(iconImage);
 
         iconImageView.setOnClickListener(view -> {
-            Selector selector = NextSelectionSelector.getNextSelectionSelector(
+            Selector selector = NextSelectionSelector.getSelector(
                     R.id.editHintNextSelectionSelector, new BlankInspect(getResources()));
 
             // Take the next selected selectable as the hint target of this hint.

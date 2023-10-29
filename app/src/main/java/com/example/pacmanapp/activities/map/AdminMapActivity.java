@@ -16,6 +16,9 @@ import android.widget.Toast;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.save.SaveActivity;
+import com.example.pacmanapp.markers.BlankMarker;
+import com.example.pacmanapp.markers.Marker;
+import com.example.pacmanapp.selection.TypeSelector;
 import com.example.pacmanapp.selection.selectables.Blank;
 import com.example.pacmanapp.selection.selectables.BlankEdit;
 import com.example.pacmanapp.selection.selectables.InfoEdit;
@@ -51,6 +54,7 @@ public class AdminMapActivity extends AppCompatActivity
     private LocationUpdater locationUpdater;
     private MapMarkers mapMarkers;
     private Selector selector;
+    private TypeSelector markerSelector;
     private SelectableContent.Preview preview;
     private final Selector.SelectionListener selectionListener = AdminMapActivity.this::onSelection;
     private AddMarkerDialog addMarkerDialog;
@@ -77,9 +81,11 @@ public class AdminMapActivity extends AppCompatActivity
         mapMarkers = MapMarkers.getFromSave(gameSave);
 
         // Get selectors to make sure they get relevant selections.
-        AcceptAllSelector.getAcceptAllSelector(R.id.inspectAllSelector,
+        AcceptAllSelector.getSelector(R.id.inspectAllSelector,
                 new InfoInspect(getResources()));
-        selector = AcceptAllSelector.getAcceptAllSelector(R.id.editAllSelector,
+        markerSelector = TypeSelector.getSelector(R.id.markerSelector,
+                new BlankMarker(), Marker.class);
+        selector = AcceptAllSelector.getSelector(R.id.editAllSelector,
                 new InfoEdit(getResources()));
 
         preview = new SelectableContent.Preview(new BlankEdit(getResources()));
@@ -177,6 +183,9 @@ public class AdminMapActivity extends AppCompatActivity
      * Update selectable content with new fetched selected.
      */
     private void onSelection(Selectable selectable) {
+        if (!(selectable instanceof Blank)) {
+            findViewById(R.id.remove_button).setVisibility(View.VISIBLE);
+        }
         preview.update(selectable);
     }
 
@@ -195,6 +204,21 @@ public class AdminMapActivity extends AppCompatActivity
         addMarkerDialog = new AddMarkerDialog(this, mapMarkers, locationUpdater,
                 R.id.pacManMapFrame);
         addMarkerDialog.show(getSupportFragmentManager(), "AddMarker");
+    }
+
+    /**
+     * Open dialog to remove the currently selected marker from the map.
+     *
+     * @param view View that method can be called from
+     */
+    public void removeMarker(View view) {
+        if (!markerSelector.hasSelected()) {
+            Toast.makeText(this, "Nothing selected to remove", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        RemoveMarkerDialog removeMarkerDialog = new RemoveMarkerDialog();
+        removeMarkerDialog.show(getSupportFragmentManager(), "RemoveMarker");
     }
 
     /**

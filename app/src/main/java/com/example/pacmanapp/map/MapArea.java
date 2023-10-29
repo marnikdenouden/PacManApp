@@ -14,6 +14,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.markers.Marker;
 
+import org.jetbrains.annotations.NotNull;
+
 @SuppressLint("ViewConstructor")
 public class MapArea extends ConstraintLayout {
     private final static String TAG = "MapArea";
@@ -77,6 +79,13 @@ public class MapArea extends ConstraintLayout {
         }
         markerLayout.addOnLayoutChangeListener(
                 (view, i, i1, i2, i3, i4, i5, i6, i7) -> marker.updatePlacement());
+    }
+
+    /**
+     * Remove marker view from this map area.
+     */
+    public void removeMarker(@NotNull Marker marker) {
+        markerLayout.removeView(marker.getImageView());
     }
 
     /**

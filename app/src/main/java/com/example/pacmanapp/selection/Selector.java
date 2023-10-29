@@ -1,15 +1,19 @@
 package com.example.pacmanapp.selection;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashSet;
 
 public abstract class Selector {
     private Selectable selected;
+    private final Selectable blankSelected;
     Collection<SelectionListener> listeners;
 
-    Selector() {
+    Selector(@NotNull Selectable blankSelected) {
+        this.blankSelected = blankSelected;
+        selected = blankSelected;
         listeners = new HashSet<>();
     }
 
@@ -25,13 +29,24 @@ public abstract class Selector {
     /**
      * Select a selectable.
      *
-     * @param selected Selectable to select
+     * @param selected Selectable to select or null to remove selection
      */
-    void select(@NotNull Selectable selected) {
-        this.selected = selected;
-        for (SelectionListener listener: listeners) {
-            listener.onSelect(selected);
+    void select(@Nullable Selectable selected) {
+        if (selected == null) {
+            this.selected = blankSelected;
+        } else {
+            this.selected = selected;
         }
+        for (SelectionListener listener: listeners) {
+            listener.onSelect(this.selected);
+        }
+    }
+
+    /**
+     * Clear selected from the selector, which will be replaced by default selected.
+     */
+    void clearSelected() {
+        select(null);
     }
 
     /**

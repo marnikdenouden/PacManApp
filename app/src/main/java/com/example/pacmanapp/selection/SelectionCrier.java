@@ -2,6 +2,8 @@ package com.example.pacmanapp.selection;
 
 import android.util.Log;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,10 +21,23 @@ public class SelectionCrier {
      *
      * @param selectable Selectable to notify selectors of
      */
-    public void select(Selectable selectable) {
+    public void select(@NotNull Selectable selectable) {
         Log.i(TAG, "User made selection with label " + selectable.getLabel());
-        for(Selector selector: selectors.values()) {
+        for (Selector selector: selectors.values()) {
             selector.select(selectable);
+        }
+    }
+
+    /**
+     * Removes the selected from all selectors.
+     *
+     * @param selected Selected to be removed.
+     */
+    public void removeSelected(@NotNull Selectable selected) {
+        for (Selector selector: selectors.values()) {
+            if (selector.getSelected().equals(selected)) {
+                selector.clearSelected();
+            }
         }
     }
 

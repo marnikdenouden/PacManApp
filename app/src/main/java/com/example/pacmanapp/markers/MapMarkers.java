@@ -1,5 +1,6 @@
 package com.example.pacmanapp.markers;
 
+import android.app.Activity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -14,6 +15,9 @@ import com.example.pacmanapp.selection.Selectable;
 import com.example.pacmanapp.selection.SelectionCrier;
 import com.example.pacmanapp.storage.GameSave;
 import com.example.pacmanapp.storage.SaveObject;
+import com.example.pacmanapp.storage.SavePlatform;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -59,10 +63,14 @@ public class MapMarkers extends SaveObject implements Serializable {
      *
      * @param marker Marker to add to the collection
      */
-    public void removeMarker(Marker marker) {
+    public void removeMarker(@NotNull Marker marker) {
         getMapCollection(marker.getFrameId()).remove(marker);
         if (currentMapContext != null) {
-            ((DynamicLocation) currentMapContext).removeObserver((LocationObserver) marker);
+            if (marker instanceof LocationObserver) {
+                ((DynamicLocation) currentMapContext).removeObserver((LocationObserver) marker);
+            }
+            // Remove marker from map area for the current map context.
+            MapArea.getMapArea(currentMapContext, marker.getFrameId()).removeMarker(marker);
         }
         Log.i(TAG, "Marker of class " + marker.getClass().getSimpleName()
                 + " was removed from the collection");
@@ -141,6 +149,20 @@ public class MapMarkers extends SaveObject implements Serializable {
         MapMarkers mapMarkers = new MapMarkers(gameSave);
         gameSave.addSaveObject(mapMarkers);
         return mapMarkers;
+    }
+
+    /**
+     * Get the map markers from the current save of the save platform.
+     *
+     * @pre SavePlatform has save.
+     * @return MapMarkers from the current save of the save platform
+     * @throws NullPointerException if precondition fails.
+     */
+    public static MapMarkers getFromCurrentSave() {
+        if (SavePlatform.hasSave()) {
+            return getFromSave(SavePlatform.getSave());
+        }
+        throw new NullPointerException("Save platform does not have save to get map markers from.");
     }
 
     /**

@@ -29,7 +29,7 @@ public class InspectActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inspect);
-        selector = AcceptAllSelector.getAcceptAllSelector(R.id.inspectAllSelector,
+        selector = AcceptAllSelector.getSelector(R.id.inspectAllSelector,
                 new InfoInspect(getResources()));
         NavigationBar.configure(this, PageType.INSPECT);
     }
@@ -46,7 +46,7 @@ public class InspectActivity extends AppCompatActivity {
 // TODO add java doc comment
     public static void open(@NotNull AppCompatActivity currentActivity,
                             @NotNull Selectable selectable) {
-        AcceptAllSelector.getAcceptAllSelector(R.id.inspectAllSelector,
+        AcceptAllSelector.getSelector(R.id.inspectAllSelector,
                 new InfoEdit(currentActivity.getResources()));
         SelectionCrier.getInstance().select(selectable);
         Navigate.navigate(currentActivity, InspectActivity.class);

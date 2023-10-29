@@ -59,7 +59,7 @@ public class PlayMapActivity extends AppCompatActivity
         NavigationBar.configure(this, PageType.MAP);
 
         // Get selector to make sure it gets relevant selections.
-        selector = AcceptAllSelector.getAcceptAllSelector(R.id.inspectAllSelector,
+        selector = AcceptAllSelector.getSelector(R.id.inspectAllSelector,
                 new InfoInspect(getResources()));
 
         preview = new SelectableContent.Preview(new BlankInspect(getResources()));
