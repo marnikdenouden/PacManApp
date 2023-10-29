@@ -48,7 +48,8 @@ public class ContentContainer implements Container, Content, Serializable {
      *
      * @param contentList List of content to store
      */
-    protected void setContent(@Nullable List<Content> contentList) {
+    @Override
+    public void setContent(@Nullable List<Content> contentList) {
         if (contentList != null) {
             this.contentList = contentList;
         } else {

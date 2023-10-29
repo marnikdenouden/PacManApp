@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
@@ -91,5 +92,10 @@ public class PacDot extends Marker implements Selectable, Character.Visitable {
     @Override
     public List<Content> getContent(@NonNull AppCompatActivity activity, boolean editable) {
         return content.getContent(activity, editable);
+    }
+
+    @Override
+    public void setContent(@Nullable List<Content> contentList) {
+        content.setContent(contentList);
     }
 }

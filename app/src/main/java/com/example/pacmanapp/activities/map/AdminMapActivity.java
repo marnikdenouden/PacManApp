@@ -62,6 +62,7 @@ public class AdminMapActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // TODO dissect this method into more clear section, like configuring buttons and such.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_edit);
 
@@ -84,9 +85,15 @@ public class AdminMapActivity extends AppCompatActivity
         AcceptAllSelector.getSelector(R.id.inspectAllSelector,
                 new InfoInspect(getResources()));
         markerSelector = TypeSelector.getSelector(R.id.markerSelector,
-                new BlankMarker(), Marker.class);
+                new BlankMarker(getResources()), Marker.class);
         selector = AcceptAllSelector.getSelector(R.id.editAllSelector,
                 new InfoEdit(getResources()));
+
+        View addButton = findViewById(R.id.add_button);
+        addButton.setOnClickListener(view -> addMarker());
+
+        View removeButton = findViewById(R.id.remove_button);
+        removeButton.setOnClickListener(view -> removeMarker());
 
         preview = new SelectableContent.Preview(new BlankEdit(getResources()));
         ViewGroup selectableView = findViewById(R.id.selected_preview);
@@ -191,10 +198,8 @@ public class AdminMapActivity extends AppCompatActivity
 
     /**
      * Add marker to current map and location using the add marker dialog.
-     *
-     * @param view View that method can be called from
      */
-    public void addMarker(View view) {
+    public void addMarker() {
         if (!locationUpdater.hasLocation()) {
             Toast.makeText(getApplicationContext(),
                     "Please wait on location", Toast.LENGTH_SHORT).show();
@@ -208,10 +213,8 @@ public class AdminMapActivity extends AppCompatActivity
 
     /**
      * Open dialog to remove the currently selected marker from the map.
-     *
-     * @param view View that method can be called from
      */
-    public void removeMarker(View view) {
+    public void removeMarker() {
         if (!markerSelector.hasSelected()) {
             Toast.makeText(this, "Nothing selected to remove", Toast.LENGTH_SHORT).show();
             return;

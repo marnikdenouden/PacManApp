@@ -1,27 +1,24 @@
 package com.example.pacmanapp.markers;
 
+import android.content.res.Resources;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.contents.Content;
 import com.example.pacmanapp.selection.Selectable;
+import com.example.pacmanapp.selection.selectables.Blank;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BlankMarker implements Selectable {
-    @Override
-    public List<Content> getContent(@NonNull AppCompatActivity activity, boolean editable) {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public View addView(@NonNull AppCompatActivity activity, @NonNull ViewGroup viewGroup, boolean editable) {
-        return viewGroup;
+public class BlankMarker extends Blank implements Selectable {
+    public BlankMarker(@NonNull Resources resources) {
+        super(resources);
     }
 
     @Override

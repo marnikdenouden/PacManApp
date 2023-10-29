@@ -7,11 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.contents.Content;
 import com.example.pacmanapp.contents.ContentContainer;
+import com.example.pacmanapp.contents.HintEdit;
+import com.example.pacmanapp.contents.Information;
 import com.example.pacmanapp.selection.Selectable;
 
 import org.jetbrains.annotations.NotNull;
@@ -37,6 +40,15 @@ public class PowerPellet extends Marker implements Selectable, Character.Visitab
     public PowerPellet(int frameId, double latitude, double longitude, Context context) {
         super(frameId, latitude, longitude, drawableId, markerId, context);
         List<Content> contentList = new ArrayList<>();
+        contentList.add(new Information("Start information"));
+        contentList.add(new HintEdit(this));
+        contentList.add(new Information("More Information"));
+        contentList.add(new HintEdit(this));
+        contentList.add(new Information("Just Information"));
+        contentList.add(new HintEdit(this));
+        contentList.add(new Information("Additional Information"));
+        contentList.add(new HintEdit(this));
+        contentList.add(new Information("Final Information"));
         content = new ContentContainer(contentList);
     }
 
@@ -82,6 +94,11 @@ public class PowerPellet extends Marker implements Selectable, Character.Visitab
     @Override
     public List<Content> getContent(@NonNull AppCompatActivity activity, boolean editable) {
         return content.getContent(activity, editable);
+    }
+
+    @Override
+    public void setContent(@Nullable List<Content> contentList) {
+        content.setContent(contentList);
     }
 
     @Override

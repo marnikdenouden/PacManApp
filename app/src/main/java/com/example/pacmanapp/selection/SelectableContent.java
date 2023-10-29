@@ -16,7 +16,6 @@ import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.edit.EditActivity;
 import com.example.pacmanapp.activities.inspect.InspectActivity;
 import com.example.pacmanapp.contents.Content;
-import com.example.pacmanapp.contents.Container;
 import com.example.pacmanapp.contents.ContentContainer;
 
 import org.jetbrains.annotations.NotNull;

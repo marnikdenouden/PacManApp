@@ -24,8 +24,8 @@ public class RemoveMarkerDialog extends DialogFragment {
      * Create a dialog to confirm removing the last selected marker.
      */
     public RemoveMarkerDialog() {
-        TypeSelector typeSelector =
-                TypeSelector.getSelector(R.id.markerSelector, new BlankMarker(), Marker.class);
+        TypeSelector typeSelector = TypeSelector.getSelector(R.id.markerSelector,
+                new BlankMarker(getResources()), Marker.class);
         if (typeSelector.hasSelected()) {
             marker = (Marker) typeSelector.getSelected();
         } else {
