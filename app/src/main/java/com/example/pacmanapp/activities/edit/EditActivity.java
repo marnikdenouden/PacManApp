@@ -75,6 +75,9 @@ public class EditActivity extends AppCompatActivity
         Navigate.navigate(currentActivity, EditActivity.class);
     }
 
+    /**
+     * Configure the edit buttons for default or is removing state.
+     */
     public void configureEditButtons() {
         Button leftButton = findViewById(R.id.button_left);
         Button rightButton = findViewById(R.id.button_right);
@@ -93,11 +96,18 @@ public class EditActivity extends AppCompatActivity
         Log.d(TAG, "Configured edit buttons");
     }
 
+    /**
+     * Open the create content dialog, which allows content to be added.
+     */
     public void addContent() {
         new CreateContentDialog().show(getSupportFragmentManager(), "CreateContent");
         Log.d(TAG, "Opened dialog to add content");
     }
 
+    /**
+     * Start content removing by changing the state to is removing,
+     *  where all content is presented in remove content.
+     */
     public void startContentRemoving() {
         Log.d(TAG, "Started content removing");
         isRemovingContent = true;
@@ -116,16 +126,28 @@ public class EditActivity extends AppCompatActivity
         configureEditButtons();
     }
 
+    /**
+     * Return from the is removing state to the default, by restoring the saved content list.
+     */
     public void cancelRemoving() {
         Log.d(TAG, "Canceled removing of content");
         setContentList(savedContentList);
         stopContentRemoving();
     }
 
+    /**
+     * Confirm removing the removed content elements from the is removing state.
+     *
+     * @pre is currently in is removing content state
+     */
     public void confirmRemoving() {
+        if (!isRemovingContent) {
+            Log.w(TAG, "Trying to confirm removing while not in is removing content state");
+            return;
+        }
         Log.d(TAG, "Confirmed removing of content");
         List<Content> newContentList = new ArrayList<>();
-        for (RemoveContent removeContent: removeContentList) {
+        for (RemoveContent removeContent : removeContentList) {
             if (!removeContent.isRemoved()) {
                 newContentList.add(removeContent.getContent());
             }
@@ -135,12 +157,20 @@ public class EditActivity extends AppCompatActivity
         stopContentRemoving();
     }
 
+    /**
+     * Stop removing content by returning to default state.
+     */
     public void stopContentRemoving() {
         Log.d(TAG, "Ended content removing");
         isRemovingContent = false;
         configureEditButtons();
     }
 
+    /**
+     * Set the content list of the selected in this activity.
+     *
+     * @param contentList List of content to set to the selected
+     */
     public void setContentList(@NotNull List<Content> contentList) {
         ContentContainer contentContainer = new ContentContainer(contentList);
         SelectableContent.setContent(this, getViewGroup(), contentContainer, true);
