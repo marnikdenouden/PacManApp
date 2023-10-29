@@ -27,7 +27,7 @@ public class PowerPellet extends Marker implements Selectable, Character.Visitab
     private static final long serialVersionUID = 1L;
     private final static int drawableId =  R.drawable.power_pellet;
     private final static int markerId = R.id.powerpellet;
-    private final ContentContainer content;
+    private final ContentContainer contentContainer;
 
     /**
      * PowerPellet marker to display on the map and use.
@@ -49,7 +49,7 @@ public class PowerPellet extends Marker implements Selectable, Character.Visitab
         contentList.add(new Information("Additional Information"));
         contentList.add(new HintEdit(this));
         contentList.add(new Information("Final Information"));
-        content = new ContentContainer(contentList);
+        contentContainer = new ContentContainer(contentList);
     }
 
     /**
@@ -88,17 +88,28 @@ public class PowerPellet extends Marker implements Selectable, Character.Visitab
 
     @Override
     public View addView(@NonNull AppCompatActivity activity, @NonNull ViewGroup viewGroup, boolean editable) {
-        return content.addView(activity, viewGroup, editable);
+        return contentContainer.addView(activity, viewGroup, editable);
     }
 
     @Override
     public List<Content> getContent(@NonNull AppCompatActivity activity, boolean editable) {
-        return content.getContent(activity, editable);
+        return contentContainer.getContent(activity, editable);
     }
 
     @Override
     public void setContent(@Nullable List<Content> contentList) {
-        content.setContent(contentList);
+        contentContainer.setContent(contentList);
+    }
+
+
+    @Override
+    public void addContent(@NonNull Content content) {
+        contentContainer.addContent(content);
+    }
+
+    @Override
+    public void removeContent(@NonNull Content content) {
+        contentContainer.removeContent(content);
     }
 
     @Override

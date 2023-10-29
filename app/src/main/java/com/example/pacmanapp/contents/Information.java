@@ -15,6 +15,10 @@ import org.jetbrains.annotations.NotNull;
 public class Information implements Content {
     private String info;
 
+    public Information() {
+        info = "";
+    }
+
     public Information(String info) {
         this.info = info;
     }

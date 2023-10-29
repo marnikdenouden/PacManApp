@@ -30,7 +30,7 @@ public class PacDot extends Marker implements Selectable, Character.Visitable {
     private static final long serialVersionUID = 1L;
     private final static int drawableId = R.drawable.pac_dot;
     private final static int markerId = R.id.pacdot;
-    private final ContentContainer content;
+    private final ContentContainer contentContainer;
 
     /**
      * Pac-dot marker to display on the map and use.
@@ -45,7 +45,7 @@ public class PacDot extends Marker implements Selectable, Character.Visitable {
         List<Content> contentList = new ArrayList<>();
         contentList.add(new Information("Hint to key"));
         contentList.add(new HintEdit(this));
-        content = new ContentContainer(contentList);
+        contentContainer = new ContentContainer(contentList);
     }
 
     @Override
@@ -86,16 +86,26 @@ public class PacDot extends Marker implements Selectable, Character.Visitable {
 
     @Override
     public View addView(@NonNull AppCompatActivity activity, @NonNull ViewGroup viewGroup, boolean editable) {
-        return content.addView(activity, viewGroup, editable);
+        return contentContainer.addView(activity, viewGroup, editable);
     }
 
     @Override
     public List<Content> getContent(@NonNull AppCompatActivity activity, boolean editable) {
-        return content.getContent(activity, editable);
+        return contentContainer.getContent(activity, editable);
     }
 
     @Override
     public void setContent(@Nullable List<Content> contentList) {
-        content.setContent(contentList);
+        contentContainer.setContent(contentList);
+    }
+
+    @Override
+    public void addContent(@NonNull Content content) {
+        contentContainer.addContent(content);
+    }
+
+    @Override
+    public void removeContent(@NonNull Content content) {
+        contentContainer.removeContent(content);
     }
 }

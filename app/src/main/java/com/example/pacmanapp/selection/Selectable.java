@@ -11,6 +11,5 @@ public interface Selectable extends Serializable, Container, Content {
     int getIconId();
 
     String getDescription();
-
 }
 

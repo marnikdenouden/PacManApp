@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,8 +14,10 @@ import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.inspect.InspectActivity;
 import com.example.pacmanapp.contents.Content;
 import com.example.pacmanapp.contents.ContentContainer;
+import com.example.pacmanapp.contents.ContentType;
 import com.example.pacmanapp.contents.RemoveContent;
 import com.example.pacmanapp.navigation.Navigate;
+import com.example.pacmanapp.selection.SelectablePlatform;
 import com.example.pacmanapp.selection.SelectionCrier;
 import com.example.pacmanapp.selection.selectables.InfoEdit;
 import com.example.pacmanapp.navigation.NavigationBar;
@@ -29,7 +32,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditActivity extends AppCompatActivity {
+public class EditActivity extends AppCompatActivity
+        implements CreateContentDialog.contentConstructor, SelectablePlatform {
     private final String TAG = "EditActivity";
     private Selector selector;
     private Selectable selected;
@@ -40,7 +44,7 @@ public class EditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit); // TODO add "Add hint" button to layout and activity.
+        setContentView(R.layout.activity_edit);
         selector = AcceptAllSelector.getSelector(R.id.editAllSelector,
                 new InfoEdit(getResources()));
         NavigationBar.configure(this, PageType.EDIT);
@@ -50,8 +54,7 @@ public class EditActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         selected = selector.getSelected();
-        ViewGroup viewGroup = findViewById(R.id.edit_activity);
-        SelectableContent.setData(this, viewGroup, selected, true);
+        SelectableContent.setData(this, getViewGroup(), selected, true);
         ImageView iconView = findViewById(R.id.selectable_icon);
         iconView.setOnClickListener(view ->
                 InspectActivity.open(EditActivity.this, selected));
@@ -91,7 +94,7 @@ public class EditActivity extends AppCompatActivity {
     }
 
     public void addContent() {
-        // TODO open add content dialog.
+        new CreateContentDialog().show(getSupportFragmentManager(), "CreateContent");
         Log.d(TAG, "Opened dialog to add content");
     }
 
@@ -140,26 +143,25 @@ public class EditActivity extends AppCompatActivity {
 
     public void setContentList(@NotNull List<Content> contentList) {
         ContentContainer contentContainer = new ContentContainer(contentList);
-        ViewGroup viewGroup = findViewById(R.id.edit_activity);
-        SelectableContent.setContent(this, viewGroup, contentContainer, true);
+        SelectableContent.setContent(this, getViewGroup(), contentContainer, true);
         Log.d(TAG, "Updated content list");
     }
 
-    /*
-     * For the left and right button the following things need to be done:
-     *
-     * When the left button is pressed, with the default add text on it,
-     * then a dialog needs to open that allows different content to be added to the content list.
-     * The dialog has a button with cancel and add, for confirmation
-     *
-     * When the right button is pressed, with the default remove text on it,
-     * then the content list is duplicated and for each content updated by extending it.
-     *     We extend the content using a new content that adds a x button to the side,
-     *     allowing to remove it form the content list.
-     * The left button is changed to cancel and the right to confirm.
-     * This new content list is displayed and can have content removed.
-     * When the cancel button is pressed the old content list is restored.
-     * When the confirm button is pressed the new content is parsed back and updated the old content list.
+    /**
+     * Get the view group for this activity.
      */
+    public ViewGroup getViewGroup() {
+        return findViewById(R.id.edit_activity);
+    }
 
+    @Override
+    public void create(@NonNull ContentType contentType) {
+        contentType.addContent(selected, this);
+        SelectableContent.setContent(this, getViewGroup(), selected, true);
+    }
+
+    @Override
+    public Selectable getSelected() {
+        return selected;
+    }
 }

@@ -23,4 +23,18 @@ public interface Container {
      * @param contentList List of content to store
      */
     void setContent(@Nullable List<Content> contentList);
+
+    /**
+     * Add content to the content container.
+     *
+     * @param content Content element to add to the content container
+     */
+    void addContent(@NotNull Content content);
+
+    /**
+     * Remove content from the content container.
+     *
+     * @param content Content element to remove from content container
+     */
+    void removeContent(@NotNull Content content);
 }

@@ -3,6 +3,7 @@ package com.example.pacmanapp.contents;
 import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,7 +11,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.edit.EditHintDialog;
 import com.example.pacmanapp.general.Util;
+import com.example.pacmanapp.selection.AcceptAllSelector;
+import com.example.pacmanapp.selection.NextSelectionSelector;
 import com.example.pacmanapp.selection.Selectable;
+import com.example.pacmanapp.selection.SelectablePlatform;
+import com.example.pacmanapp.selection.Selector;
+import com.example.pacmanapp.selection.selectables.BlankEdit;
 import com.example.pacmanapp.storage.SavePlatform;
 
 import org.jetbrains.annotations.NotNull;
@@ -56,6 +62,21 @@ public class HintEdit implements Content {
             view = content.addView(activity, viewGroup, false);
         }
         return view;
+    }
+
+    public static void create(@NotNull Container container, @NotNull AppCompatActivity activity) {
+        if (activity instanceof SelectablePlatform) {
+            Selectable hintProvider = ((SelectablePlatform) activity).getSelected();
+            container.addContent(new HintEdit(hintProvider));
+            return;
+        }
+
+        Toast.makeText(activity, "Select hint provider to use for edit hint",
+                Toast.LENGTH_LONG).show();
+
+        NextSelectionSelector.getSelector(R.id.editHintNextSelectionSelector, new BlankEdit(
+                activity.getResources())).addOnSelectionListener(selectable ->
+                container.addContent(new HintEdit(selectable)));
     }
 
     /**

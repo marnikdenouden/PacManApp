@@ -29,8 +29,8 @@ public class CreateFruitDialog extends DialogFragment {
     private Fruit.FruitType selectedFruitType;
 
     /**
-     * Construct a create fruit dialog, requires fruit activity parent.
-     *  Requires activity to implement fruit constructor interface.
+     * Construct a create fruit dialog,
+     * which requires creating activity to implement fruit constructor interface.
      */
     public CreateFruitDialog() {
 

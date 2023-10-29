@@ -57,21 +57,13 @@ public class ContentContainer implements Container, Content, Serializable {
         }
     }
 
-    /**
-     * Add content to the content list.
-     *
-     * @param content Content element to add to the content list
-     */
-    protected void addContent(Content content) {
+    @Override
+    public void addContent(@NotNull Content content) {
         contentList.add(content);
     }
 
-    /**
-     * Remove content from the content list.
-     *
-     * @param content Content element to remove from content list
-     */
-    protected void removeContent(Content content) {
+    @Override
+    public void removeContent(@NotNull Content content) {
         contentList.remove(content);
     }
 
