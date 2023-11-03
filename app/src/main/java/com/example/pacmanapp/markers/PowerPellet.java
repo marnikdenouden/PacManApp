@@ -2,7 +2,7 @@ package com.example.pacmanapp.markers;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.location.Location;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -15,16 +15,19 @@ import com.example.pacmanapp.contents.Content;
 import com.example.pacmanapp.contents.ContentContainer;
 import com.example.pacmanapp.contents.HintEdit;
 import com.example.pacmanapp.contents.Information;
+import com.example.pacmanapp.map.MapArea;
+import com.example.pacmanapp.map.MapPosition;
 import com.example.pacmanapp.selection.Selectable;
+import com.example.pacmanapp.selection.SelectionCrier;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressLint("ViewConstructor")
-public class PowerPellet extends Marker implements Selectable, Character.Visitable {
+public class PowerPellet extends Marker implements Selectable {
     private static final long serialVersionUID = 1L;
+    private final static String TAG = "PowerPellet";
     private final static int drawableId =  R.drawable.power_pellet;
     private final static int markerId = R.id.powerpellet;
     private final ContentContainer contentContainer;
@@ -32,13 +35,11 @@ public class PowerPellet extends Marker implements Selectable, Character.Visitab
     /**
      * PowerPellet marker to display on the map and use.
      *
-     * @param frameId   FrameId reference to map area that the marker is placed on
      * @param latitude  latitude that the power pellet is placed at
      * @param longitude longitude that the power pellet is placed at
-     * @param context   Context that the power pellet is created in
      */
-    public PowerPellet(int frameId, double latitude, double longitude, Context context) {
-        super(frameId, latitude, longitude, drawableId, markerId, context);
+    public PowerPellet(double latitude, double longitude) {
+        super(latitude, longitude, drawableId, markerId);
         List<Content> contentList = new ArrayList<>();
         contentList.add(new Information("Start information"));
         contentList.add(new HintEdit(this));
@@ -52,23 +53,30 @@ public class PowerPellet extends Marker implements Selectable, Character.Visitab
         contentContainer = new ContentContainer(contentList);
     }
 
+    @Override
+    protected PowerPelletView createView(@NotNull MapArea mapArea) {
+        PowerPelletView powerPelletView = new PowerPelletView(mapArea, this);
+        powerPelletView.createView();
+        return powerPelletView;
+    }
+
     /**
      * Get the power pellet size for width and height.
      *
      * @return Pixel size for the width and height of the power pellet
      */
-    private int getPowerPelletSize() {
-        return (int) getContext().getResources().getDimension(R.dimen.powerPelletSize);
+    private int getPowerPelletSize(@NotNull Context context) {
+        return (int) context.getResources().getDimension(R.dimen.powerPelletSize);
     }
 
     @Override
-    int getPixelWidth() {
-        return getPowerPelletSize();
+    int getPixelWidth(@NotNull Context context) {
+        return getPowerPelletSize(context);
     }
 
     @Override
-    int getPixelHeight() {
-        return getPowerPelletSize();
+    int getPixelHeight(@NotNull Context context) {
+        return getPowerPelletSize(context);
     }
 
     @Override
@@ -101,7 +109,6 @@ public class PowerPellet extends Marker implements Selectable, Character.Visitab
         contentContainer.setContent(contentList);
     }
 
-
     @Override
     public void addContent(@NonNull Content content) {
         contentContainer.addContent(content);
@@ -112,8 +119,30 @@ public class PowerPellet extends Marker implements Selectable, Character.Visitab
         contentContainer.removeContent(content);
     }
 
-    @Override
-    public void visit(@NotNull Character character, @NotNull Location location) {
-        // TODO implement method
+    @SuppressLint("ViewConstructor")
+    public static class PowerPelletView extends MarkerView implements Character.CharacterView.Visitable {
+        private final PowerPellet powerPellet;
+        protected PowerPelletView(@NonNull MapArea mapArea, @NonNull PowerPellet powerPellet) {
+            super(mapArea, powerPellet);
+            this.powerPellet = powerPellet;
+        }
+
+        @Override
+        public void visit(@NotNull Character character) {
+            Log.d(TAG, "Power pellet is being visited by character");
+            float mapDistance = distanceTo(character);
+            float realDistance = distanceTo(character.getLatitude(), character.getLongitude());
+
+            // TODO Improve this method, and include a single time score bonus for when the real distance is close.
+            MapPosition mapPositionPowerPellet = getMapPosition();
+            MapPosition mapPositionCharacter = character.getMapPosition(mapArea, getContext());
+
+            int xDistance = Math.abs(mapPositionPowerPellet.getX() - mapPositionCharacter.getX());
+            int yDistance = Math.abs(mapPositionPowerPellet.getY() - mapPositionCharacter.getY());
+            if (xDistance < (getWidth() / 2) &&
+                    yDistance < (getHeight() / 2)) {
+                SelectionCrier.getInstance().select(powerPellet);
+            }
+        }
     }
 }

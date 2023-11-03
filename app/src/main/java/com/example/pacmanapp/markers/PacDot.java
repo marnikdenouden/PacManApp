@@ -1,8 +1,7 @@
 package com.example.pacmanapp.markers;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.location.Location;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -15,6 +14,7 @@ import com.example.pacmanapp.contents.Content;
 import com.example.pacmanapp.contents.ContentContainer;
 import com.example.pacmanapp.contents.HintEdit;
 import com.example.pacmanapp.contents.Information;
+import com.example.pacmanapp.map.MapArea;
 import com.example.pacmanapp.map.MapPosition;
 import com.example.pacmanapp.selection.Selectable;
 import com.example.pacmanapp.selection.SelectionCrier;
@@ -24,10 +24,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressLint("ViewConstructor")
-public class PacDot extends Marker implements Selectable, Character.Visitable {
-    private final static String TAG = "PacDot";
+public class PacDot extends Marker implements Selectable {
     private static final long serialVersionUID = 1L;
+    private final static String TAG = "PacDot";
     private final static int drawableId = R.drawable.pac_dot;
     private final static int markerId = R.id.pacdot;
     private final ContentContainer contentContainer;
@@ -35,22 +34,15 @@ public class PacDot extends Marker implements Selectable, Character.Visitable {
     /**
      * Pac-dot marker to display on the map and use.
      *
-     * @param frameId   FrameId reference to map area that the pac-dot is placed on
      * @param latitude  latitude that the pac-dot is placed at
      * @param longitude longitude that the pac-dot is placed at
-     * @param context   Context that the pac-dot is created in
      */
-    public PacDot(int frameId, double latitude, double longitude, @NotNull Context context) {
-        super(frameId, latitude, longitude, drawableId, markerId, context);
+    public PacDot(double latitude, double longitude) {
+        super(latitude, longitude, drawableId, markerId);
         List<Content> contentList = new ArrayList<>();
         contentList.add(new Information("Hint to key"));
         contentList.add(new HintEdit(this));
         contentContainer = new ContentContainer(contentList);
-    }
-
-    @Override
-    public void onClick(View view) {
-        super.onClick(view);
     }
 
     @Override
@@ -70,22 +62,15 @@ public class PacDot extends Marker implements Selectable, Character.Visitable {
     }
 
     @Override
-    public void visit(@NotNull Character character, @NotNull Location location) {
-        float mapDistance = distanceTo(character);
-        float realDistance = distanceTo(location.getLatitude(), location.getLongitude());
-
-        // TODO Improve this method, and include a single time score bonus for when the real distance is close.
-        MapPosition mapPositionPacDot = this.getMapPosition();
-        MapPosition mapPositionCharacter = character.getMapPosition();
-        int xDistance = Math.abs(mapPositionPacDot.getX() - mapPositionCharacter.getX());
-        int yDistance = Math.abs(mapPositionPacDot.getY() - mapPositionCharacter.getY());
-        if (xDistance < (character.getWidth() / 2) && yDistance < (character.getHeight() / 2)) {
-            SelectionCrier.getInstance().select(this);
-        }
+    protected PacDotView createView(@NotNull MapArea mapArea) {
+        PacDotView pacDotView = new PacDotView(mapArea, this);
+        pacDotView.createView();
+        return pacDotView;
     }
 
     @Override
-    public View addView(@NonNull AppCompatActivity activity, @NonNull ViewGroup viewGroup, boolean editable) {
+    public View addView(@NonNull AppCompatActivity activity, @NonNull ViewGroup viewGroup,
+                        boolean editable) {
         return contentContainer.addView(activity, viewGroup, editable);
     }
 
@@ -107,5 +92,32 @@ public class PacDot extends Marker implements Selectable, Character.Visitable {
     @Override
     public void removeContent(@NonNull Content content) {
         contentContainer.removeContent(content);
+    }
+
+    @SuppressLint("ViewConstructor")
+    public static class PacDotView extends MarkerView implements Character.CharacterView.Visitable {
+        private final PacDot pacDot;
+        protected PacDotView(@NonNull MapArea mapArea, @NonNull PacDot pacDot) {
+            super(mapArea, pacDot);
+            this.pacDot = pacDot;
+        }
+
+        @Override
+        public void visit(@NotNull Character character) {
+            Log.d(TAG, "Power pellet is being visited by character");
+            float mapDistance = distanceTo(character);
+            float realDistance = distanceTo(character.getLatitude(), character.getLongitude());
+
+            // TODO Improve this method, and include a single time score bonus for when the real distance is close.
+            MapPosition mapPositionPacDot = getMapPosition();
+            MapPosition mapPositionCharacter = character.getMapPosition(mapArea, getContext());
+
+            int xDistance = Math.abs(mapPositionPacDot.getX() - mapPositionCharacter.getX());
+            int yDistance = Math.abs(mapPositionPacDot.getY() - mapPositionCharacter.getY());
+            if (xDistance < (getWidth() / 2) &&
+                    yDistance < (getHeight() / 2)) {
+                SelectionCrier.getInstance().select(pacDot);
+            }
+        }
     }
 }

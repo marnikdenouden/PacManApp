@@ -83,6 +83,11 @@ public class ImageStorage implements Serializable {
         return imageMap.get(imageId);
     }
 
+    /**
+     * Serializable read object method, constructor for deserialization.
+     *
+     * @param objectInputStream Input stream of objects to reconstruct class with
+     */
     private void readObject(ObjectInputStream objectInputStream) throws ClassNotFoundException, IOException {
         objectInputStream.defaultReadObject();
         loadImages();

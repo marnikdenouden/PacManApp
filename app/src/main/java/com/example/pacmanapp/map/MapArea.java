@@ -1,17 +1,20 @@
 package com.example.pacmanapp.map;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.location.Location;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.OverScroller;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.location.DynamicLocation;
+import com.example.pacmanapp.location.LocationObserver;
 import com.example.pacmanapp.markers.Marker;
 
 import org.jetbrains.annotations.NotNull;
@@ -20,21 +23,26 @@ import org.jetbrains.annotations.NotNull;
 public class MapArea extends ConstraintLayout {
     private final static String TAG = "MapArea";
     private final static int mapAreaId = R.id.mapArea;
+    private final MapSave mapSave; // Map save that the map area was created from.
     private final MapType mapType; // Map type that specifies map specific values
     private final MapView mapView; // Map view that determines the area of the map
     private final MarkerLayout markerLayout; // Relative layout to contain markers on top of the map
+    private final ViewGroup parent;
 
     //>>> Methods to create the map area layout <<<//
 
     /**
      * Create a map area layout for a context.
      *
-     * @param mapType Map to create map area for
-     * @param context to create layout with
+     * @param viewGroup viewGroup to create map area in
+     * @param mapSave MapSave to create map area for
+     *
      */
-    private MapArea(MapType mapType, Context context) {
-        super(context);
-        this.mapType = mapType;
+    private MapArea(@NotNull ViewGroup viewGroup, @NotNull MapSave mapSave) {
+        super(viewGroup.getContext());
+        this.mapType = mapSave.getMapType();
+        this.parent = viewGroup;
+        this.mapSave = mapSave;
 
         mapView = new MapView(this); // Visual map that is behind the markers
         markerLayout = new MarkerLayout(this); // Contains the markers on top of the map
@@ -69,91 +77,91 @@ public class MapArea extends ConstraintLayout {
      * Adds a marker to the map.
      *
      * @param marker Marker to add to the map
-     * @param displayOnTop Truth assignment, if marker should be displayed on top
      */
-    public void addMarker(Marker marker, boolean displayOnTop) {
-        if (displayOnTop) {
-            markerLayout.addView(marker.getImageView());
-        } else {
-            markerLayout.addView(marker.getImageView(), 0);
-        }
-        markerLayout.addOnLayoutChangeListener(
-                (view, i, i1, i2, i3, i4, i5, i6, i7) -> marker.updatePlacement());
+    protected void addMarker(Marker marker) {
+        markerLayout.addMarker(marker);
     }
 
     /**
      * Remove marker view from this map area.
      */
-    public void removeMarker(@NotNull Marker marker) {
-        markerLayout.removeView(marker.getImageView());
+    protected void removeMarker(@NotNull Marker marker) {
+        markerLayout.removeMarker(marker);
     }
 
     /**
      * Remove all markers added to this map area.
      */
-    public void removeMarkers() {
-        markerLayout.removeAllViews();
+    protected void removeAllMarkers() {
+        markerLayout.removeAllMarkers();
     }
 
     /**
      * Creates a map on the given view.
      *
-     * @param mapType MapType to use for map
-     * @param view View to create map on
+     * @param viewGroup ViewGroup to create map on
+     * @param mapSave MapSave to create map area for
      */
-    public static void createMap(MapType mapType, ViewGroup view) {
-        MapArea mapArea = new MapArea(mapType, view.getContext());
-        if (view.findViewById(mapAreaId) != null) {
+    protected static MapArea createMap(@NotNull ViewGroup viewGroup, @NotNull MapSave mapSave) {
+        MapArea mapArea = new MapArea(viewGroup, mapSave);
+        if (viewGroup.findViewById(mapAreaId) != null) {
             Log.w(TAG, "A map area was already added to this view group");
         }
-        view.addView(mapArea);
-        view.addView(new MapController(mapArea), 0);
-        MapManager.getMapManager().setMapArea(view.getId(), mapArea);
+        viewGroup.addView(mapArea);
+        viewGroup.addView(new MapController(mapArea), 0);
+        return mapArea;
     }
 
     /**
-     * Check if the map area for the specified frame id exists in the specified activity.
+     * Get the map save of the map area.
      *
-     * @param appCompatActivity Activity to check frame id in
-     * @param frameId Frame id to check for
-     * @return Truth assignment, if map area with frame id exists in the specified activity
+     * @return mapSave Map save that map area is created for
      */
-    public static boolean hasMapArea(AppCompatActivity appCompatActivity, int frameId) {
+    public MapSave getMapSave() {
+        return mapSave;
+    }
+
+    /**
+     * Remove the map area view from the view group it was added to.
+     */
+    protected void removeMap() {
+        parent.removeView(this);
+    }
+
+    /**
+     * Get the marker listener for the map area.
+     *
+     * @return markerListener that updates the markers in the map area
+     */
+    protected MapMarkers.MarkerListener getMarkerListener() {
+        return markerLayout;
+    }
+
+    /**
+     * Check if a map area exists in a frame layout with specified id in the specified view group.
+     *
+     * @param viewGroup ViewGroup to check frame layout for
+     * @param frameId Frame id to check frame layout for
+     * @return Truth assignment, if a map area exists in the specified activity
+     */
+    protected static boolean hasMapArea(@NotNull ViewGroup viewGroup, int frameId) {
         // Check if the frame layout for the frame id is null.
-        FrameLayout frameLayout = appCompatActivity.findViewById(frameId);
-        return frameLayout != null;
+        FrameLayout frameLayout = viewGroup.findViewById(frameId);
+        View mapAreaView = frameLayout.findViewById(mapAreaId);
+        return mapAreaView != null;
     }
 
     /**
      * Get the map area from the specified frame id.
      *
-     * @param appCompatActivity Activity to get map from
-     * @param frameId Frame id to get map for
+     * @param viewGroup ViewGroup to get map area from
+     * @param frameId Frame id to get map area for
      * @return Map area on the frame id and in the specified activity
      */
-    public static MapArea getMapArea(AppCompatActivity appCompatActivity, int frameId) {
+    protected static MapArea getMapArea(@NotNull ViewGroup viewGroup, int frameId) {
         // Get the map area from the frame id.
-        FrameLayout frameLayout = appCompatActivity.findViewById(frameId);
+        FrameLayout frameLayout = viewGroup.findViewById(frameId);
         return frameLayout.findViewById(mapAreaId);
-    }
-
-    /**
-     * Get the map position from a latitude and longitude location.
-     *
-     * @param latitude  latitude that is converted to map y position
-     * @param longitude longitude that is converted to map x position
-     * @return MapPosition that corresponds to the specified location
-     */
-    public MapPosition getMapLocation(double latitude, double longitude) {
-        // Convert the longitude to the X position on the map
-        double xPosition = (longitude - mapType.getLongitudeStart())
-                * mapView.getWidth() / mapType.getLongitudeWidth();
-
-        // Convert the latitude to the Y position on the map
-        double yPosition = (latitude - mapType.getLatitudeStart())
-                * mapView.getHeight() / mapType.getLatitudeHeight();
-
-        return new MapPosition((int) xPosition, (int) yPosition);
     }
 
     /**
@@ -209,6 +217,38 @@ public class MapArea extends ConstraintLayout {
             scrollTo(scroller.getCurrX(), scroller.getCurrY());
             invalidate();
         }
+    }
+
+    /**
+     * Update the map size of the map area.
+     *
+     * @param width int width size of the new map
+     * @param height int height size of the new map
+     */
+    protected void updateMapSize(int width, int height) {
+        ViewGroup.LayoutParams mapLayout = mapView.getLayoutParams();
+        mapLayout.width = width;
+        mapLayout.height = height;
+        requestLayout();
+    }
+
+    /**
+     * Get the map position from a latitude and longitude location.
+     *
+     * @param latitude  latitude that is converted to map y position
+     * @param longitude longitude that is converted to map x position
+     * @return MapPosition that corresponds to the specified location
+     */
+    public MapPosition getMapPosition(double latitude, double longitude) {
+        // Convert the longitude to the X position on the map
+        double xPosition = (longitude - mapType.getLongitudeStart())
+                * mapView.getWidth() / mapType.getLongitudeWidth();
+
+        // Convert the latitude to the Y position on the map
+        double yPosition = (latitude - mapType.getLatitudeStart())
+                * mapView.getHeight() / mapType.getLatitudeHeight();
+
+        return new MapPosition((int) xPosition, (int) yPosition);
     }
 
 }

@@ -54,7 +54,7 @@ public abstract class CreateDialog<Type extends Enum<Type> & Option> extends Dia
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext(), R.style.DialogTheme);
         builder.setView(R.layout.dialog_create);
         builder.setTitle("Select " + name + " type to add");
-        builder.setPositiveButton("Confirm", (dialogInterface, i) -> create())
+        builder.setPositiveButton("Create", (dialogInterface, i) -> create())
                 .setNegativeButton("Cancel", (dialogInterface, i) -> dismiss());
         Dialog dialog = builder.create();
         dialog.setOnShowListener(dialogInterface -> addTypeOptions());

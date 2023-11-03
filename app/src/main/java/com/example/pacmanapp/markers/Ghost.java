@@ -1,14 +1,15 @@
 package com.example.pacmanapp.markers;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 
+import androidx.annotation.NonNull;
+
 import com.example.pacmanapp.R;
-import com.example.pacmanapp.location.LocationObserver;
+import com.example.pacmanapp.map.MapArea;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -16,107 +17,121 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-@SuppressLint("ViewConstructor")
-public class Ghost extends Character implements Serializable, LocationObserver {
+public class Ghost extends Character implements Serializable {
     private static final long serialVersionUID = 1L;
     private final static String TAG = "Ghost";
-    private transient Map<Direction, AnimationDrawable> animationDrawableMap;
-    private final GhostType ghostType;
     private static final Direction startDirection = Direction.RIGHT;
+    private Direction direction;
+    private final GhostType ghostType;
 
     /**
      * Ghost marker to display on the map and control.
      *
      * @param ghostType GhostType that ghost displays as
-     * @param frameId   FrameId reference to map area that the ghost is placed on
      * @param latitude  latitude that the ghost starts at
      * @param longitude longitude that the ghost start at
-     * @param context   Context that the ghost is created in
      */
-    public Ghost(@NotNull GhostType ghostType, int frameId, double latitude, double longitude,
-                 Context context) {
-        super(frameId, latitude, longitude, R.drawable.ghost_icon, ghostType.getId(), context);
+    public Ghost(@NotNull GhostType ghostType, double latitude, double longitude) {
+        super(latitude, longitude, R.drawable.ghost_icon, ghostType.getId());
         this.ghostType = ghostType;
+        direction = startDirection;
     }
 
     /**
-     * Set the color of the ghost.
+     * Get the ghost type.
      *
-     * @param ghostType Type to set the ghost to
-     * @param context Context for the theme
+     * @return ghostType Ghost type of this ghost
      */
-    private void setColor(@NotNull GhostType ghostType, Context context) {
-        int color = ghostType.getColor(context);
-        animationDrawableMap = createAnimationDrawables(color, context);
+    public GhostType getGhostType() {
+        return ghostType;
     }
 
-    /**
-     * Get the animation drawable for a specified direction.
-     *
-     * @param direction Direction to get animation drawable for
-     * @return Animation drawable for the specified direction
-     */
-    private AnimationDrawable getAnimationDrawable(Direction direction) {
-        return animationDrawableMap.get(direction);
+    @Override
+    protected GhostView createView(@NotNull MapArea mapArea) {
+        GhostView ghostView = new GhostView(mapArea, this);
+        ghostView.createView();
+        return ghostView;
     }
 
-    /**
-     * Create animation drawables map to use for different directions.
-     *
-     * @param color Color that all animation drawables get
-     * @param context Context in which to create the drawables
-     * @return Map of AnimationDrawables for each Direction
-     */
-    private Map<Direction, AnimationDrawable> createAnimationDrawables(int color, Context context) {
-        int frameDuration = context.getResources().getInteger(R.integer.ghostFrameDuration);
-        int frameCount = context.getResources().getInteger(R.integer.ghostFrameCount);
+    @SuppressLint("ViewConstructor")
+    public static class GhostView extends CharacterView {
+        private final Ghost ghost;
+        private final transient Map<Direction, AnimationDrawable> animationDrawableMap;
 
-        HashMap<Direction, AnimationDrawable> drawableHashMap = new HashMap<>();
-
-        for (Direction direction: Direction.values()) {
-            AnimationDrawable animationDrawable = new AnimationDrawable();
-            for (int frameIndex = 0; frameIndex < frameCount; frameIndex++) {
-                animationDrawable.addFrame(createFrame(direction, frameIndex, color, context),
-                        frameDuration);
-            }
-            drawableHashMap.put(direction, animationDrawable);
+        protected GhostView(@NonNull MapArea mapArea, @NonNull Ghost ghost) {
+            super(mapArea, ghost);
+            this.ghost = ghost;
+            animationDrawableMap = createAnimationDrawables();
+            createView();
         }
 
-        return drawableHashMap;
-    }
+        @Override
+        protected void createView() {
+            super.createView();
+            setDrawable(getAnimationDrawable());
+        }
 
-    /**
-     * Create a ghost frame for a specific direction, frame index and color.
-     *
-     * @param direction Direction for the ghost
-     * @param frameIndex Frame index of the ghost
-     * @param color Color for the ghost to have
-     * @param context Context in which to create the frame
-     * @return LayerDrawable frame of ghost with specified properties
-     */
-    private LayerDrawable createFrame(Direction direction, int frameIndex, int color,
-                                      Context context) {
-        Drawable drawableBase = direction.getDrawableGhostBase(context, frameIndex);
+        @Override
+        void setRotation(Direction direction) {
+            ghost.direction = direction;
+            // Replace the imageView with the new direction.
+            setDrawable(getAnimationDrawable());
+        }
 
-        assert drawableBase != null;
-        drawableBase.setFilterBitmap(false); // TODO do this for all the pixel art images and reduce the size of them.
-        drawableBase.setTintMode(PorterDuff.Mode.SRC_ATOP);
-        drawableBase.setTint(color);
+        /**
+         * Get the animation drawable for a specified direction.
+         *
+         * @return Animation drawable for the specified direction
+         */
+        private AnimationDrawable getAnimationDrawable() {
+            return animationDrawableMap.get(ghost.direction);
+        }
 
-        return new LayerDrawable(new Drawable[] {drawableBase, direction.getDrawableGhostEyes(context)});
-    }
+        /**
+         * Create animation drawables map to use for different directions.
+         *
+         * @return Map of AnimationDrawables for each Direction
+         */
+        private Map<Direction, AnimationDrawable> createAnimationDrawables() {
+            int frameDuration = getContext().getResources().getInteger(R.integer.ghostFrameDuration);
+            int frameCount = getContext().getResources().getInteger(R.integer.ghostFrameCount);
 
-    @Override
-    void setRotation(Direction direction) {
-        // Replace the imageView with the new direction.
-        setDrawable(getAnimationDrawable(direction));
-    }
+            HashMap<Direction, AnimationDrawable> drawableHashMap = new HashMap<>();
 
-    @Override
-    protected void createImageView(Context context) {
-        super.createImageView(context);
-        setColor(ghostType, context);
-        setDrawable(getAnimationDrawable(startDirection));
+            int ghostColor = ghost.getGhostType().getColor(getContext());
+
+            for (Direction direction: Direction.values()) {
+                AnimationDrawable animationDrawable = new AnimationDrawable();
+                for (int frameIndex = 0; frameIndex < frameCount; frameIndex++) {
+                    animationDrawable.addFrame(createFrame(direction, frameIndex,
+                            ghostColor), frameDuration);
+                }
+                drawableHashMap.put(direction, animationDrawable);
+            }
+
+            return drawableHashMap;
+        }
+
+        /**
+         * Create a ghost frame for a specific direction, frame index and color.
+         *
+         * @param direction Direction for the ghost
+         * @param frameIndex Frame index of the ghost
+         * @param color Color for the ghost to have
+         * @return LayerDrawable frame of ghost with specified properties
+         */
+        private LayerDrawable createFrame(Direction direction, int frameIndex, int color) {
+            Drawable drawable = direction.getDrawableGhostBase(getContext(), frameIndex);
+
+            assert drawable != null;
+            drawable.setFilterBitmap(false); // TODO do this for all the pixel art images and reduce the size of them.
+            drawable.setTintMode(PorterDuff.Mode.SRC_ATOP);
+            drawable.setTint(color);
+
+            return new LayerDrawable(new Drawable[] {drawable,
+                    direction.getDrawableGhostEyes(getContext())});
+        }
+
     }
 
 }

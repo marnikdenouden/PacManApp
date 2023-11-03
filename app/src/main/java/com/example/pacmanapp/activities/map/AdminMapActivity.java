@@ -16,6 +16,9 @@ import android.widget.Toast;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.save.SaveActivity;
+import com.example.pacmanapp.map.MapMarkers;
+import com.example.pacmanapp.map.MapSave;
+import com.example.pacmanapp.map.MapStorage;
 import com.example.pacmanapp.markers.BlankMarker;
 import com.example.pacmanapp.markers.Marker;
 import com.example.pacmanapp.selection.TypeSelector;
@@ -33,7 +36,6 @@ import com.example.pacmanapp.map.MapType;
 import com.example.pacmanapp.markers.Character;
 import com.example.pacmanapp.markers.Ghost;
 import com.example.pacmanapp.markers.GhostType;
-import com.example.pacmanapp.markers.MapMarkers;
 import com.example.pacmanapp.navigation.Navigate;
 import com.example.pacmanapp.navigation.NavigationBar;
 import com.example.pacmanapp.navigation.PageType;
@@ -48,11 +50,12 @@ import java.util.Collection;
 import java.util.Random;
 
 public class AdminMapActivity extends AppCompatActivity
-        implements DynamicLocation, Navigate.BaseActivity {
+        implements DynamicLocation, Navigate.BaseActivity, RemoveMarkerDialog.Remove {
     private final static String TAG = "AdminMapActivity";
 
     private LocationUpdater locationUpdater;
-    private MapMarkers mapMarkers;
+    private MapSave mapSave;
+    private MapArea mapArea;
     private Selector selector;
     private TypeSelector markerSelector;
     private SelectableContent.Preview preview;
@@ -68,9 +71,6 @@ public class AdminMapActivity extends AppCompatActivity
 
         NavigationBar.configure(this, PageType.ADMIN_MAP);
 
-        ViewGroup mapFrame = findViewById(R.id.pacManMapFrame);
-        MapArea.createMap(MapType.PACMAN_FRANSEBAAN, mapFrame);
-
         if (!SavePlatform.hasSave()) {
             Navigate.navigate(this, SaveActivity.class);
             finish();
@@ -78,19 +78,28 @@ public class AdminMapActivity extends AppCompatActivity
         }
 
         GameSave gameSave = SavePlatform.getSave();
-
-        mapMarkers = MapMarkers.getFromSave(gameSave);
+        MapStorage mapStorage = MapStorage.getFromSave(gameSave);
+        mapSave = mapStorage.loadMapSave(R.id.pacManMapFrame, MapType.PACMAN_FRANSEBAAN);
 
         // Get selectors to make sure they get relevant selections.
         AcceptAllSelector.getSelector(R.id.inspectAllSelector,
                 new InfoInspect(getResources()));
         markerSelector = TypeSelector.getSelector(R.id.markerSelector,
                 new BlankMarker(getResources()), Marker.class);
+//        markerSelector.addOnSelectionListener(new Selector.SelectionListener() {
+//            @Override
+//            public void onSelect(Selectable selectable) {
+//                if (selectable instanceof Marker) {
+//                    Marker marker = (Marker) selectable;
+//                    // TODO make marker look selected. Maybe in different place/class
+//                }
+//            }
+//        });
         selector = AcceptAllSelector.getSelector(R.id.editAllSelector,
                 new InfoEdit(getResources()));
 
         View addButton = findViewById(R.id.add_button);
-        addButton.setOnClickListener(view -> addMarker());
+        addButton.setOnClickListener(view -> openAddMarkerDialog());
 
         View removeButton = findViewById(R.id.remove_button);
         removeButton.setOnClickListener(view -> removeMarker());
@@ -116,7 +125,8 @@ public class AdminMapActivity extends AppCompatActivity
         // Load ghost and then load map to have old characters removed
         // and new one created on next location update.
         loadGhost();
-        mapMarkers.loadMap(this, R.id.pacManMapFrame);
+        ViewGroup mapFrame = findViewById(R.id.pacManMapFrame);
+        mapArea = mapSave.loadMap(mapFrame);
 
         // Call on selection with currently selected to load in preview
         Selectable selectable = selector.getSelected();
@@ -127,6 +137,7 @@ public class AdminMapActivity extends AppCompatActivity
         // Add selection listener to selector to update selection preview
         selector.addOnSelectionListener(selectionListener);
 
+        addObserver(mapSave); // TODO probably a better way to do this than this
         if (locationUpdater.isRequestingLocationUpdates()) {
             locationUpdater.startLocationUpdates();
         }
@@ -136,8 +147,9 @@ public class AdminMapActivity extends AppCompatActivity
     protected void onStop() {
         super.onStop();
         SavePlatform.save();
+        mapSave.unloadMap(mapArea);
         selector.removeOnSelectionListener(selectionListener);
-        MapArea.getMapArea(this, R.id.pacManMapFrame).removeMarkers();
+        removeObserver(mapSave);
         locationUpdater.stopLocationUpdates();
     }
 
@@ -199,14 +211,14 @@ public class AdminMapActivity extends AppCompatActivity
     /**
      * Add marker to current map and location using the add marker dialog.
      */
-    public void addMarker() {
+    public void openAddMarkerDialog() {
         if (!locationUpdater.hasLocation()) {
             Toast.makeText(getApplicationContext(),
                     "Please wait on location", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        addMarkerDialog = new AddMarkerDialog(this, mapMarkers, locationUpdater,
+        addMarkerDialog = new AddMarkerDialog(this, mapSave.getMapMarkers(), locationUpdater,
                 R.id.pacManMapFrame);
         addMarkerDialog.show(getSupportFragmentManager(), "AddMarker");
     }
@@ -214,14 +226,20 @@ public class AdminMapActivity extends AppCompatActivity
     /**
      * Open dialog to remove the currently selected marker from the map.
      */
-    public void removeMarker() {
+    public void openRemoveMarkerDialog() {
         if (!markerSelector.hasSelected()) {
             Toast.makeText(this, "Nothing selected to remove", Toast.LENGTH_SHORT).show();
             return;
         }
-
         RemoveMarkerDialog removeMarkerDialog = new RemoveMarkerDialog();
         removeMarkerDialog.show(getSupportFragmentManager(), "RemoveMarker");
+    }
+
+    public void removeMarker() {
+        if (!markerSelector.hasSelected()) {
+            return;
+        }
+        mapSave.getMapMarkers().removeMarker((Marker) markerSelector.getSelected());
     }
 
     /**
@@ -246,9 +264,9 @@ public class AdminMapActivity extends AppCompatActivity
      * Load ghost character, which ensures one after the next location update.
      */
     private void loadGhost() {
+        MapMarkers mapMarkers = mapSave.getMapMarkers();
         // Remove all characters, except a single ghost, from the map markers collection
-        Collection<Character> currentCharacters =
-                mapMarkers.getMarkersWithClass(R.id.pacManMapFrame, Character.class);
+        Collection<Character> currentCharacters = mapMarkers.getMarkersWithClass(Character.class);
         boolean foundGhost = false;
         for (Character character: currentCharacters) {
             if (character instanceof Ghost && !foundGhost) {
@@ -270,8 +288,7 @@ public class AdminMapActivity extends AppCompatActivity
 
         // Create a new ghost on the next location result
         locationUpdater.observeNextLocation(location -> {
-            Ghost ghost = new Ghost(ghostType, R.id.pacManMapFrame,
-                    location.getLatitude(), location.getLongitude(), AdminMapActivity.this);
+            Ghost ghost = new Ghost(ghostType, location.getLatitude(), location.getLongitude());
             mapMarkers.addMarker(ghost);
             Log.i(TAG, "Added new ghost to pac man map frame.");
         });

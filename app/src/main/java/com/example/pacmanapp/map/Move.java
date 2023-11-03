@@ -49,11 +49,11 @@ public class Move {
     /**
      * Move the map image to place a marker in the center of the map area.
      *
-     * @param marker Marker to center the map are on
+     * @param markerView move the MarkerView to the center of the map area
      */
-    public void moveToCenter(Marker marker) {
-        int targetX = mapArea.getWidth() / 2 - ((int) marker.getImageView().getX() + marker.getWidth() / 2);
-        int targetY = mapArea.getHeight() / 2 - ((int) marker.getImageView().getY() + marker.getHeight() / 2);
+    public void moveToCenter(Marker.MarkerView markerView) {
+        int targetX = mapArea.getWidth() / 2 - ((int) markerView.getX() + markerView.getWidth() / 2);
+        int targetY = mapArea.getHeight() / 2 - ((int) markerView.getY() + markerView.getHeight() / 2);
 
         move(targetX, targetY);
     }
@@ -106,7 +106,7 @@ public class Move {
         //mapView.setY(yPosition);
         //markerLayout.setX(xPosition);
         //markerLayout.setY(yPosition);
-        mapArea.scrollTo(xPosition, yPosition); // TODO test if this works instead
+        mapArea.scrollTo(xPosition, yPosition); // test if this works instead
     }
 
     /**

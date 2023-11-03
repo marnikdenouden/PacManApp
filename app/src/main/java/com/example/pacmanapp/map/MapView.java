@@ -18,6 +18,7 @@ public class MapView extends androidx.appcompat.widget.AppCompatImageView {
 
     MapView(MapArea mapArea) {
         super(mapArea.getContext());
+        Log.d(TAG, "Constructing map view");
 
         // Setup the image view
         setViewValues();

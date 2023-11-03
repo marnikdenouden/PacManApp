@@ -1,5 +1,9 @@
 package com.example.pacmanapp.storage;
 
+import com.example.pacmanapp.map.MapStorage;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 
 public abstract class SaveObject implements Serializable {

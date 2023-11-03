@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item type="id" name="playValues" />
-    <item type="id" name="mapMarkers" />
+    <item type="id" name="mapStorage" />
     <item type="id" name="fruitStorage" />
     <item type="id" name="gameSettings" />
     <item type="id" name="imageManager" />

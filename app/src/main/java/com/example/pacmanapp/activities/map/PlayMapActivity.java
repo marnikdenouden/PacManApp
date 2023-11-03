@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.save.SaveActivity;
+import com.example.pacmanapp.map.MapMarkers;
+import com.example.pacmanapp.map.MapSave;
+import com.example.pacmanapp.map.MapStorage;
 import com.example.pacmanapp.selection.selectables.Blank;
 import com.example.pacmanapp.selection.selectables.BlankInspect;
 import com.example.pacmanapp.selection.selectables.InfoInspect;
@@ -25,7 +28,6 @@ import com.example.pacmanapp.location.LocationUpdater;
 import com.example.pacmanapp.map.MapArea;
 import com.example.pacmanapp.map.MapType;
 import com.example.pacmanapp.markers.Character;
-import com.example.pacmanapp.markers.MapMarkers;
 import com.example.pacmanapp.markers.PacMan;
 import com.example.pacmanapp.navigation.Navigate;
 import com.example.pacmanapp.navigation.NavigationBar;
@@ -43,7 +45,8 @@ public class PlayMapActivity extends AppCompatActivity
         implements DynamicLocation, Navigate.BaseActivity {
     private final static String TAG = "PlayMapActivity";
     private LocationUpdater locationUpdater;
-    private MapMarkers mapMarkers;
+    private MapSave mapSave;
+    private MapArea mapArea;
     private Selector selector;
     private SelectableContent.Preview preview;
     private final Selector.SelectionListener selectionListener = PlayMapActivity.this::onSelection;
@@ -73,11 +76,8 @@ public class PlayMapActivity extends AppCompatActivity
         }
 
         GameSave gameSave = SavePlatform.getSave();
-
-        mapMarkers = MapMarkers.getFromSave(gameSave);
-
-        ViewGroup mapFrame = findViewById(R.id.pacManMapFrame);
-        MapArea.createMap(MapType.PACMAN_FRANSEBAAN, mapFrame);
+        MapStorage mapStorage = MapStorage.getFromSave(gameSave);
+        mapSave = mapStorage.loadMapSave(R.id.pacManMapFrame, MapType.PACMAN_FRANSEBAAN);
 
         Clock clock = new Clock(gameSave);
         clock.updateDisplay(PlayMapActivity.this, R.color.onPrimaryContainer);
@@ -112,7 +112,8 @@ public class PlayMapActivity extends AppCompatActivity
         // Load ghost and then load map to have old characters removed
         // and new one created on next location update.
         loadPacMan();
-        mapMarkers.loadMap(this, R.id.pacManMapFrame);
+        ViewGroup mapFrame = findViewById(R.id.pacManMapFrame);
+        mapArea = mapSave.loadMap(mapFrame);
 
         // Call on selection with currently selected to load in preview
         Selectable selectable = selector.getSelected();
@@ -132,9 +133,8 @@ public class PlayMapActivity extends AppCompatActivity
     @Override
     protected void onStop() {
         super.onStop();
-        MapArea.getMapArea(this, R.id.pacManMapFrame).removeMarkers();
+        mapSave.unloadMap(mapArea);
         selector.removeOnSelectionListener(selectionListener);
-
         locationUpdater.stopLocationUpdates();
     }
 
@@ -184,9 +184,9 @@ public class PlayMapActivity extends AppCompatActivity
      * Load pacman character, which ensures one after the next location update.
      */
     private void loadPacMan() {
+        MapMarkers mapMarkers = mapSave.getMapMarkers();
         // Remove all characters, except a single pacman, from the map markers collection
-        Collection<Character> currentCharacters =
-                mapMarkers.getMarkersWithClass(R.id.pacManMapFrame, Character.class);
+        Collection<Character> currentCharacters = mapMarkers.getMarkersWithClass(Character.class);
         boolean foundPacMan = false;
         for (Character character: currentCharacters) {
             if (character instanceof PacMan && !foundPacMan) {
@@ -203,8 +203,7 @@ public class PlayMapActivity extends AppCompatActivity
         }
 
         locationUpdater.observeNextLocation(location -> {
-            PacMan pacMan = new PacMan(R.id.pacManMapFrame,
-                    location.getLatitude(), location.getLongitude(), PlayMapActivity.this);
+            PacMan pacMan = new PacMan(location.getLatitude(), location.getLongitude());
             mapMarkers.addMarker(pacMan);
             Log.i(TAG, "Added new pacman to pac man map frame.");
         });

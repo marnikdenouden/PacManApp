@@ -8,137 +8,95 @@ import android.location.Location;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.appcompat.widget.AppCompatImageView;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.inspect.InspectActivity;
-import com.example.pacmanapp.map.MapManager;
+import com.example.pacmanapp.map.MapArea;
 import com.example.pacmanapp.map.MapPosition;
 import com.example.pacmanapp.selection.Selectable;
 import com.example.pacmanapp.selection.SelectionCrier;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 
-@SuppressLint("ViewConstructor")
 public class Marker implements Serializable {
     private static final long serialVersionUID = 1L;
     private final static String TAG = "Marker";
-    private transient ImageView imageView;
-    private final int frameId; // mapFrameId reference to the single map area,
-                               //   that this marker is placed on
     private double latitude;
     private double longitude;
     private final int markerId;
     private final int drawableId; // Should always be able to be used as icon for the marker
     private boolean displayOnTop = false;
     private boolean animate = false;
-    private transient Context context;
+    private transient Collection<LocationListener> locationListeners;
 
     //>>> Constructors for marker <<<//
 
     /**
      * Create a marker for specified context, activity and alike.
      *
-     * @param frameId    FrameId reference to map area that the marker is placed on
      * @param latitude   Latitude used to position marker on map area
      * @param longitude  Longitude used to position marker on map area
      * @param drawableId DrawableId used to get drawable to display for the marker
      * @param markerId   MarkerId set to ImageView for potential reference
-     * @param context    Context in which the marker is created
      */
-    Marker(int frameId, double latitude, double longitude, int drawableId, int markerId,
-           @NotNull Context context) {
+    Marker(double latitude, double longitude, int drawableId, int markerId) {
         // Set marker values
-        this.frameId = frameId;
         this.latitude = latitude;
         this.longitude = longitude;
         this.drawableId = drawableId;
         this.markerId = markerId;
-        this.context = context;
+        locationListeners = new ArrayList<>();
     }
 
     //>>> Methods for marker creation <<<//
 
     /**
-     * Add the image view of the marker to a given map area.
+     * Get the marker view from the current values.
      *
-     * @pre Map manager has map are for markers frame id
-     * @param context to load marker in
+     * @param mapArea Map Area to create the marker view with
+     * @return markerView Marker view that was created
      */
-    public void loadOnMapArea(Context context) {
-        this.context = context;
-        if (!MapManager.hasMapArea(frameId)) {
-            return; // No map area available for the frame id
-        }
-
-        // Remove image view from the parent before adding marker to the map
-        if (imageView != null && imageView.getParent() != null) {
-            ViewGroup viewGroup = (ViewGroup) imageView.getParent();
-            viewGroup.removeView(imageView);
-        }
-
-        // Create image view for the markers context
-        createImageView(context);
-        tryAnimate(animate);
-
-        // Add the marker to the map area
-        MapManager.getMapArea(frameId).addMarker(this, displayOnTop);
+    protected MarkerView createView(@NotNull MapArea mapArea) {
+        MarkerView markerView = new MarkerView(mapArea, this);
+        markerView.createView();
+        return markerView;
     }
 
     /**
-     * Create the image view to display the marker with.
+     * Add the marker view to the specified view group.
      *
-     * @param context Context to create image view for
+     * @param mapArea Map Area to create the marker view with
+     * @param viewGroup View group to add marker view to
      */
-    protected void createImageView(Context context) {
-        // Create imageView for on the map area
-        imageView = new ImageView(context);
-        imageView.setOnClickListener(Marker.this::onClick);
-
-        imageView.setOnLongClickListener(view -> {
-            Marker.this.onLongClick(view);
-            return true;
-        });
-
-        setLayoutParams(latitude, longitude);
-        imageView.setId(markerId);
-        setDrawable(drawableId);
-    }
-
-    /**
-     * Set drawable for given drawable Id.
-     *
-     * @param drawableId Id to set drawable with
-     */
-    private void setDrawable(int drawableId) {
-        Drawable drawable = AppCompatResources.getDrawable(getContext(), drawableId);
-        if (drawable == null) {
-            Log.e(TAG, "Could not set drawable on marker for id: " + drawableId);
+    public MarkerView addView(@NotNull MapArea mapArea, @NotNull ViewGroup viewGroup) {
+        MarkerView markerView = createView(mapArea);
+        if (displayOnTop) {
+            viewGroup.addView(markerView);
+        } else {
+            viewGroup.addView(markerView, 0);
         }
-        setDrawable(drawable);
+        markerView.addOnLayoutChangeListener(
+                (view, i, i1, i2, i3, i4, i5, i6, i7) -> markerView.updatePlacement());
+        return markerView;
     }
 
-    /**
-     * Set the current imageView appearance for this marker.
-     *
-     * @pre imageView has been created for this marker
-     *
-     * @param drawable Drawable to set on imageView
-     */
-    protected void setDrawable(Drawable drawable) {
-        if (imageView == null) {
-            Log.e(TAG, "Could not set drawable, image view is null");
-            return;
-        }
-        imageView.setImageDrawable(drawable);
-        tryAnimate(animate);
-    }
+    // TODO instead of loading a marker to a single map it would be better to allow for a listener to update on the location changes the marker makes.
+    //  Marker should be the truth instance and be a data storage to use instead of actively trying to update UI itself.
+    //  So it should have a geo-location, image view representation to get and other values or methods to compare.
+    //  Getting image view could also be more dynamic, like having parameter scale(for width and height), and if it is marked selected or not.
+    //  Of course scale parameter should be constrained to have minimum/maximum width and height, which can also be defined per marker.
 
     /**
      * Set if the drawable should animate, class default is false.
@@ -147,6 +105,15 @@ public class Marker implements Serializable {
      */
     protected void setAnimate(boolean animate) {
         this.animate = animate;
+    }
+
+    /**
+     * Check if drawable is animated.
+     *
+     * @return Truth assignment, if drawable is animated.
+     */
+    public boolean isAnimated() {
+        return animate;
     }
 
     /**
@@ -159,24 +126,6 @@ public class Marker implements Serializable {
     }
 
     /**
-     * Try to animate the animation drawable.
-     *
-     * @param animate Boolean if the marker is set to animate
-     */
-    void tryAnimate(boolean animate) {
-        Drawable drawable = imageView.getDrawable();
-        // If animate is true and drawable an instance of animation drawable,
-        // then cast and start to animate the drawable.
-        if (animate && drawable instanceof AnimationDrawable) {
-            // Cast the drawable to animation drawable
-            AnimationDrawable animationDrawable = ((AnimationDrawable) drawable);
-
-            // Start the animation drawable
-            animationDrawable.start();
-        }
-    }
-
-    /**
      * Get the marker id.
      *
      * @return Marker id
@@ -185,114 +134,44 @@ public class Marker implements Serializable {
         return markerId;
     }
 
-    /**
-     * Set layout params for marker in relative layout.
-     */
-    private void setLayoutParams(double latitude, double longitude) {
-        // Set the marker clickable and focusable
-        imageView.setClickable(true);
-        imageView.setFocusable(true);
-
-        // Create the relative layout params with specified height and width
-        RelativeLayout.LayoutParams layoutParams =
-                new RelativeLayout.LayoutParams(getPixelWidth(), getPixelHeight());
-
-        // Create map location from latitude and longitude
-        MapPosition mapPosition = MapPosition.getPosition(frameId, latitude, longitude,
-                getPixelWidth(), getPixelHeight());
-
-        // set the margins of the layout params
-        layoutParams.setMargins(mapPosition.getX(), mapPosition.getY(), 0, 0);
-        imageView.setLayoutParams(layoutParams);
-    }
-
-    /**
-     * On click method called for the marker.
-     *
-     * @param view View from the click event
-     */
-    public void onClick(View view) {
-        if (this instanceof Selectable) {
-            SelectionCrier.getInstance().select((Selectable) this);
-            // TODO Display marker as selected and set on next selection listener to remove selected look.
-        }
-    }
-
-    /**
-     * On long click method called for the marker.
-     *
-     * @param view View from the long click event
-     */
-    public void onLongClick(View view) {
-        if (this instanceof Selectable) {
-            InspectActivity.open((AppCompatActivity) view.getContext(), (Selectable) this);
-        }
-    }
-
     //>>> Methods to set marker values <<<//
 
     /**
      * Get the pixel width for the marker.
      *
+     * @param context Context to get the dimension with
      * @return pixel width in int
      */
-    int getPixelWidth() {
-        return (int) imageView.getResources().getDimension(R.dimen.defaultMarkerSize);
+    int getPixelWidth(@NotNull Context context) {
+        return (int) context.getResources().getDimension(R.dimen.defaultMarkerSize);
     }
 
     /**
      * Get the pixel height for the marker.
      *
+     * @param context Context to get the dimension with
      * @return pixel height in int
      */
-    int getPixelHeight() {
-        return (int) imageView.getResources().getDimension(R.dimen.defaultMarkerSize);
+    int getPixelHeight(@NotNull Context context) {
+        return (int) context.getResources().getDimension(R.dimen.defaultMarkerSize);
     }
 
     /**
-     * Get the width from the imageView.
+     * Get latitude location of the marker.
      *
-     * @return pixel width in int
+     * @return double latitude location
      */
-    public int getWidth() {
-        return imageView.getWidth();
+    public double getLatitude() {
+        return latitude;
     }
 
     /**
-     * Get the height from the imageView.
+     * Get longitude location of the marker.
      *
-     * @return pixel height in int
+     * @return double longitude location
      */
-    public int getHeight() {
-        return imageView.getHeight();
-    }
-
-    /**
-     * Get the frame id for the marker.
-     *
-     * @return Frame id of the map area that the marker is placed in
-     */
-    public int getFrameId() {
-        return frameId;
-    }
-
-    /**
-     * Checks if marker belongs on map with frame id.
-     *
-     * @param frameId Frame id to check for
-     * @return Truth assignment, if marker belongs on map with specified frame id
-     */
-    public boolean belongsOnMap(int frameId) {
-        return this.frameId == frameId;
-    }
-
-    /**
-     * Get the image view of the marker.
-     *
-     * @return ImageView of the marker.
-     */
-    public ImageView getImageView() {
-        return imageView;
+    public double getLongitude() {
+        return longitude;
     }
 
     /**
@@ -306,94 +185,248 @@ public class Marker implements Serializable {
     }
 
     /**
-     * Context of the image view.
+     * Set marker latitude and longitude to the specified values.
      *
-     * @return Context of the image view
+     * @param latitude y axis location of the marker.
+     * @param longitude x axis location of the marker.
      */
-    protected Context getContext() {
-        return context;
-    }
-
-    //>>> place marker methods <<<//
-
-    /**
-     * Place the marker to a new location.
-     *
-     * @param location to place marker to
-     */
-    void place(@NotNull Location location) {
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
-        place(latitude, longitude);
-    }
-
-    /**
-     * Place the marker to a new location.
-     *
-     * @param latitude Used to set the y location
-     * @param longitude Used to set the x location
-     */
-    void place(double latitude, double longitude) {
+    protected void setLocation(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
-        updatePlacement();
+        while(locationListeners.contains(null)) {
+            locationListeners.remove(null);
+        };
+        for (LocationListener listener: locationListeners) {
+            listener.onLocationChange(latitude, longitude);
+        }
     }
 
     /**
-     * Place the character to a new map location.
+     * Get the centered map position of the marker on specified the map area.
      *
-     * @param mapPosition the new map location.
+     * @param mapArea Map area to get map position from
+     * @param context Context to get marker size from to get central position
+     * @return MapPosition of current latitude and longitude on the map area
      */
-    private void place(MapPosition mapPosition) {
-        imageView.setX(mapPosition.getX());
-        imageView.setY(mapPosition.getY());
-    }
-
-    //>>> Public methods to use on marker <<<//
-
-    /**
-     * Update the marker position for its stored location.
-     */
-    public void updatePlacement() {
-        MapPosition mapPosition = MapPosition.getPosition(frameId, latitude, longitude,
-                getWidth(), getHeight());
-        place(mapPosition);
+    public MapPosition getMapPosition(@NotNull MapArea mapArea, @NotNull Context context) {
+        return MapPosition.getPosition(mapArea, getLatitude(),
+                getLongitude(), getPixelWidth(context),
+                getPixelHeight(context));
     }
 
     /**
-     * Get the map position of this marker.
+     * Add location listener to the marker.
      *
-     * @return Map position of this marker
+     * @param listener Listener to receive future location updates
      */
-    @NotNull
-    public MapPosition getMapPosition() {
-        int xPosition = (int) imageView.getX();
-        int yPosition = (int) imageView.getY();
-        return new MapPosition(xPosition, yPosition);
+    void addLocationListener(@NotNull LocationListener listener) {
+        locationListeners.add(listener);
     }
 
     /**
-     * Get the distance to another marker.
+     * Remove location listener to the marker.
      *
-     * @param marker Marker to get distance to
-     * @return Distance between this marker and the specified marker.
+     * @param listener Listener to remove from listeners collection
      */
-    public float distanceTo(Marker marker) {
-        return distanceTo(marker.latitude, marker.longitude);
+    void removeLocationListener(@NotNull LocationListener listener) {
+        locationListeners.remove(listener);
     }
 
     /**
-     * Get the distance to another location.
+     * Serializable read object method, constructor for deserialization.
      *
-     * @param latitude to get distance to
-     * @param longitude to get distance to
-     * @return Distance between this marker and the specified location.
+     * @param objectInputStream Input stream of objects to reconstruct class with
      */
-    public float distanceTo(double latitude, double longitude) {
-        float[] results = new float[3];
-        Location.distanceBetween(this.latitude, this.longitude, latitude, longitude, results);
-        return results[0];
+    private void readObject(ObjectInputStream objectInputStream)
+            throws ClassNotFoundException, IOException {
+        objectInputStream.defaultReadObject();
+        locationListeners = new ArrayList<>();
     }
 
+    public interface LocationListener {
+        /**
+         * Called when location of marker changes.
+         *
+         * @param latitude New y axis location of the marker
+         * @param longitude New x axis location of the marker
+         */
+        void onLocationChange(double latitude, double longitude);
+    }
+
+    @SuppressLint("ViewConstructor")
+    public static class MarkerView extends AppCompatImageView implements LocationListener {
+        private final String TAG = "MarkerView";
+
+        protected final MapArea mapArea;
+        protected Marker marker;
+
+        /**
+         * Create the marker view for the specified map area and marker.
+         *
+         * @param mapArea Map area to create view for
+         * @param marker Marker to create view for
+         * @return markerView MarkerView that is created
+         */
+        protected MarkerView(@NotNull MapArea mapArea, @NotNull Marker marker) {
+            super(mapArea.getContext());
+            this.mapArea = mapArea;
+            this.marker = marker;
+            marker.addLocationListener(this);
+        }
+
+        @Override
+        protected void onDetachedFromWindow() {
+            super.onDetachedFromWindow();
+            marker.removeLocationListener(this);
+        }
+
+        /**
+         * Create the marker view.
+         *
+         * @return markerView Marker view that has been created
+         */
+        protected void createView() {
+            setOnClickListener(this::onClick);
+
+            setOnLongClickListener(view -> {
+                onLongClick(view);
+                return true;
+            });
+
+            setLayoutParams();
+            setId(marker.getMarkerId());
+            setDrawable(marker.getDrawableId());
+        }
+
+        /**
+         * Set drawable for given drawable Id.
+         *
+         * @param drawableId Id to set drawable with
+         */
+        private void setDrawable(int drawableId) {
+            Drawable drawable = AppCompatResources.getDrawable(getContext(), drawableId);
+            if (drawable == null) {
+                Log.e(TAG, "Could not set drawable on marker for id: " + drawableId);
+            }
+            setDrawable(drawable);
+        }
+
+        /**
+         * Set drawable for given drawable
+         *
+         * @param drawable Drawable to set for view
+         */
+        protected void setDrawable(Drawable drawable) {
+            setImageDrawable(drawable);
+            tryAnimate();
+        }
+
+        /**
+         * Try to animate the animation drawable.
+         */
+        void tryAnimate() {
+            // If animate is true and drawable an instance of animation drawable,
+            // then cast and start to animate the drawable.
+            if (marker.isAnimated() && getDrawable() instanceof AnimationDrawable) {
+                // Cast the drawable to animation drawable
+                AnimationDrawable animationDrawable = ((AnimationDrawable) getDrawable());
+
+                // Start the animation drawable
+                animationDrawable.start();
+            }
+        }
+
+        @Override
+        public void onLocationChange(double latitude, double longitude) {
+            updatePlacement();
+        }
+
+        /**
+         * Update placement of the marker view in the map area with the current position.
+         */
+        public void updatePlacement() {
+            MapPosition mapPosition = getMapPosition();
+            setX(mapPosition.getX());
+            setY(mapPosition.getY());
+        }
+
+        /**
+         * Get the map position for the marker view on the current location on the map area.
+         *
+         * @return MapPosition of current latitude and longitude on the map area
+         */
+        public MapPosition getMapPosition() {
+            return MapPosition.getPosition(mapArea, marker.getLatitude(),
+                    marker.getLongitude(), getWidth(), getHeight());
+        }
+
+        /**
+         * Set layout params for marker in relative layout.
+         */
+        private void setLayoutParams() {
+            // Set the marker clickable and focusable
+            setClickable(true);
+            setFocusable(true);
+
+            // Create the relative layout params with specified height and width
+            RelativeLayout.LayoutParams layoutParams =
+                    new RelativeLayout.LayoutParams(marker.getPixelWidth(getContext()),
+                            marker.getPixelHeight(getContext()));
+
+            // Create map location from latitude and longitude
+            MapPosition mapPosition = getMapPosition();
+
+            // set the margins of the layout params
+            layoutParams.setMargins(mapPosition.getX(), mapPosition.getY(), 0, 0);
+            setLayoutParams(layoutParams);
+        }
+
+        /**
+         * On click method called for the marker.
+         *
+         * @param view View from the click event
+         */
+        public void onClick(View view) {
+            if (marker instanceof Selectable) {
+                SelectionCrier.getInstance().select((Selectable) marker);
+                // TODO Display marker as selected and set on next selection listener to remove selected look.
+            }
+        }
+
+        /**
+         * On long click method called for the marker.
+         *
+         * @param view View from the long click event
+         */
+        public void onLongClick(View view) {
+            if (this instanceof Selectable) {
+                InspectActivity.open((AppCompatActivity) view.getContext(), (Selectable) this);
+            }
+        }
+
+        /**
+         * Get the distance to another marker.
+         *
+         * @param marker Marker to get distance to
+         * @return Distance between this marker and the specified marker.
+         */
+        public float distanceTo(Marker marker) {
+            return distanceTo(marker.getLatitude(), marker.getLongitude());
+        }
+
+        /**
+         * Get the distance to another location.
+         *
+         * @param latitude  to get distance to
+         * @param longitude to get distance to
+         * @return Distance between this marker and the specified location.
+         */
+        public float distanceTo(double latitude, double longitude) {
+            float[] results = new float[3];
+            Location.distanceBetween(marker.getLatitude(), marker.getLongitude(), latitude, longitude, results);
+            return results[0];
+        }
+
+    }
 }
 

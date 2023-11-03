@@ -24,7 +24,7 @@ public class FruitStorage extends SaveObject implements Serializable {
      *
      * @param gameSave Save to add the save object to the current save of.
      */
-    public FruitStorage(GameSave gameSave) {
+    private FruitStorage(GameSave gameSave) {
         super(fruitStorageId, gameSave);
         fruitList = new ArrayList<>();
     }
@@ -76,7 +76,7 @@ public class FruitStorage extends SaveObject implements Serializable {
     }
 
     /**
-     * Gets or creates the map marker for the current save of the specified game save.
+     * Gets or creates the fruit storage for the current save of the specified game save.
      *
      * @param gameSave Save to get fruit storage from
      * @return fruit storage from current save of the specified game save

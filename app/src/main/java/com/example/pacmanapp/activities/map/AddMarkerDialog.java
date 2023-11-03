@@ -12,7 +12,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.location.LocationUpdater;
-import com.example.pacmanapp.markers.MapMarkers;
+import com.example.pacmanapp.map.MapMarkers;
 import com.example.pacmanapp.markers.Marker;
 import com.example.pacmanapp.markers.PacDot;
 import com.example.pacmanapp.markers.PowerPellet;
@@ -96,7 +96,7 @@ public class AddMarkerDialog extends DialogFragment {
      * Select pac dot to be the new marker to add.
      */
     public void selectPacDot() {
-        marker = new PacDot(frameId, getLatitude(), getLongitude(), activity);
+        marker = new PacDot(getLatitude(), getLongitude());
         Objects.requireNonNull(getDialog()).setTitle("Add pac dot?");
     }
 
@@ -104,7 +104,7 @@ public class AddMarkerDialog extends DialogFragment {
      * Select power pellet to be the new marker to add.
      */
     public void selectPowerPellet() {
-        marker = new PowerPellet(frameId, getLatitude(), getLongitude(), activity);
+        marker = new PowerPellet(getLatitude(), getLongitude());
         Objects.requireNonNull(getDialog()).setTitle("Add power pellet?");
     }
 }

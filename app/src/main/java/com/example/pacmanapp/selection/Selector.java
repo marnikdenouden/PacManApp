@@ -37,6 +37,9 @@ public abstract class Selector {
         } else {
             this.selected = selected;
         }
+        while(listeners.contains(null)) {
+            listeners.remove(null);
+        };
         for (SelectionListener listener: listeners) {
             listener.onSelect(this.selected);
         }

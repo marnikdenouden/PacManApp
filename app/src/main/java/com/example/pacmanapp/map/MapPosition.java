@@ -1,7 +1,5 @@
 package com.example.pacmanapp.map;
 
-import android.util.Log;
-
 import org.jetbrains.annotations.NotNull;
 
 public class MapPosition {
@@ -42,28 +40,6 @@ public class MapPosition {
      * Gets the top left map position of a square with specified width and height,
      * which has at the center the specified latitude and longitude location on the map area.
      *
-     * @pre Map area exists for frame id in current context.
-     *
-     * @param frameId FrameId reference to map from which to get the location
-     * @param latitude Latitude to convert to y location
-     * @param longitude Longitude to convert to x location
-     * @param width Width of square to align longitude center of
-     * @param height Height of square to align latitude center of
-     */
-    @NotNull
-    public static MapPosition getPosition(int frameId, double latitude, double longitude,
-                                          int width, int height) {
-        if (!MapManager.hasMapArea(frameId)) {
-            Log.e(TAG, "Could not get map position without map area.");
-            throw new NullPointerException("No map area found for frame id " + frameId);
-        }
-        return getPosition(MapManager.getMapArea(frameId), latitude, longitude, width, height);
-    }
-
-    /**
-     * Gets the top left map position of a square with specified width and height,
-     * which has at the center the specified latitude and longitude location on the map area.
-     *
      * @param mapArea Map on which to get the map location
      * @param latitude Latitude to convert to y location
      * @param longitude Longitude to convert to x location
@@ -71,9 +47,10 @@ public class MapPosition {
      * @param height Height of square to align latitude center of
      */
     @NotNull
-    public static MapPosition getPosition(@NotNull MapArea mapArea, double latitude, double longitude,
+    public static MapPosition getPosition(@NotNull MapArea mapArea,
+                                          double latitude, double longitude,
                                           int width, int height) {
-        MapPosition mapPosition = mapArea.getMapLocation(latitude, longitude);
+        MapPosition mapPosition = mapArea.getMapPosition(latitude, longitude);
         int xPosition = mapPosition.getX() - (width / 2);
         int yPosition = mapPosition.getY() - (height / 2);
 
@@ -91,7 +68,7 @@ public class MapPosition {
      * @return Bounded position of a location on the map area
      */
     public static MapPosition getPositionBounded(MapArea mapArea, double latitude, double longitude) {
-        MapPosition mapPosition = mapArea.getMapLocation(latitude, longitude);
+        MapPosition mapPosition = mapArea.getMapPosition(latitude, longitude);
         return boundOnMap(mapArea, mapPosition);
     }
 
