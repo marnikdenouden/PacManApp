@@ -20,6 +20,8 @@ public class MapSave implements Serializable, LocationObserver {
     private final int frameId;
     private final MapType mapType;
     private final MapMarkers mapMarkers;
+    private int xOffset = 0;
+    private int yOffset = 0;
 
     public MapSave(int frameId, @NotNull MapType mapType) {
         this.frameId = frameId;
@@ -102,6 +104,35 @@ public class MapSave implements Serializable, LocationObserver {
      */
     public int getFrameId() {
         return frameId;
+    }
+
+    /**
+     * Set the map offset position.
+     *
+     * @param xOffSet Horizontal offset of the map
+     * @param yOffset Vertical offset of the map
+     */
+    public void setOffset(int xOffSet, int yOffset) {
+        this.xOffset = xOffSet;
+        this.yOffset = yOffset;
+    }
+
+    /**
+     * Get the x off set of the map.
+     *
+     * @return xOffset that determines the horizontal map position
+     */
+    public int getXOffset() {
+        return xOffset;
+    }
+
+    /**
+     * Get the y off set of the map.
+     *
+     * @return yOffset that determines the vertical map position
+     */
+    public int getYOffset() {
+        return yOffset;
     }
 
     // Use a lot of protected methods in map area, then have method calls here that use them and store values to reconstruct it on new creation.

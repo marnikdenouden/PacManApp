@@ -187,6 +187,7 @@ public class MapArea extends ConstraintLayout {
     OverScroller scroller; // Allow map controller to use scroller
 
     private void createOverScroller() {
+        updateOffset();
         scroller = new OverScroller(getContext(), new AccelerateDecelerateInterpolator());
         //scroller.setFriction(1.00f);
     }
@@ -194,9 +195,17 @@ public class MapArea extends ConstraintLayout {
     @Override
     public void computeScroll() {
         if (scroller.computeScrollOffset()) {
-            scrollTo(scroller.getCurrX(), scroller.getCurrY());
-            invalidate();
+            mapSave.setOffset(scroller.getCurrX(), scroller.getCurrY());
+            updateOffset();
         }
+    }
+
+    /**
+     * Update the scroll to the offset of the map save.
+     */
+    public void updateOffset() {
+        scrollTo(mapSave.getXOffset(), mapSave.getYOffset());
+        invalidate();
     }
 
     /**
