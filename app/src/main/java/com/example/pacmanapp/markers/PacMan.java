@@ -35,6 +35,8 @@ public class PacMan extends Character implements Serializable {
 
     @SuppressLint("ViewConstructor")
     public static class PacManView extends CharacterView {
+        private final String TAG = "PacManView";
+
         protected PacManView(@NonNull MapArea mapArea, @NonNull PacMan pacMan) {
             super(mapArea, pacMan);
         }

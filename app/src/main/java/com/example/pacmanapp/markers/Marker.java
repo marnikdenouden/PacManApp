@@ -405,21 +405,21 @@ public class Marker implements Serializable {
         }
 
         /**
-         * Get the distance to another marker.
+         * Get the real distance to another marker.
          *
          * @param marker Marker to get distance to
-         * @return Distance between this marker and the specified marker.
+         * @return Distance between the marker from this view and the specified marker.
          */
         public float distanceTo(Marker marker) {
             return distanceTo(marker.getLatitude(), marker.getLongitude());
         }
 
         /**
-         * Get the distance to another location.
+         * Get the real distance to another location.
          *
          * @param latitude  to get distance to
          * @param longitude to get distance to
-         * @return Distance between this marker and the specified location.
+         * @return Distance between the marker from this view and the specified location.
          */
         public float distanceTo(double latitude, double longitude) {
             float[] results = new float[3];

@@ -121,6 +121,7 @@ public class PowerPellet extends Marker implements Selectable {
 
     @SuppressLint("ViewConstructor")
     public static class PowerPelletView extends MarkerView implements Character.CharacterView.Visitable {
+        private final String TAG = "PacDotView";
         private final PowerPellet powerPellet;
         protected PowerPelletView(@NonNull MapArea mapArea, @NonNull PowerPellet powerPellet) {
             super(mapArea, powerPellet);
@@ -130,19 +131,6 @@ public class PowerPellet extends Marker implements Selectable {
         @Override
         public void visit(@NotNull Character character) {
             Log.d(TAG, "Power pellet is being visited by character");
-            float mapDistance = distanceTo(character);
-            float realDistance = distanceTo(character.getLatitude(), character.getLongitude());
-
-            // TODO Improve this method, and include a single time score bonus for when the real distance is close.
-            MapPosition mapPositionPowerPellet = getMapPosition();
-            MapPosition mapPositionCharacter = character.getMapPosition(mapArea, getContext());
-
-            int xDistance = Math.abs(mapPositionPowerPellet.getX() - mapPositionCharacter.getX());
-            int yDistance = Math.abs(mapPositionPowerPellet.getY() - mapPositionCharacter.getY());
-            if (xDistance < (getWidth() / 2) &&
-                    yDistance < (getHeight() / 2)) {
-                SelectionCrier.getInstance().select(powerPellet);
-            }
         }
     }
 }

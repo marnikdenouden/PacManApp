@@ -55,6 +55,7 @@ public class Ghost extends Character implements Serializable {
 
     @SuppressLint("ViewConstructor")
     public static class GhostView extends CharacterView {
+        private final String TAG = "GhostView";
         private final Ghost ghost;
         private final transient Map<Direction, AnimationDrawable> animationDrawableMap;
 

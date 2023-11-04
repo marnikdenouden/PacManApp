@@ -13,7 +13,9 @@ import com.example.pacmanapp.selection.SelectionCrier;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 @SuppressLint("ViewConstructor")
@@ -95,12 +97,62 @@ public class MarkerLayout extends RelativeLayout implements MapMarkers.MarkerLis
                     " could not be removed from marker layout as it was not stored.");
             return;
         }
-        
+
         Marker.MarkerView markerView = markerMap.get(marker);
         removeView(markerView);
 
         Log.d(TAG, "Removed marker of class " + marker.getClass().getSimpleName() +
                 " from the marker layout");
+    }
+
+    /**
+     * Gets the map collection of marker views.
+     *
+     * @return Marker view collection that is currently stored
+     */
+    private Collection<Marker.MarkerView> getMarkerViews() {
+        return markerMap.values();
+    }
+
+    /**
+     * Gets a collection of the map marker views.
+     *
+     * @return new Set of the map marker view collection
+     */
+    public Collection<Marker.MarkerView> getMapMarkerViews() {
+        return new HashSet<>(getMarkerViews());
+    }
+
+    /**
+     * Check if marker views contains a view with specified class.
+     *
+     * @param markerViewClass Class to check if a marker view from the collection is an instance of
+     * @return Truth assignment, if there exists a view that is an instance of the specified class
+     */
+    public boolean hasMarkerViewWithClass(Class<?> markerViewClass) {
+        for (Marker.MarkerView markerView: getMarkerViews()) {
+            if (markerViewClass.isInstance(markerView)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Get the collection of marker views with the specified class.
+     *
+     * @param markerViewClass Class of marker views to get
+     * @return Collection of marker views with the specified class
+     */
+    public <ViewClass> Collection<ViewClass> getMarkerViewsWithClass(
+            Class<ViewClass> markerViewClass) {
+        Collection<ViewClass> markers = new HashSet<>();
+        for (Marker.MarkerView markerView: getMarkerViews()) {
+            if (markerViewClass.isInstance(markerView)) {
+                markers.add(markerViewClass.cast(markerView));
+            }
+        }
+        return markers;
     }
 
     @Override

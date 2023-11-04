@@ -1,5 +1,7 @@
 package com.example.pacmanapp.map;
 
+import android.view.View;
+
 import org.jetbrains.annotations.NotNull;
 
 public class MapPosition {
@@ -141,6 +143,24 @@ public class MapPosition {
         int positionY = Math.max(topBound, Math.min(mapPosition.getY(), bottomBound));
 
         return new MapPosition(positionX, positionY);
+    }
+
+    /**
+     * Check if the specified views overlap.
+     *
+     * @param view1 View 1 to check overlap with view 2
+     * @param view2 View 2 to check overlap with view 1
+     * @return Truth assignment, if the specified views overlap
+     */
+    public static boolean doViewsOverlap(@NotNull View view1, @NotNull View view2) {
+        boolean horizontalOverlap =
+                        view1.getX() + view1.getWidth() >= view2.getX() &&
+                        view2.getX() + view2.getWidth() >= view1.getX();
+        boolean verticalOverlap =
+                        view1.getY() + view1.getHeight() >= view2.getY() &&
+                        view2.getY() + view2.getHeight() >= view1.getY();
+
+        return horizontalOverlap && verticalOverlap;
     }
 
     // TODO add (static?) method to get rough geo location, so map x&y position can be converted to it.

@@ -96,6 +96,8 @@ public class PacDot extends Marker implements Selectable {
 
     @SuppressLint("ViewConstructor")
     public static class PacDotView extends MarkerView implements Character.CharacterView.Visitable {
+
+        private final String TAG = "PacDotView";
         private final PacDot pacDot;
         protected PacDotView(@NonNull MapArea mapArea, @NonNull PacDot pacDot) {
             super(mapArea, pacDot);
@@ -104,20 +106,7 @@ public class PacDot extends Marker implements Selectable {
 
         @Override
         public void visit(@NotNull Character character) {
-            Log.d(TAG, "Power pellet is being visited by character");
-            float mapDistance = distanceTo(character);
-            float realDistance = distanceTo(character.getLatitude(), character.getLongitude());
-
-            // TODO Improve this method, and include a single time score bonus for when the real distance is close.
-            MapPosition mapPositionPacDot = getMapPosition();
-            MapPosition mapPositionCharacter = character.getMapPosition(mapArea, getContext());
-
-            int xDistance = Math.abs(mapPositionPacDot.getX() - mapPositionCharacter.getX());
-            int yDistance = Math.abs(mapPositionPacDot.getY() - mapPositionCharacter.getY());
-            if (xDistance < (getWidth() / 2) &&
-                    yDistance < (getHeight() / 2)) {
-                SelectionCrier.getInstance().select(pacDot);
-            }
+            Log.d(TAG, "Pac Dot is being visited by character");
         }
     }
 }

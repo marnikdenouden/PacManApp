@@ -10,8 +10,9 @@ import androidx.annotation.NonNull;
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.location.LocationObserver;
 import com.example.pacmanapp.map.MapArea;
-import com.example.pacmanapp.map.MapMarkers;
 import com.example.pacmanapp.map.MapPosition;
+import com.example.pacmanapp.selection.Selectable;
+import com.example.pacmanapp.selection.SelectionCrier;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -21,6 +22,7 @@ import java.util.Collection;
 public abstract class Character extends Marker implements Serializable, LocationObserver {
     private static final long serialVersionUID = 1L;
     private final static String TAG = "Character";
+    private final static int VISIT_DISTANCE = 20;
 
     //>>> Constructors for character <<<//
 
@@ -75,12 +77,41 @@ public abstract class Character extends Marker implements Serializable, Location
             setRotation(getDirection(targetX, targetY));
 
             // Animate the character to the target position
+            int moveDuration = getContext().getResources().getInteger(R.integer.moveAnimationTime);
             animate().x(targetX).y(targetY)
-                    .withEndAction(this::updatePlacement)
-                    .setDuration(getContext().getResources().getInteger(R.integer.moveAnimationTime))
+                    .withEndAction(() -> {
+                        updatePlacement();
+                        visitMarkers();
+                    })
+                    .setDuration(moveDuration)
                     .start();
 
             Log.d(TAG, "Moving character to x: " + targetX + " and y:" + targetY);
+        }
+
+        /**
+         * Visits markers that are within visit distance of the current location.
+         */
+        private void visitMarkers() {
+            Collection<Visitable> visitableMarkers = mapArea.getMarkerViewsWithClass(Visitable.class);
+            Log.d(TAG, "Character is moving, will check " +
+                    visitableMarkers.size() + " markers to visit");
+
+            for (Visitable visitableMarker: visitableMarkers) {
+                if (!(visitableMarker instanceof MarkerView)) {
+                    Log.w(TAG, "Visitable marker was not instance of marker view.");
+                    continue;
+                }
+
+                // If marker view overlaps character view we can visit the visitable marker.
+                MarkerView markerView = (MarkerView) visitableMarker;
+
+                if (markerView.distanceTo(character) < VISIT_DISTANCE) {
+                    Log.d(TAG, "Visiting marker with distance: " +
+                            markerView.distanceTo(character));
+                    visitableMarker.visit(character);
+                }
+            }
         }
 
         /**
@@ -91,16 +122,27 @@ public abstract class Character extends Marker implements Serializable, Location
         @Override
         public void onClick(View view) {
             super.onClick(view);
-            MapMarkers mapMarkers = mapArea.getMapSave().getMapMarkers();
-            Collection<Visitable> visitableMarkers =
-                    mapMarkers.getMarkersWithClass(Visitable.class);
 
-            Log.d(TAG, "Character is clicked, will visit " +
-                    visitableMarkers.size() + " markers");
+            // Call click on a marker views that overlap the character.
+            for (MarkerView markerView: mapArea.getMapMarkerViews()) {
+                if (markerView.equals(this)) {
+                    continue;
+                }
 
-            for (Visitable visitableMarker: visitableMarkers) {
-                visitableMarker.visit(character);
+                if (MapPosition.doViewsOverlap(markerView, this)) {
+                    Log.d(TAG, "Calling on click for marker view, since view overlaps.");
+                    markerView.callOnClick();
+                    return;
+                }
             }
+
+            // No marker to click, so we can try to 'click' the character.
+            if (character instanceof Selectable) {
+                SelectionCrier.getInstance().select((Selectable) character);
+                return;
+            }
+
+            Log.i(TAG, "No marker found to click and character is also not selectable.");
         }
 
         /**

@@ -19,6 +19,9 @@ import com.example.pacmanapp.markers.Marker;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 @SuppressLint("ViewConstructor")
 public class MapArea extends ConstraintLayout {
     private final static String TAG = "MapArea";
@@ -72,29 +75,6 @@ public class MapArea extends ConstraintLayout {
     }
 
     //>>> Public methods to call for map area <<<//
-
-    /**
-     * Adds a marker to the map.
-     *
-     * @param marker Marker to add to the map
-     */
-    protected void addMarker(Marker marker) {
-        markerLayout.addMarker(marker);
-    }
-
-    /**
-     * Remove marker view from this map area.
-     */
-    protected void removeMarker(@NotNull Marker marker) {
-        markerLayout.removeMarker(marker);
-    }
-
-    /**
-     * Remove all markers added to this map area.
-     */
-    protected void removeAllMarkers() {
-        markerLayout.removeAllMarkers();
-    }
 
     /**
      * Creates a map on the given view.
@@ -249,6 +229,61 @@ public class MapArea extends ConstraintLayout {
                 * mapView.getHeight() / mapType.getLatitudeHeight();
 
         return new MapPosition((int) xPosition, (int) yPosition);
+    }
+
+    /* Marker layout methods that can be called from the map area. */
+
+    /**
+     * Adds a marker to the map.
+     *
+     * @param marker Marker to add to the map
+     */
+    protected void addMarker(Marker marker) {
+        markerLayout.addMarker(marker);
+    }
+
+    /**
+     * Remove marker view from this map area.
+     */
+    protected void removeMarker(@NotNull Marker marker) {
+        markerLayout.removeMarker(marker);
+    }
+
+    /**
+     * Remove all markers added to this map area.
+     */
+    protected void removeAllMarkers() {
+        markerLayout.removeAllMarkers();
+    }
+
+    /**
+     * Gets a collection of the map marker views.
+     *
+     * @return new Set of the map marker view collection
+     */
+    public Collection<Marker.MarkerView> getMapMarkerViews() {
+        return markerLayout.getMapMarkerViews();
+    }
+
+    /**
+     * Check if marker views contains a view with specified class.
+     *
+     * @param markerViewClass Class to check if a marker view from the collection is an instance of
+     * @return Truth assignment, if there exists a view that is an instance of the specified class
+     */
+    public boolean hasMarkerViewWithClass(Class<?> markerViewClass) {
+        return markerLayout.hasMarkerViewWithClass(markerViewClass);
+    }
+
+    /**
+     * Get the collection of marker views with the specified class.
+     *
+     * @param markerViewClass Class of marker views to get
+     * @return Collection of marker views with the specified class
+     */
+    public <MarkerType> Collection<MarkerType> getMarkerViewsWithClass(
+            Class<MarkerType> markerViewClass) {
+        return markerLayout.getMarkerViewsWithClass(markerViewClass);
     }
 
 }

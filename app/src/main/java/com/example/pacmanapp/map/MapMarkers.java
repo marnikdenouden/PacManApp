@@ -103,10 +103,10 @@ public class MapMarkers implements Serializable, LocationObserver {
     }
 
     /**
-     * Get the collection of map markers for the specified frame id with the specified class.
+     * Get the collection of map markers with the specified class.
      *
      * @param markerClass Class of markers to get
-     * @return Collection of map markers with the specified class for the specified frame id
+     * @return Collection of map markers with the specified class
      */
     public <MarkerType> Collection<MarkerType> getMarkersWithClass(Class<MarkerType> markerClass) {
         Collection<MarkerType> markers = new HashSet<>();
