@@ -12,10 +12,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.save.SaveActivity;
+import com.example.pacmanapp.general.Util;
 import com.example.pacmanapp.map.MapMarkers;
 import com.example.pacmanapp.map.MapSave;
 import com.example.pacmanapp.map.MapStorage;
@@ -44,8 +46,10 @@ import com.example.pacmanapp.selection.Selectable;
 import com.example.pacmanapp.selection.SelectableContent;
 import com.example.pacmanapp.selection.Selector;
 import com.example.pacmanapp.storage.GameSave;
+import com.example.pacmanapp.storage.GameSettings;
 import com.example.pacmanapp.storage.SavePlatform;
 
+import java.time.Duration;
 import java.util.Collection;
 import java.util.Random;
 
@@ -79,7 +83,7 @@ public class AdminMapActivity extends AppCompatActivity
 
         GameSave gameSave = SavePlatform.getSave();
         MapStorage mapStorage = MapStorage.getFromSave(gameSave);
-        mapSave = mapStorage.loadMapSave(R.id.pacManMapFrame, MapType.PACMAN_FRANSEBAAN);
+        mapSave = mapStorage.loadMapSave(R.id.pacManMapFrame, MapType.SATELLITE_TUE_CAMPUS);
 
         // Get selectors to make sure they get relevant selections.
         AcceptAllSelector.getSelector(R.id.inspectAllSelector,
@@ -102,14 +106,22 @@ public class AdminMapActivity extends AppCompatActivity
         addButton.setOnClickListener(view -> openAddMarkerDialog());
 
         View removeButton = findViewById(R.id.remove_button);
-        removeButton.setOnClickListener(view -> removeMarker());
+        removeButton.setOnClickListener(view -> openRemoveMarkerDialog());
 
         preview = new SelectableContent.Preview(new BlankEdit(getResources()));
         ViewGroup selectableView = findViewById(R.id.selected_preview);
         preview.configure(this, selectableView, true);
 
-        Clock clock = new Clock(gameSave);
-        clock.updateDisplay(AdminMapActivity.this, R.color.onPrimaryContainer);
+        EditText editText = findViewById(R.id.editStartDuration);
+        GameSettings gameSettings = GameSettings.getFromSave(gameSave);
+        long gameDurationSeconds = gameSettings.getGameDuration().getSeconds();
+        Util.configureEditText(editText, String.valueOf(gameDurationSeconds), text -> {
+            if (text.equals("")) {
+                return;
+            }
+            Duration newGameDuration = Duration.ofSeconds(Integer.parseInt(text));
+            gameSettings.setGameDuration(newGameDuration);
+        });
 
         score = new Score(gameSave);
         score.updateDisplay(5, R.id.scoreLayout, AdminMapActivity.this,

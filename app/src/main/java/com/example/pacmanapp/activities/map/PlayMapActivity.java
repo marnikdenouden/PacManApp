@@ -77,7 +77,7 @@ public class PlayMapActivity extends AppCompatActivity
 
         GameSave gameSave = SavePlatform.getSave();
         MapStorage mapStorage = MapStorage.getFromSave(gameSave);
-        mapSave = mapStorage.loadMapSave(R.id.pacManMapFrame, MapType.PACMAN_FRANSEBAAN);
+        mapSave = mapStorage.loadMapSave(R.id.pacManMapFrame, MapType.SATELLITE_TUE_CAMPUS);
 
         Clock clock = new Clock(gameSave);
         clock.updateDisplay(PlayMapActivity.this, R.color.onPrimaryContainer);

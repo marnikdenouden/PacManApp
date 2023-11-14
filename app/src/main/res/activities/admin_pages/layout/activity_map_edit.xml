@@ -82,19 +82,22 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:srcCompat="@drawable/icon_time"
             app:tint="?attr/colorOnSurfaceVariant"
-            app:layout_constraintBottom_toBottomOf="@id/clock"
+            app:layout_constraintBottom_toBottomOf="@id/editStartDuration"
             app:layout_constraintEnd_toStartOf="@id/guidelineStartValues"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/clock" />
+            app:layout_constraintTop_toTopOf="@id/editStartDuration" />
 
-        <Chronometer
-            android:id="@+id/clock"
+        <EditText
+            android:id="@+id/editStartDuration"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="16dp"
+            android:hint="Game duration in seconds"
+            android:ems="10"
+            android:inputType="number"
             android:textColor="?attr/colorOnSurfaceVariant"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

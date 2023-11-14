@@ -53,8 +53,8 @@ public class MapView extends androidx.appcompat.widget.AppCompatImageView {
                     mapType + " is null");
             return;
         }
-        drawable.setFilterBitmap(false);
-        drawable.setTint(mapType.getLineColor(getContext()));
+        //drawable.setFilterBitmap(false); TODO make this more part of the map type, since this belongs to it and might even differ per map type.
+        //drawable.setTint(mapType.getLineColor(getContext()));
         setImageDrawable(drawable);
     }
 

@@ -29,6 +29,7 @@ public class StartActivity extends AppCompatActivity implements Navigate.BaseAct
         setContentView(R.layout.activity_start);
 
         setAdminButton();
+        setResumeButton();
     }
 
     @Override
@@ -46,6 +47,14 @@ public class StartActivity extends AppCompatActivity implements Navigate.BaseAct
             Navigate.navigate(StartActivity.this, AdminMapActivity.class);
             NavigationBar.setNavigationBarType(NavigationBarType.ADMIN);
         });
+    }
+
+    /**
+     * Set resume button of the start activity.
+     */
+    private void setResumeButton() {
+        Button adminButton = findViewById(R.id.resumeButton);
+        adminButton.setOnClickListener(view -> resume());
     }
 
     /**
@@ -71,6 +80,15 @@ public class StartActivity extends AppCompatActivity implements Navigate.BaseAct
      */
     void play() {
         SavePlatform.play();
+        Navigate.navigate(StartActivity.this, PlayMapActivity.class);
+        finish();
+    }
+
+    /**
+     * Call to resume the current game save.
+     */
+    void resume() {
+        SavePlatform.resume();
         Navigate.navigate(StartActivity.this, PlayMapActivity.class);
         finish();
     }

@@ -274,6 +274,15 @@ public class Marker implements Serializable {
             marker.addLocationListener(this);
         }
 
+        /**
+         * Get the marker that the marker view is based on.
+         *
+         * @return Marker that the view is based on
+         */
+        private Marker getMarker() {
+            return marker;
+        }
+
         @Override
         protected void onDetachedFromWindow() {
             super.onDetachedFromWindow();

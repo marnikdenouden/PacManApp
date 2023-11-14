@@ -2,6 +2,7 @@ package com.example.pacmanapp.displays;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.storage.GameSave;
+import com.example.pacmanapp.storage.GameSettings;
 import com.example.pacmanapp.storage.SaveObject;
 
 import org.jetbrains.annotations.NotNull;
@@ -77,7 +78,8 @@ public class PlayValues extends SaveObject {
      */
     public static void resetValues(GameSave gameSave) {
         Clock clock = new Clock(gameSave);
-        clock.setTime(Duration.ofSeconds(9000));
+        Duration gameDuration = GameSettings.getFromSave(gameSave).getGameDuration();
+        clock.setTime(gameDuration);
         Score score = new Score(gameSave);
         score.setValue(0);
     }

@@ -94,9 +94,11 @@ public class SavePlatform {
             return;
         }
 
+        Log.i(TAG, "Called save for current save");
+
         new Thread(() -> {
             if (!isPlaying) {
-            saveManager.save(currentSave);
+                saveManager.save(currentSave);
             }
             storeCurrentSave();
         }).start();
@@ -118,6 +120,36 @@ public class SavePlatform {
      * @pre platform has a save loaded
      */
     public static void play() {
+        if (hasInvalidSetup()) {
+            return;
+        }
+
+        if (!hasSave()) {
+            Log.e(TAG, "Could not play current save, as no save is loaded.");
+            return;
+        }
+
+        new Thread(() -> {
+            // Sanity save, so you can restore the save exactly from before you started to play it.
+            save();
+
+            currentSave.reset();
+            currentSave.play();
+            updateIsPlaying();
+            storeCurrentSave();
+
+            Log.i(TAG, "Started to play current save with name \"" +
+                    currentSave.getSaveName() + "\"");
+        }).start();
+    }
+
+    /**
+     * Resume playing the current game save.
+     *
+     * @pre Save platform is setup
+     * @pre platform has a save loaded
+     */
+    public static void resume() {
         if (hasInvalidSetup()) {
             return;
         }
@@ -166,13 +198,8 @@ public class SavePlatform {
 
         currentSave.quit();
         updateIsPlaying();
-
-        // Replace the finished played save by a freshly loaded one, if it still exits
-        if (saveManager.hasSave(currentSave.getSaveName())) {
-            load(currentSave.getSaveName(), () -> {});
-        } else {
-            currentSave = null;
-        }
+        Log.i(TAG, "Quit the current save");
+        storeCurrentSave();
     }
 
     /**

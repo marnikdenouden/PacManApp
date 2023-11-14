@@ -44,8 +44,14 @@ public class GameSave implements Serializable {
      * Start the game save to be playing.
      */
     void play() {
-        PlayValues.resetValues(this);
         isPlaying = true;
+    }
+
+    /**
+     * Reset the game save values to prepare to start the game.
+     */
+    void reset() {
+        PlayValues.resetValues(this);
     }
 
     /**

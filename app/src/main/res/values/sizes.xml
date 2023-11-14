@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="campusMapSizeWidth">1200dp</dimen>
+    <dimen name="campusMapSizeHeight">800dp</dimen>
     <dimen name="defaultMapSize">2000dp</dimen>
 <!--    <dimen name="defaultMapSize">1320dp</dimen>-->
     <dimen name="defaultMarkerSize">32dp</dimen>

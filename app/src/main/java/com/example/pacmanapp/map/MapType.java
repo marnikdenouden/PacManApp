@@ -5,13 +5,19 @@ import android.content.Context;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.pacmanapp.R;
-import com.google.android.material.color.MaterialColors;
 
 public enum MapType {
     PACMAN_GERARDUS(R.drawable.map_gerardus, R.color.surface, R.color.primary, R.dimen.defaultMapSize, R.dimen.defaultMapSize,
             51.424203344, -0.0084914531, 5.48382758497, 0.013472188),
     PACMAN_FRANSEBAAN(R.drawable.map_fransebaan, R.color.surface, R.color.primary, R.dimen.defaultMapSize, R.dimen.defaultMapSize,
-            51.491565, -0.012955,  5.4357 -0.0018, (5.4515-5.4357) + 0.0042);
+            51.491565, -0.012955,  5.4357 -0.0018, (5.4515-5.4357) + 0.0042),
+    SATELLITE_TUE_CAMPUS(R.drawable.map_tue_campus, R.color.surface, R.color.primary,
+            R.dimen.campusMapSizeWidth, R.dimen.campusMapSizeHeight,
+            51.44952, 5.4823, -0.0039030884,0.0137);
+    // 51.44952015406524, 5.482530758637465
+    // 51.44625612981707, 5.482200504816999
+    // 51.44561745167637, 5.492573218712526
+    // 51.449525221924254, 5.4924957143227555
     // franse baan: 5.4366
     //juist 5.4357
     private final int drawable;
