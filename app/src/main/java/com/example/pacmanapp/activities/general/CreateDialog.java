@@ -181,7 +181,7 @@ public abstract class CreateDialog<Type extends Enum<Type> & Option> extends Dia
         dismiss();
     }
 
-    public interface Constructor<Type> {
+    protected interface Constructor<Type> {
         void create(@NotNull Type type);
     }
 

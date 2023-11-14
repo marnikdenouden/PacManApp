@@ -4,10 +4,12 @@ import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.activities.general.CreateDialog;
 import com.example.pacmanapp.navigation.NavigationBar;
 import com.example.pacmanapp.navigation.PageType;
 import com.example.pacmanapp.selection.SelectableContent;
@@ -16,7 +18,7 @@ import com.example.pacmanapp.selection.selectables.Fruit;
 import com.example.pacmanapp.selection.selectables.FruitStorage;
 import com.example.pacmanapp.storage.SavePlatform;
 
-public class FruitActivity extends AppCompatActivity implements FruitConstructor {
+public class FruitActivity extends AppCompatActivity implements CreateFruitDialog.fruitConstructor {
     private FruitStorage fruitStorage;
     private Fruits fruits;
 // TODO fix that dialogs crash app when creating from saved instance state and maybe start using saved instance state?
@@ -61,7 +63,7 @@ public class FruitActivity extends AppCompatActivity implements FruitConstructor
      *
      * @param fruitType Fruit type to create fruit with
      */
-    public void createFruit(Fruit.FruitType fruitType) {
+    public void create(@NonNull Fruit.FruitType fruitType) {
         Fruit fruit = new Fruit(fruitType);
         fruitStorage.addFruit(new Fruit(fruitType));
         SelectionCrier.getInstance().select(fruit);

@@ -11,7 +11,6 @@ public class CreateContentDialog extends CreateDialog<ContentType> {
     /**
      * Construct a create dialog,
      * which requires creating activity to implement constructor interface.
-     *
      */
     public CreateContentDialog() {
         super("Content", ContentType.class, contentConstructor.class);

@@ -3,6 +3,7 @@ package com.example.pacmanapp.selection.selectables;
 import androidx.annotation.NonNull;
 
 import com.example.pacmanapp.R;
+import com.example.pacmanapp.activities.general.Option;
 import com.example.pacmanapp.contents.ContentContainer;
 import com.example.pacmanapp.contents.HintEdit;
 import com.example.pacmanapp.selection.Selectable;
@@ -43,7 +44,7 @@ public class Fruit extends ContentContainer implements Selectable {
         return fruitType;
     }
 
-    public enum FruitType {
+    public enum FruitType implements Option {
         CHERRY("Cherry", R.drawable.fruit_1_cherry, 200),
         STRAWBERRY("Strawberry", R.drawable.fruit_2_strawberry, 300),
         ORANGE("Orange", R.drawable.fruit_3_orange, 400),
