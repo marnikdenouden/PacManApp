@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -105,6 +106,9 @@ public class AdminMapActivity extends AppCompatActivity
 
         View addButton = findViewById(R.id.add_button);
         addButton.setOnClickListener(view -> openAddMarkerDialog());
+
+        View relocateButton = findViewById(R.id.relocate_button);
+        relocateButton.setOnClickListener(view -> relocateMarker());
 
         View removeButton = findViewById(R.id.remove_button);
         removeButton.setOnClickListener(view -> openRemoveMarkerDialog());
@@ -310,6 +314,20 @@ public class AdminMapActivity extends AppCompatActivity
             mapMarkers.addMarker(ghost);
             Log.i(TAG, "Added new ghost to pac man map frame.");
         });
+    }
+
+    private void relocateMarker() {
+        if (!locationUpdater.hasLocation()) {
+            Log.i(TAG, "Could not get last location to relocate");
+            return;
+        }
+        Location location = locationUpdater.getLastLocation();
+        if (markerSelector.hasSelected()) {
+            Log.i(TAG, "Relocating last selected marker");
+            ((Marker) markerSelector.getSelected()).setLocation(location.getLatitude(), location.getLongitude());
+            return;
+        }
+        Log.d(TAG, "No marker selected to relocate");
     }
 
 }
