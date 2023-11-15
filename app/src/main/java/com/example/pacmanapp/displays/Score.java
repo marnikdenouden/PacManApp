@@ -118,6 +118,11 @@ public class Score {
             return;
         }
 
+        if (value == 0) {
+            displayZero();
+            return;
+        }
+
         for (Digit digit : digits) {
             if (value == 0) {
                 digit.setVisible(false);
@@ -127,6 +132,19 @@ public class Score {
             digit.setValue(value);
             value = value / 10;
         }
+    }
+
+    /**
+     * Update the display to display the value 0.
+     */
+    public void displayZero() {
+        // Hide all digits
+        for (Digit digit: digits) {
+            digit.setVisible(false);
+        }
+        // Display a single zero
+        digits[0].setValue(0);
+        digits[0].setVisible(true);
     }
 
 }

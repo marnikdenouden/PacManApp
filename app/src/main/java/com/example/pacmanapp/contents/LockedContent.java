@@ -24,6 +24,8 @@ import com.example.pacmanapp.storage.SavePlatform;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class LockedContent implements Content, ResetManager.ResetListener {
 
     private boolean locked = true;
@@ -131,6 +133,8 @@ public class LockedContent implements Content, ResetManager.ResetListener {
     @Override
     public void reset() {
         keyInput = "";
-        locked = false;
+        if (!key.equals("")) {
+            locked = true;
+        }
     }
 }

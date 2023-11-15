@@ -15,9 +15,7 @@ import com.example.pacmanapp.contents.ContentContainer;
 import com.example.pacmanapp.contents.HintEdit;
 import com.example.pacmanapp.contents.Information;
 import com.example.pacmanapp.map.MapArea;
-import com.example.pacmanapp.map.MapPosition;
 import com.example.pacmanapp.selection.Selectable;
-import com.example.pacmanapp.selection.SelectionCrier;
 
 import org.jetbrains.annotations.NotNull;
 

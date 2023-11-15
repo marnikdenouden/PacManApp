@@ -7,9 +7,7 @@ import android.widget.RelativeLayout;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.pacmanapp.R;
-import com.example.pacmanapp.location.LocationObserver;
 import com.example.pacmanapp.markers.Marker;
-import com.example.pacmanapp.selection.SelectionCrier;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -23,6 +23,7 @@ import com.example.pacmanapp.map.MapSave;
 import com.example.pacmanapp.map.MapStorage;
 import com.example.pacmanapp.markers.BlankMarker;
 import com.example.pacmanapp.markers.Marker;
+import com.example.pacmanapp.selection.SelectionCrier;
 import com.example.pacmanapp.selection.TypeSelector;
 import com.example.pacmanapp.selection.selectables.Blank;
 import com.example.pacmanapp.selection.selectables.BlankEdit;
@@ -247,11 +248,16 @@ public class AdminMapActivity extends AppCompatActivity
         removeMarkerDialog.show(getSupportFragmentManager(), "RemoveMarker");
     }
 
+    /**
+     * Remove the selected marker from the map and selection.
+     */
     public void removeMarker() {
         if (!markerSelector.hasSelected()) {
             return;
         }
-        mapSave.getMapMarkers().removeMarker((Marker) markerSelector.getSelected());
+        Selectable selectedMarker = markerSelector.getSelected();
+        mapSave.getMapMarkers().removeMarker((Marker) selectedMarker);
+        SelectionCrier.getInstance().removeSelected(selectedMarker);
     }
 
     /**

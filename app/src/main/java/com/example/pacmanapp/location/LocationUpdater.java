@@ -176,6 +176,7 @@ public class LocationUpdater implements DynamicLocation {
      * Stop location updates.
      */
     public void stopLocationUpdates() {
+        Log.i(TAG, "Stopping location updates.");
         fusedLocationClient.removeLocationUpdates(locationCallback);
         requestingLocationUpdates = false;
     }
@@ -184,6 +185,7 @@ public class LocationUpdater implements DynamicLocation {
      * Start location updates. after checking permissions and GPS.
      */
     public void startLocationUpdates() {
+        Log.i(TAG, "Starting location updates.");
         if (!(ActivityCompat.checkSelfPermission(context,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)) {
             // Request location permission if it is not yet given.
@@ -214,6 +216,7 @@ public class LocationUpdater implements DynamicLocation {
      * Turn on GPS by preparing settings and alike.
      */
     public void turnOnGPS() {
+        Log.i(TAG, "Trying to turn on GPS.");
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                 .addLocationRequest(locationRequest);
         builder.setAlwaysShow(true);

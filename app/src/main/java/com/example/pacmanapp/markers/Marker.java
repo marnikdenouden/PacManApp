@@ -190,7 +190,7 @@ public class Marker implements Serializable {
      * @param latitude y axis location of the marker.
      * @param longitude x axis location of the marker.
      */
-    protected void setLocation(double latitude, double longitude) {
+    public void setLocation(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
         while(locationListeners.contains(null)) {

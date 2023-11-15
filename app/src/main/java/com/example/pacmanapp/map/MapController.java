@@ -149,7 +149,7 @@ public class MapController extends View {
      */
     private int getBottomBound() {
         int mapHeight = mapArea.getMapView().getHeight();
-        return mapHeight - mapArea.getHeight() +128; // 128 adjusts for overlap with bottom area
+        return mapHeight - mapArea.getHeight(); //+ 128; // 128 adjusts for overlap with bottom area
     }
 
     /**
@@ -167,6 +167,6 @@ public class MapController extends View {
      * @return topBound value for the map area.
      */
     private int getTopBound() {
-        return -128; // 128 adjusts for overlap with top area
+        return 0; //-128; // 128 adjusts for overlap with top area
     }
 }

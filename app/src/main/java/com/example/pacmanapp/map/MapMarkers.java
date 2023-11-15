@@ -62,6 +62,9 @@ public class MapMarkers implements Serializable, LocationObserver {
      */
     public void removeMarker(@NotNull Marker marker) {
         getMarkers().remove(marker);
+        while(markerListeners.contains(null)) {
+            markerListeners.remove(null);
+        }
         for (MarkerListener markerListener: markerListeners) {
             markerListener.removeMarker(marker);
         }

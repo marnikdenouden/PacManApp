@@ -1,7 +1,6 @@
 package com.example.pacmanapp.map;
 
 import android.annotation.SuppressLint;
-import android.location.Location;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,18 +8,14 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.OverScroller;
 
-import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.pacmanapp.R;
-import com.example.pacmanapp.location.DynamicLocation;
-import com.example.pacmanapp.location.LocationObserver;
 import com.example.pacmanapp.markers.Marker;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.HashSet;
 
 @SuppressLint("ViewConstructor")
 public class MapArea extends ConstraintLayout {
