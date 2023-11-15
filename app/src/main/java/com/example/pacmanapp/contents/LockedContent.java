@@ -19,11 +19,12 @@ import com.example.pacmanapp.general.Util;
 import com.example.pacmanapp.markers.PacDot;
 import com.example.pacmanapp.selection.Selectable;
 import com.example.pacmanapp.selection.selectables.Fruit;
+import com.example.pacmanapp.storage.ResetManager;
 import com.example.pacmanapp.storage.SavePlatform;
 
 import org.jetbrains.annotations.NotNull;
 
-public class LockedContent implements Content {
+public class LockedContent implements Content, ResetManager.ResetListener {
 
     private boolean locked = true;
     private final String key;
@@ -48,6 +49,7 @@ public class LockedContent implements Content {
         this.content = content;
         this.hintProvider = hintProvider;
         this.key = key;
+        SavePlatform.getSave().getResetManager().addResetListener(this);
     }
 
     @Override
@@ -126,4 +128,9 @@ public class LockedContent implements Content {
         }
     }
 
+    @Override
+    public void reset() {
+        keyInput = "";
+        locked = false;
+    }
 }

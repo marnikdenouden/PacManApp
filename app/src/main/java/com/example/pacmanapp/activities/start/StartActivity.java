@@ -43,18 +43,15 @@ public class StartActivity extends AppCompatActivity implements Navigate.BaseAct
      */
     private void setAdminButton() {
         Button adminButton = findViewById(R.id.adminButton);
-        adminButton.setOnClickListener(view -> {
-            Navigate.navigate(StartActivity.this, AdminMapActivity.class);
-            NavigationBar.setNavigationBarType(NavigationBarType.ADMIN);
-        });
+        adminButton.setOnClickListener(view -> edit());
     }
 
     /**
      * Set resume button of the start activity.
      */
     private void setResumeButton() {
-        Button adminButton = findViewById(R.id.resumeButton);
-        adminButton.setOnClickListener(view -> resume());
+        Button resumeButton = findViewById(R.id.resumeButton);
+        resumeButton.setOnClickListener(view -> resume());
     }
 
     /**
@@ -80,7 +77,18 @@ public class StartActivity extends AppCompatActivity implements Navigate.BaseAct
      */
     void play() {
         SavePlatform.play();
+        NavigationBar.setNavigationBarType(NavigationBarType.PLAY);
         Navigate.navigate(StartActivity.this, PlayMapActivity.class);
+        finish();
+    }
+
+    /**
+     * Call to edit the current game save.
+     */
+    void edit() {
+        SavePlatform.save();
+        NavigationBar.setNavigationBarType(NavigationBarType.ADMIN);
+        Navigate.navigate(StartActivity.this, AdminMapActivity.class);
         finish();
     }
 
@@ -89,6 +97,7 @@ public class StartActivity extends AppCompatActivity implements Navigate.BaseAct
      */
     void resume() {
         SavePlatform.resume();
+        NavigationBar.setNavigationBarType(NavigationBarType.PLAY);
         Navigate.navigate(StartActivity.this, PlayMapActivity.class);
         finish();
     }

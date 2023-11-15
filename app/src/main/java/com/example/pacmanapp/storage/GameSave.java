@@ -20,10 +20,11 @@ import java.util.HashSet;
 
 public class GameSave implements Serializable {
     private static final long serialVersionUID = 1L;
+    private static final String TAG = "GameSave";
 
     private final String saveName;
-    private static final String TAG = "GameSave";
     private final ImageStorage imageStorage;
+    private final ResetManager resetManager;
     private final Collection<SaveObject> saveObjects;
     private boolean isPlaying = false;
 
@@ -38,6 +39,7 @@ public class GameSave implements Serializable {
         this.saveName = saveName;
         this.imageStorage = new ImageStorage(saveName, imageDirectory);
         saveObjects = new HashSet<>();
+        resetManager = new ResetManager(this);
     }
 
     /**
@@ -51,7 +53,7 @@ public class GameSave implements Serializable {
      * Reset the game save values to prepare to start the game.
      */
     void reset() {
-        PlayValues.resetValues(this);
+        resetManager.reset();
     }
 
     /**
@@ -166,6 +168,13 @@ public class GameSave implements Serializable {
      */
     public ImageStorage getImageStorage() {
         return imageStorage;
+    }
+
+    /**
+     * Get the reset manager of the game save.
+     */
+    public ResetManager getResetManager() {
+        return resetManager;
     }
 
 }

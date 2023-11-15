@@ -56,9 +56,6 @@ public class PlayMapActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        // TODO add ghost interaction button
-        //Button ghostInteractionButton = findViewById(R.id.ghostInteractionButton);
-
         NavigationBar.configure(this, PageType.MAP);
 
         // Get selector to make sure it gets relevant selections.

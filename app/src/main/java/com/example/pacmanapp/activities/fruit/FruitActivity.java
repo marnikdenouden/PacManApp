@@ -10,6 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pacmanapp.R;
 import com.example.pacmanapp.activities.general.CreateDialog;
+import com.example.pacmanapp.activities.settings.AdminSettingsActivity;
+import com.example.pacmanapp.activities.start.StartActivity;
+import com.example.pacmanapp.navigation.Navigate;
 import com.example.pacmanapp.navigation.NavigationBar;
 import com.example.pacmanapp.navigation.PageType;
 import com.example.pacmanapp.selection.SelectableContent;
@@ -35,13 +38,36 @@ public class FruitActivity extends AppCompatActivity implements CreateFruitDialo
         fruits = new Fruits(fruitStorage);
         updateFruitList();
 
+        setCreateButton();
+        setClearButton();
+        setQuitButton();
+
+    }
+
+    /**
+     * Set the create button to open create fruit dialog with.
+     */
+    public void setCreateButton() {
         Button createButton = findViewById(R.id.createButton);
         createButton.setOnClickListener(view -> new CreateFruitDialog()
                 .show(getSupportFragmentManager(), "CreateFruit"));
+    }
 
+    /**
+     * Set the clear button to remove all fruits with.
+     */
+    public void setClearButton() {
         Button clearButton = findViewById(R.id.clearButton);
         clearButton.setOnClickListener(view -> new ClearFruitDialog(this)
                 .show(getSupportFragmentManager(), "ClearFruit"));
+    }
+
+    /**
+     * Set the quit button to return to the start activity.
+     */
+    public void setQuitButton() {
+        Button quitButton = findViewById(R.id.quitButton);
+        quitButton.setOnClickListener(view -> quit());
     }
 
     @Override
@@ -76,6 +102,15 @@ public class FruitActivity extends AppCompatActivity implements CreateFruitDialo
     void clearSaves() {
         fruitStorage.clearFruits();
         updateFruitList();
+    }
+
+    /**
+     * Call to quit the current game save.
+     */
+    void quit() {
+        SavePlatform.quit();
+        Navigate.navigate(FruitActivity.this, StartActivity.class);
+        finish();
     }
 
 }

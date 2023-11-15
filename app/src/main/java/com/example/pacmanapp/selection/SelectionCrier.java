@@ -42,6 +42,15 @@ public class SelectionCrier {
     }
 
     /**
+     * Clear the selected for all selectors.
+     */
+    public void clearSelected() {
+        for (Selector selector: selectors.values()) {
+            selector.clearSelected();
+        }
+    }
+
+    /**
      * Add selector to the list of selectors to notify.
      *
      * @param selector selector to be notified
