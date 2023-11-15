@@ -48,7 +48,7 @@ public class MarioKartMarker extends Marker implements Selectable {
 
     @Override
     public String getLabel() {
-        return "Mario-Kart Piece";
+        return marioKartItem.toString();
     }
 
     @Override

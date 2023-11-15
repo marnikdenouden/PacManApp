@@ -48,7 +48,7 @@ public class PacManMarker extends Marker implements Selectable {
 
     @Override
     public String getLabel() {
-        return "Pac-Man Piece";
+        return pacManGhost.toString();
     }
 
     @Override
