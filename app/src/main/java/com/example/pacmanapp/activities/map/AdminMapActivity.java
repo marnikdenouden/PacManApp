@@ -23,7 +23,10 @@ import com.example.pacmanapp.map.MapMarkers;
 import com.example.pacmanapp.map.MapSave;
 import com.example.pacmanapp.map.MapStorage;
 import com.example.pacmanapp.markers.BlankMarker;
+import com.example.pacmanapp.markers.GEPWNAGEMarker;
+import com.example.pacmanapp.markers.MarioKartMarker;
 import com.example.pacmanapp.markers.Marker;
+import com.example.pacmanapp.markers.PacManMarker;
 import com.example.pacmanapp.selection.SelectionCrier;
 import com.example.pacmanapp.selection.TypeSelector;
 import com.example.pacmanapp.selection.selectables.Blank;
@@ -135,6 +138,7 @@ public class AdminMapActivity extends AppCompatActivity
         // Load ghost and then load map to have old characters removed
         // and new one created on next location update.
         loadGhost();
+        loadMarkers();
         ViewGroup mapFrame = findViewById(R.id.pacManMapFrame);
         mapArea = mapSave.loadMap(mapFrame);
 
@@ -307,6 +311,52 @@ public class AdminMapActivity extends AppCompatActivity
             mapMarkers.addMarker(ghost);
             Log.i(TAG, "Added new ghost to pac man map frame.");
         });
+    }
+
+    private void loadMarkers() {
+        MapMarkers mapMarkers = mapSave.getMapMarkers();
+
+        Collection<GEPWNAGEMarker> GEPWNAGEMarkers = mapMarkers.getMarkersWithClass(GEPWNAGEMarker.class);
+        if (GEPWNAGEMarkers.isEmpty()) {
+            // Create a new ghost on the next location result
+            locationUpdater.observeNextLocation(location -> {
+                GEPWNAGEMarker GEPWNAGEMarker = new GEPWNAGEMarker(location.getLatitude(), location.getLongitude());
+                mapMarkers.addMarker(GEPWNAGEMarker);
+                Log.i(TAG, "Added new ghost to pac man map frame.");
+            });
+        }
+
+        Collection<MarioKartMarker> MarioKartMarkers = mapMarkers.getMarkersWithClass(MarioKartMarker.class);
+        if (MarioKartMarkers.isEmpty()) {
+            // Create a new ghost on the next location result
+            locationUpdater.observeNextLocation(location -> {
+                MarioKartMarker marioKartMarkerBananaPeel = new MarioKartMarker(location.getLatitude(), location.getLongitude(), MarioKartMarker.MarioKartItem.BANANA_PEEL);
+                mapMarkers.addMarker(marioKartMarkerBananaPeel);
+                MarioKartMarker marioKartMarkerMushroom = new MarioKartMarker(location.getLatitude(), location.getLongitude(), MarioKartMarker.MarioKartItem.MUSHROOM);
+                mapMarkers.addMarker(marioKartMarkerMushroom);
+                MarioKartMarker marioKartMarkerShell = new MarioKartMarker(location.getLatitude(), location.getLongitude(), MarioKartMarker.MarioKartItem.SHELL);
+                mapMarkers.addMarker(marioKartMarkerShell);
+                MarioKartMarker marioKartMarkerGhost = new MarioKartMarker(location.getLatitude(), location.getLongitude(), MarioKartMarker.MarioKartItem.GHOST);
+                mapMarkers.addMarker(marioKartMarkerGhost);
+                Log.i(TAG, "Added new Mario kart markers to pac man map frame.");
+            });
+        }
+
+        Collection<PacManMarker> PacManMarkers = mapMarkers.getMarkersWithClass(PacManMarker.class);
+        if (PacManMarkers.isEmpty()) {
+            // Create a new ghost on the next location result
+            locationUpdater.observeNextLocation(location -> {
+                PacManMarker pacManMarkerBlinky = new PacManMarker(location.getLatitude(), location.getLongitude(), PacManMarker.PacManGhost.BLINKY);
+                mapMarkers.addMarker(pacManMarkerBlinky);
+                PacManMarker pacManMarkerInky = new PacManMarker(location.getLatitude(), location.getLongitude(), PacManMarker.PacManGhost.INKY);
+                mapMarkers.addMarker(pacManMarkerInky);
+                PacManMarker pacManMarkerPinky = new PacManMarker(location.getLatitude(), location.getLongitude(), PacManMarker.PacManGhost.PINKY);
+                mapMarkers.addMarker(pacManMarkerPinky);
+                PacManMarker pacManMarkerClyde = new PacManMarker(location.getLatitude(), location.getLongitude(), PacManMarker.PacManGhost.CLYDE);
+                mapMarkers.addMarker(pacManMarkerClyde);
+                Log.i(TAG, "Added new Pac Man markers to pac man map frame.");
+            });
+        }
     }
 
     private void relocateMarker() {

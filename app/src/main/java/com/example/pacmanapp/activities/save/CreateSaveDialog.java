@@ -17,7 +17,6 @@ import com.example.pacmanapp.storage.SaveManager;
 public class CreateSaveDialog extends DialogFragment {
     private final static String TAG = "CreateSaveDialog";
     private final SaveActivity activity;
-// TODO add java doc comment
     CreateSaveDialog(SaveActivity saveActivity) {
         this.activity = saveActivity;
     }

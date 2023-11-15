@@ -23,10 +23,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MarioKartMarker extends Marker implements Selectable {
+public class PacManMarker extends Marker implements Selectable {
     private static final long serialVersionUID = 1L;
     private final static String TAG = "MarioKartMarker";
-    private final MarioKartItem marioKartItem;
+    private final PacManGhost pacManGhost;
     private final static int markerId = R.id.mariokart;
     private final ContentContainer contentContainer;
 
@@ -36,9 +36,9 @@ public class MarioKartMarker extends Marker implements Selectable {
      * @param latitude  latitude that the pac-dot is placed at
      * @param longitude longitude that the pac-dot is placed at
      */
-    public MarioKartMarker(double latitude, double longitude, MarioKartItem marioKartItem) {
-        super(latitude, longitude, marioKartItem.getDrawableId(), markerId);
-        this.marioKartItem = marioKartItem;
+    public PacManMarker(double latitude, double longitude, PacManGhost pacManGhost) {
+        super(latitude, longitude, pacManGhost.getDrawableId(), markerId);
+        this.pacManGhost = pacManGhost;
 
         List<Content> contentList = new ArrayList<>();
         contentList.add(new Information("Hint to key"));
@@ -48,24 +48,24 @@ public class MarioKartMarker extends Marker implements Selectable {
 
     @Override
     public String getLabel() {
-        return "Mario-Kart Piece";
+        return "Pac-Man Piece";
     }
 
     @Override
     public int getIconId() {
-        return marioKartItem.getDrawableId();
+        return pacManGhost.getDrawableId();
     }
 
     @Override
     public String getDescription() {
-        return "Here you can find a piece to restore the mario kart track";
+        return "Here you can find a piece to restore the pac man arcade";
     }
 
     @Override
-    protected MarioKartView createView(@NotNull MapArea mapArea) {
-        MarioKartView marioKartView = new MarioKartView(mapArea, this);
-        marioKartView.createView();
-        return marioKartView;
+    protected PacManGhostView createView(@NotNull MapArea mapArea) {
+        PacManGhostView pacManGhostView = new PacManGhostView(mapArea, this);
+        pacManGhostView.createView();
+        return pacManGhostView;
     }
 
     @Override
@@ -95,12 +95,12 @@ public class MarioKartMarker extends Marker implements Selectable {
     }
 
     @SuppressLint("ViewConstructor")
-    public static class MarioKartView extends MarkerView implements Character.CharacterView.Visitable {
+    public static class PacManGhostView extends MarkerView implements Character.CharacterView.Visitable {
         private final String TAG = "MarioKartView";
-        private final MarioKartMarker marioKartMarker;
-        protected MarioKartView(@NonNull MapArea mapArea, @NonNull MarioKartMarker marioKartMarker) {
-            super(mapArea, marioKartMarker);
-            this.marioKartMarker = marioKartMarker;
+        private final PacManMarker pacManMarker;
+        protected PacManGhostView(@NonNull MapArea mapArea, @NonNull PacManMarker pacManMarker) {
+            super(mapArea, pacManMarker);
+            this.pacManMarker = pacManMarker;
         }
 
         @Override
@@ -109,18 +109,16 @@ public class MarioKartMarker extends Marker implements Selectable {
         }
     }
 
-    public enum MarioKartItem implements Option {
-        SHELL("Shell", R.drawable.mk_shell),
-        STAR("Star", R.drawable.mk_star),
-        BANANA_PEEL("Banana Peel", R.drawable.mk_bananapeel),
-        MUSHROOM("Mushroom", R.drawable.mk_mushroom),
-        COIN("Coin", R.drawable.mk_coin),
-        GHOST("Ghost", R.drawable.mk_ghost);
+    public enum PacManGhost implements Option {
+        INKY("Inky", R.drawable.ghost_inky),
+        PINKY("PINKY", R.drawable.ghost_pinky),
+        BLINKY("BLINKY", R.drawable.ghost_blinky),
+        CLYDE("Clyde", R.drawable.ghost_clyde);
 
         private final String label;
         private final int drawableId;
 
-        MarioKartItem(String label, int drawableId) {
+        PacManGhost(String label, int drawableId) {
             this.label = label;
             this.drawableId = drawableId;
         }
