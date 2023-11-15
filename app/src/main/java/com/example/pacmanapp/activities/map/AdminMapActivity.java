@@ -51,6 +51,8 @@ import com.example.pacmanapp.storage.GameSave;
 import com.example.pacmanapp.storage.GameSettings;
 import com.example.pacmanapp.storage.SavePlatform;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Random;
@@ -117,16 +119,7 @@ public class AdminMapActivity extends AppCompatActivity
         ViewGroup selectableView = findViewById(R.id.selected_preview);
         preview.configure(this, selectableView, true);
 
-        EditText editText = findViewById(R.id.editStartDuration);
-        GameSettings gameSettings = GameSettings.getFromSave(gameSave);
-        long gameDurationSeconds = gameSettings.getGameDuration().getSeconds();
-        Util.configureEditText(editText, String.valueOf(gameDurationSeconds), text -> {
-            if (text.equals("")) {
-                return;
-            }
-            Duration newGameDuration = Duration.ofSeconds(Integer.parseInt(text));
-            gameSettings.setGameDuration(newGameDuration);
-        });
+        setEditDuration(gameSave);
 
         score = new Score(gameSave);
         score.updateDisplay(5, R.id.scoreLayout, AdminMapActivity.this,
@@ -328,6 +321,38 @@ public class AdminMapActivity extends AppCompatActivity
             return;
         }
         Log.d(TAG, "No marker selected to relocate");
+    }
+
+    private void setEditDuration(@NotNull GameSave gameSave) {
+        EditText editText = findViewById(R.id.editStartDuration);
+
+        // Allow the seconds left to be edited, if playing
+        if (gameSave.isPlaying()) {
+            Log.d(TAG, "Allowing seconds left to be edited");
+            Clock clock = new Clock(gameSave);
+            long secondsLeft = clock.getTimeLeft().getSeconds();
+            Util.configureEditText(editText, String.valueOf(secondsLeft), text -> {
+                if (text.equals("")) {
+                    return;
+                }
+                Duration newClockTime = Duration.ofSeconds(Integer.parseInt(text));
+                clock.setTime(newClockTime);
+            });
+
+        } else {
+
+            Log.d(TAG, "Allowing start time to be edited");
+            // Allow the start time to be edited, if not playing
+            GameSettings gameSettings = GameSettings.getFromSave(gameSave);
+            long gameDurationSeconds = gameSettings.getGameDuration().getSeconds();
+            Util.configureEditText(editText, String.valueOf(gameDurationSeconds), text -> {
+                if (text.equals("")) {
+                    return;
+                }
+                Duration newGameDuration = Duration.ofSeconds(Integer.parseInt(text));
+                gameSettings.setGameDuration(newGameDuration);
+            });
+        }
     }
 
 }

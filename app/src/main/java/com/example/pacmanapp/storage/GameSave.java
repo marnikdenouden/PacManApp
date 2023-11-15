@@ -61,7 +61,7 @@ public class GameSave implements Serializable {
      *
      * @return Truth assignment, if the current game save is being played
      */
-    boolean isPlaying() {
+    public boolean isPlaying() {
         return isPlaying;
     }
 
